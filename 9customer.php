@@ -110,7 +110,8 @@ function getTimeElapsedString($datetime)
         }
 
         .sidebar {
-            background-color: #f04e23;;
+            background-color: #f04e23;
+            ;
             margin-top: 65px;
             height: 100%;
             width: 250px;
@@ -122,7 +123,7 @@ function getTimeElapsedString($datetime)
             display: flex;
             flex-direction: column;
         }
-        
+
         .logo-container {
             position: fixed;
             top: 0;
@@ -188,18 +189,19 @@ function getTimeElapsedString($datetime)
         }
 
         .sidebar a:hover {
-            background-color:white;
+            background-color: white;
             color: darkred;
         }
 
         .sidebar a.active {
-            background-color:#ffcccb;
+            background-color: #ffcccb;
             color: darkred;
         }
 
         .sidebar a i {
             margin-right: 15px;
         }
+
         .container {
             margin-left: 250px;
             padding: 20px;
@@ -431,7 +433,7 @@ function getTimeElapsedString($datetime)
             <a href="9customer.php" <?php echo (basename($_SERVER['PHP_SELF']) == '9customer.php') ? 'class="active"' : ''; ?>>
                 <i class="fa fa-fw fa-home"></i>Home
             </a>
-            <a href="favoritesreen.php">
+            <a href="favoritescreen.php">
                 <i class="fa-solid fas fa-heart"></i>Favorites
             </a>
             <a href="view_categories.php">
@@ -536,33 +538,35 @@ function getTimeElapsedString($datetime)
         </div>
     </div>
 
-<script>
-// jQuery to handle favorite button click
-$(document).ready(function() {
-    $(".favorite-button").click(function() {
-        var meal_id = $(this).data("meal-id"); // Get meal_id from the button's data attribute
+    <script>
+        // jQuery to handle favorite button click
+        $(document).ready(function() {
+            $(".favorite-button").click(function() {
+                var meal_id = $(this).data("meal-id"); // Get meal_id from the button's data attribute
 
-        // Make AJAX request to add the meal to favorites
-        $.ajax({
-            url: '9customer.php', // The PHP file that processes the request
-            type: 'GET',
-            data: { meal_id: meal_id }, // Send meal_id as a GET parameter
-            success: function(response) {
-                // Check if the response is "success"
-                if (response === "success") {
-                    // Show a pop-up message
-                    alert("Successfully added to favorites!");
-                } else {
-                    alert("Error: " + response);
-                }
-            },
-            error: function() {
-                alert("An error occurred. Please try again.");
-            }
+                // Make AJAX request to add the meal to favorites
+                $.ajax({
+                    url: '9customer.php', // The PHP file that processes the request
+                    type: 'GET',
+                    data: {
+                        meal_id: meal_id
+                    }, // Send meal_id as a GET parameter
+                    success: function(response) {
+                        // Check if the response is "success"
+                        if (response === "success") {
+                            // Show a pop-up message
+                            alert("Successfully added to favorites!");
+                        } else {
+                            alert("Error: " + response);
+                        }
+                    },
+                    error: function() {
+                        alert("An error occurred. Please try again.");
+                    }
+                });
+            });
         });
-    });
-});
-</script>
+    </script>
 </body>
 
 </html>
