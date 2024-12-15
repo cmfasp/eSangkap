@@ -119,70 +119,28 @@ function generateRecipePreview($pdo, $meal_id) {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <link rel="icon" type="image/png">
     <style>
         body {
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: #f3f3f3;
             display: flex;
             flex-wrap: wrap;
         }
 
-        .topnav {
-            background-color: #16b978;
-            overflow: hidden;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            padding-top: 90px;
-            transition: top 0.3s;
-        }
-
-        .topnav a {
-            float: center;
-            color: #f2f2f2;
-            text-align: center;
-            padding: 15px 25px;
-            text-decoration: none;
-            font-size: 17px;
-            display: flex;
-            align-items: center;
-        }
-
-        .topnav a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        .topnav a.active {
-            background-color: #04AA6D;
-            color: white;
-        }
-
-        .topnav a i {
-            margin-right: 30px;
-        }
-
-        .clearfix::after {
-            content: "";
-            clear: both;
-            display: table;
-        }
-
         .logo-container {
+            padding: 19px;
             position: fixed;
-            top: 0;
             width: 100%;
             display: flex;
             justify-content: center;
@@ -190,6 +148,7 @@ function generateRecipePreview($pdo, $meal_id) {
             background-color: #fff;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             z-index: 1000;
+            display: flex;
         }
 
         .logo {
@@ -204,89 +163,176 @@ function generateRecipePreview($pdo, $meal_id) {
             margin-right: 10px;
         }
 
-        .logo h1 {
-            font-family: cursive;
-            font-size: 24px;
-            margin: 0;
-            color: #16b978;
+        .logo {
+            width: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        title {
+            color: #f04e23;
+        }
+
+        h2 {
+            color: black;
+            margin-left: 2px;
+            display: inline-block;
+        }
+
+        .sidebar {
+            background-color: #f04e23;
+            margin-top: 65px;
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            padding-top: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 15px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar a:hover {
+            background-color: white;
+            color: darkred;
+        }
+
+        .sidebar a.active {
+            background-color:#ffcccb;
+            color: darkred;
+        }
+
+        .sidebar a i {
+            margin-right: 15px;
         }
 
         .container {
-            margin-top: 200px;
-            flex-grow: 1;
-            background-color: #fff;
-            width: 100%;
-            margin: 0 auto;
+            margin: 20px auto;
+            height: auto;
+            width: auto;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            box-sizing: border-box;
+            background: #fff;
         }
+
 
         h2 {
             text-align: center;
             color: black;
             margin-bottom: 20px;
-            margin-top: 150px;
+            margin-top: 100px;
         }
+
         form {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        label {
-            margin: 10px 0 5px;
-            color: #16b978;
-            width: 300px; 
-            text-align: right;
+        .form-title {
+            text-align: center;
+            color: darkred;
+            font-size: 2rem;
+            margin-bottom: 20px;
         }
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
 
         input,
         select,
         textarea {
-            width: 500px; 
-            padding: 10px;
-            margin: 5px 0 15px;
-            border: 2px solid #ccc;
-            border-radius: 4px;
+            width: 500px;
+            padding: 15px;
+            margin: 5px;
+            background-color: rgb(244, 242, 242);
+            /* Light grey background */
+            border: none;
+            /* Remove border */
+            border-radius: 30px;
             box-sizing: border-box;
+            outline: none;
+            /* Remove focus outline */
+            font-family: Arial, Helvetica, sans-serif;
         }
 
-
-        #buttons {
-            text-align: center;
-            margin-top: 20px;
+        .form-buttons {
+            display: flex;
+            /* Arrange buttons in a row */
+            gap: 20px;
+            /* Add space between buttons */
+            width: 100%;
+            /* Make the container span the full width */
+            justify-content: space-between;
+            /* Distribute buttons evenly across the width */
         }
 
         button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #16b978;
-            color: #fff;
+            flex: 1;
+            /* Make each button take equal width */
+            padding: 15px;
+            /* Add padding for height */
+            background-color: darkred;
+            color: white;
             border: none;
-            border-radius: 4px;
-            transition: background-color 0.3s;
+            border-radius: 25px;
+            /* Add rounded corners */
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            /* Set font size */
+            cursor: pointer;
+            text-align: center;
+            /* Center align the text */
         }
 
         button:hover {
-            background-color: #128a61;
+            background-color: #e74c3c;
+            /* Lighten button color on hover */
+            box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+            /* Enhance shadow on hover */
         }
 
         #preview-section {
             margin-top: 20px;
-            text-align: center;
-            display: none;     
+            text-align: left;
+            display: none;
         }
-        
+
         #recipe-image {
             max-width: 100%;
             height: auto;
             border-radius: 8px;
             margin-top: 10px;
             display: none;
-            margin: 0 auto; 
+            margin: 0 auto;
         }
 
         #popup {
@@ -302,7 +348,6 @@ function generateRecipePreview($pdo, $meal_id) {
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* wag tanggalin from here */
         .image-gallery {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -316,7 +361,31 @@ function generateRecipePreview($pdo, $meal_id) {
             border-radius: 5px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
         }
-        /* to here */
+
+        .brand-name {
+            font-size: 1.8rem;
+            /* Adjust font size for H2 */
+            font-weight: bold;
+            /* Emphasize the brand name */
+            color: #f04e23;
+            /* Matches the theme */
+            font-family: 'Arial', sans-serif;
+            /* Clean and modern font */
+            margin: 0;
+        }
+
+        .readonly-input {
+            font-weight: bold;
+            color: #555;
+            text-align: left;
+        }
+
+        textarea[readonly] {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            color: #555;
+            resize: none;
+        }
     </style>
     <script>
         function togglePreview() {
@@ -394,90 +463,98 @@ function generateRecipePreview($pdo, $meal_id) {
             }, 5000);
         }
     </script>
+
+
 </head>
+
 <body>
-<div class="logo-container">
-        <div class="logo">
-            <img src="logo.png" alt="Tastebud Logo">
-            <h1>Tastebud</h1>
-        </div>
+
+    <div class="logo-container">
+        <img src="logo.jpg" alt="Logo" class="logo">
+        <span class="brand-name">eSangkap</span>
     </div>
-     
-    <div class="topnav">
-        <a href="12user_profile.php"><i class="fas fa-fw fa-user"></i> Profile</a>
+
+
+    <div class="sidebar">
+        <a href="9customer.php"><i class="fa fa-fw fa-home"></i>Home</a>
+        <a href="favoritesreen.php"><i class="fa-solid fas fa-heart"></i>Favorites</a>
         <a href="view_categories.php"><i class="fa-solid fa-list"></i>Categories</a>
-        <a href="9customer.php"><i class="fa-solid fa-utensils"></i>User Recipes</a>
-        <a href="14chat.php"><i class="fa-solid fa-comment"></i>Chat</a>
-        <a href="4logout.php"><i class="fas fa-fw fa-sign-out"></i> Logout</a>
+        <a href="12user_profile.php" class="active"><i class="fas fa-user"></i>Profile</a>
+        <a href="about_us.php"><i class="fa-solid fa-info-circle"></i>About Us</a>
+        <a href="4logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
     </div>
     <div class="container">
-    <h2>Add New Recipe</h2>
-    <div id="form-section">
-        <form method="post" onsubmit="showPopupMessage('Meal added successfully');">
-            <div>
-                <label for="recipe_name">Recipe Name:</label>
-                <input type="text" name="recipe_name" id="recipe_name" required>
-            </div>
-            <div>
-                <label for="category_id">Category:</label>
-                <select name="category_id" id="category_id" required>
-                    <?php
-                    $categories = $pdo->query("SELECT * FROM categories")->fetchAll(PDO::FETCH_ASSOC);
-                    foreach ($categories as $category) {
-                        echo "<option value='{$category['category_id']}'>{$category['category_name']}</option>";
-                    }
-                    ?>
-                </select>
-            </div>
-            <div>
-                <label for="short_description">Short Description:</label>
-                <textarea name="short_description" id="short_description" rows="3" class="form-control" required></textarea>
+        <h2 class="form-title">Add New Recipe</h2>
+        <div id="form-section">
+            <form method="post" onsubmit="showPopupMessage('Meal added successfully');">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="recipe_name">Meal Name:</label>
+                        <input type="text" name="recipe_name" id="recipe_name" placeholder="Write your meal name here" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category_id">Category:</label>
+                        <select name="category_id" id="category_id" required>
+                            <?php
+                            $categories = $pdo->query("SELECT * FROM categories")->fetchAll(PDO::FETCH_ASSOC);
+                            foreach ($categories as $category) {
+                                echo "<option value='{$category['category_id']}'>{$category['category_name']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
                 </div>
-            <div>
-                <label for="video_link">Video Link:</label>
-                <input type="text" name="video_link" id="video_link" required>
-            </div>
-            <div>
-                <label for="instructions">Instructions:</label>
-                <textarea name="instructions" id="instructions" rows="5" required></textarea>
-            </div>
-            <div>
-                <label for="ingredients">Ingredients:</label>
-                <textarea name="ingredients" id="ingredients" rows="5" required></textarea>
-            </div>
-            <div>
-                <label for="image_links">Image Links:</label>
-                <textarea name="image_links" id="image_links" rows="5" class="form-control"></textarea>
-            </div>
-            <div id="buttons">
-                <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
-                <button id="add-button" type="submit">Add Recipe</button>
-                <button id="edit-button" type="button" style="display: none;">Edit</button>
-            </div>
-        </form>
-    </div>
-    
-    <div id="popup" style="display: none;">
-        <p id="popup-message" style="background-color: #4CAF50; color: white; text-align: center; padding: 10px;"></p>
-    </div>
-    <div id="preview-section">
-        <div id="readonly-section">
-            <p>Recipe Name: <span class="readonly-input"></span></p>
-            <p>Video Link: <span class="readonly-input"></span></p>
-            <p>Category: <span class="readonly-input"></span></p>
-            <p>Short Description: <span class="readonly-input short-description"></span></p>
-            <img id="recipe-image" src="" alt="Recipe Image" style="max-width: 100%; display: none;">
-        <h3>Instructions</h3>
-            <ol class="readonly-input"></ol>
-        <h3>Ingredients</h3>
-            <ul class="readonly-input"></ul>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="video_link">Video Link:</label>
+                        <input type="text" name="video_link" id="video_link" placeholder="Add a youtube tutorial" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="image_links">Image Links:</label>
+                        <input name="image_links" id="image_links" rows="3" placeholder="Add image links here"></input>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="short_description">Short Description:</label>
+                    <textarea name="short_description" id="short_description" rows="3" placeholder="Add a short description of your recipe" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="instructions">Instructions:</label>
+                        <textarea name="instructions" id="instructions" rows="5" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="ingredients">Ingredients:</label>
+                        <textarea name="ingredients" id="ingredients" rows="5" required></textarea>
+                    </div>
+                </div>
+                <div class="form-buttons">
+                    <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
+                    <button id="add-button" type="submit">Add Recipe</button>
+                    <button id="edit-button" type="button" style="display: none;">Edit</button>
+                </div>
+            </form>
         </div>
-        <h3>Images</h3>
-        <div class='image-gallery'></div>
-        <div id="buttons">
-            <button id="preview-button" type="button" onclick="togglePreview()">Edit</button>
-            <button id="add-button" type="submit">Add Recipe</button>
+
+        <div id="popup" style="display: none;">
+            <p id="popup-message"></p>
         </div>
+        <div id="preview-section" style="display: none;">
+    <div id="readonly-section">
+        <p>Meal Name: <span class="readonly-input meal-name"></span></p>
+        <p>Video Link: <span class="readonly-input short-description"></span></p>
+        <p>Image: <span class="readonly-input video-link"></span></p>
+        <img id="recipe-image" src="" alt="Recipe Image" style="max-width: 100%; display: none;">
+        <h3>Short Description</h3>
+        <p class="readonly-input instructions"></p>
+        <h3>Instruction</h3>
+        <p class="readonly-input ingredients"></p>
     </div>
+    <div class="form-buttons">
+        <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
+        <button id="add-button" type="submit">Add</button>
+        <button id="edit-button" type="button" style="display: none;" onclick="toggleEdit()">Edit</button>
+    </div>
+</div>
 </body>
-</html>
+

@@ -48,82 +48,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <link rel="icon" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>eSangkap</title>
     <style>
         body {
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: #f3f3f3;
             display: flex;
             flex-wrap: wrap;
         }
 
-        .topnav {
-            background-color: #16b978;
-            overflow: hidden;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            padding-top: 90px;
-            transition: top 0.3s;
-        }
-
-        .topnav a {
-            float: center;
-            color: #f2f2f2;
-            text-align: center;
-            padding: 15px 25px;
-            text-decoration: none;
-            font-size: 17px;
-            display: flex;
-            align-items: center;
-        }
-
-        .topnav a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        .topnav a.active {
-            background-color: #04AA6D;
-            color: white;
-        }
-
-        .topnav a i {
-            margin-right: 30px;
-        }
-
-        .button-primary {
-            background-color: #16b978;
-            color: #fff;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .button-primary:hover {
-            background-color: #128a61;
-        }
-
-        .clearfix::after {
-            content: "";
-            clear: both;
-            display: table;
-        }
-
         .logo-container {
+            padding: 7px;
             position: fixed;
-            top: 0;
             width: 100%;
             display: flex;
             justify-content: center;
@@ -133,132 +75,235 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
             z-index: 1000;
         }
 
-        .logo {
+        .logo-container img {
+            height: 60px;
+            width: auto;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        .logo-title {
+            color: #f04e23;
+        }
+
+        .sidebar {
+            background-color: #f04e23;
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 15px;
+            text-align: left;
             display: flex;
             align-items: center;
         }
 
-        .logo img {
-            height: 50px;
-            padding: 20px;
-            width: auto;
-            margin-right: 10px;
+        .sidebar a i {
+            margin-right: 15px;
+        }
+        .sidebar a.active {
+            background-color:#ffcccb;
+            color: darkred;
         }
 
-        .logo h1 {
-            font-family: cursive;
-            font-size: 24px;
-            margin: 0;
-            color: #16b978;
-        }     
+        .sidebar a:hover {
+            background-color: white;
+            color: darkred;
+        }
+
         .container {
-            width: 100%;
-            margin-top: 120px;
+            margin: 0 auto;
             padding: 20px;
+            max-width: 900px;
             background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            flex-direction: column;
+            margin-top: 100px;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            text-align: center;
+            margin-bottom: 20px;
         }
 
-        h1, h2, h3 {
-            color: #04AA6D;
+        .buttons {
+            display: flex;
+            justify-content: flex-end; 
+            margin-bottom: 10px;
         }
 
-        a {
-            color: #007BFF;
-        }
-        img {
-            width: 30%;
-        }
-        button, .shopping-list-btn {
-            padding: 0;
-            margin: 0;
+        .buttons a,
+        .buttons button {
             background: none;
             border: none;
             cursor: pointer;
-            color: black;
-            margin-left: 10px;
-            display: center;
+            font-family: 'Poppins', sans-serif;
+            /* Set the font to Poppins */
+            font-size: 1rem;
+            color:black;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-align: center;
+            display: flex;
             align-items: center;
-            font-size:15px;
+            text-decoration: none;
+            /* Remove underline */
         }
 
-        .shopping-list-btn i,
-        button i {
-            margin-right: 10px;
+        img {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 10px;
+            border-radius: 10px;
         }
 
+        h2 {
+            color: #f04e23;
+        }
 
-        .button-secondary {
-            margin-top: 20px;
-                margin-left: 25px;
-                margin-bottom: 20px;
-                color: gray;
-                padding: 8px 16px;
-                text-decoration: none;
-                display: flex;
-                align-items: center;
-                border: none;
-                font-size: 20px;
-                background-color: transparent; 
-            }
-            .topnav a.active {
-                background-color: lightgray;
-                color: black;
-            }
+        h3 {
+            color: black;
+        }
+
+        p {
+            font-size: 16px;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .list-box ol.rounded-list {
+            counter-reset: li;
+        }
+
+        .list-box ol.rounded-list li {
+            position: relative;
+            padding: 15px;
+            background: #f3f3f3;
+            border-radius: 5px;
+            margin-top: 12px;
+            list-style: none;
+        }
+
+        .list-box ol.rounded-list li:before {
+            content: counter(li);
+            counter-increment: li;
+            position: absolute;
+            left: -2em;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #f04e23;
+            height: 30px;
+            width: 30px;
+            line-height: 30px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 50%;
+            color: white;
+        }
+
+        .watch-video {
+            display: inline-block;
+            padding: 10px 16px;
+            background-color: #f04e23;
+            color: #fff;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .meal-header {
+            display: flex;
+            justify-content: space-between; /* This will allow space between meal name and video button */
+            align-items: center; /* Align items vertically centered */
+            margin-top: 10px;
+        }
+
+        .meal-header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .meal-header .watch-video {
+            margin-left: 20px;
+        }
+
+        .watch-video:hover {
+            background-color: rgb(231, 101, 99);
+            color: darkred;
+        }
+
+        .watch-video i {
+            margin-right: 8px;
+        }
     </style>
 </head>
+
 <body>
-<div class="logo-container">
-        <div class="logo">
-            <img src="logo.png" alt="Tastebud Logo">
-            <h1>Tastebud</h1>
+    <div class="logo-container">
+        <img src="logo.jpg" alt="Logo">
+        <h2 class="logo-title">eSangkap</h2>
+    </div>
+    <div class="sidebar">
+        <a href="9customer.php"><i class="fa fa-fw fa-home"></i> Home</a>
+        <a href="favoritesreen.php"><i class="fas fa-heart"></i> Favorites</a>
+        <a href="view_categories.php"><i class="fas fa-list"></i> Categories</a>
+        <a href="12user_profile.php" class="active"><i class="fas fa-user"></i> Profile</a>
+        <a href="about_us.php"><i class="fas fa-info-circle"></i> About Us</a>
+        <a href="4logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+    <div class="container">
+        <div class="buttons">
+            <a href="shoppingList.php?meal_id=<?php echo $meal_id; ?>"><i class="fas fa-shopping-cart"></i></a>
+            <a href="16editpost.php?meal_id=<?php echo $meal_id; ?>"><i class="fas fa-edit"></i></a>
+            <form method="POST">
+                <button type="submit" name="delete_recipe" onclick="return confirm('Are you sure you want to delete this recipe?')"><i class="fas fa-trash-alt"></i></button>
+            </form>
+    </div>
+        <!-- Meal Content -->
+        <img src="<?php echo $images[0]['image_link']; ?>" alt="Meal Image">
+        <div class="meal-header">
+            <h1><?php echo $meal['meal_name']; ?></h1>
+            <a class="watch-video" href="<?php echo $meal['video_link']; ?>" target="_blank">
+                <i class="fas fa-play-circle"></i> Watch Video
+            </a>
+        </div>
+        <h3>Description:</h3>
+        <p><?php echo $meal['description']; ?></p>
+
+        <!-- Ingredients -->
+        <h3>Ingredients</h3>
+        <div class="list-box">
+            <ol class="rounded-list">
+                <?php foreach ($ingredients as $ingredient) { ?>
+                    <li><?php echo $ingredient['ingredient_name']; ?></li>
+                <?php } ?>
+            </ol>
+        </div>
+
+        <!-- Instructions -->
+        <h3>Instructions</h3>
+        <div class="list-box">
+            <ol class="rounded-list">
+                <?php foreach ($instructions as $instruction) { ?>
+                    <li><?php echo $instruction['step_description']; ?></li>
+                <?php } ?>
+            </ol>
         </div>
     </div>
-     
-    <div class="topnav">
-        <a href="12user_profile.php"<?php echo (basename($_SERVER['PHP_SELF']) == '15userposts.php') ? 'class="active"' : ''; ?>><i class="fa fa-fw fa-user"></i>Profile</a>
-        <a href="view_categories.php"><i class="fas fa-fw fa-user"></i>Categories</a>
-        <a href="9customer.php"><i class="fa-solid fa-utensils"></i>User Recipes</a>
-        <a href="14chat.php"><i class="fa-solid fa-comment"></i>Chat</a>
-        <a href="4logout.php"><i class="fas fa-fw fa-sign-out"></i> Logout</a>
-    </div>
-
-    <div class="container">
-        <button class="button-secondary" onclick="window.location.href='12user_profile.php'">
-            <i class="fas fa-arrow-left"></i> </button>
-
-        <h2 style="margin-top: 20px;">
-            <span style="display: inline-block; margin-right: 10px;"><?php echo $meal['meal_name']; ?></span>
-            <p><?php echo $meal['description']; ?></p>
-            <a href="shoppingList.php?meal_id=<?php echo $meal_id; ?>" class="shopping-list-btn">
-                <i class="fas fa-shopping-cart"></i></a>
-            <form style="display: inline-block;" method="post" action="">
-                <button type="submit" name="edit_recipe"><i class="fas fa-edit"></i></button>
-                <button type="submit" name="delete_recipe" onclick="return confirm('Are you sure you want to delete this recipe?')">
-                    <i class="fas fa-trash-alt"></i> </button>
-            </form>
-        </h2>
-        <?php foreach ($images as $image) { ?>
-            <img src="<?php echo $image['image_link']; ?>" alt="Recipe Image"><br><br>
-        <?php } ?>
-
-        <a href="<?php echo $meal['video_link']; ?>" target="_blank">Watch Video</a>
-
-        <h3 id="instructions">Instructions</h3>
-        <ul>
-            <?php foreach ($instructions as $instruction) { ?>
-                <li><?php echo $instruction['step_description']; ?></li>
-            <?php } ?>
-        </ul>
-
-        <h3 id="ingredients">Ingredients</h3>
-        <ul>
-            <?php foreach ($ingredients as $ingredient) { ?>
-                <li><?php echo $ingredient['ingredient_name']; ?></li>
-            <?php } ?>
-        </ul>
 </body>
+
 </html>

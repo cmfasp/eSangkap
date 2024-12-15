@@ -78,592 +78,440 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
-    body {
-        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f3f3f3;
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    .topnav {
-        background-color: #16b978;
-        overflow: hidden;
-        position: fixed;
-        top: 0;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        padding-top: 90px;
-        transition: top 0.3s;
-    }
-
-    .topnav a {
-        float: center;
-        color: #f2f2f2;
-        text-align: center;
-        padding: 15px 25px;
-        text-decoration: none;
-        font-size: 17px;
-        display: flex;
-        align-items: center;
-    }
-
-    .topnav a:hover {
-        background-color: #ddd;
-        color: black;
-    }
-
-    .topnav a.active {
-        background-color: #04AA6D;
-        color: white;
-    }
-    
-    .topnav a i {
-            margin-right: 30px;
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .logo-container {
+            position: fixed;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
         }
 
-    .clearfix::after {
-        content: "";
-        clear: both;
-        display: table;
-    }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        h2{
+            margin-top: 40px;
+            color: #f04e23;
+            align-items: center;
+            justify-content: center;
+        }
 
-    .logo-container {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #fff;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-    }
+        h1,
+        h3 {
+            font-weight: bold;
+            margin-top: 20px;
+            margin-left: 60px;
+        }
 
-    .logo {
-        display: flex;
-        align-items: center;
-    }
+        .logo img {
+            height: 50px;
+            padding: 20px;
+            width: auto;
+            margin-right: 10px;
+        }
 
-    .logo img {
-        height: 50px;
-        padding: 20px;
-        width: auto;
-        margin-right: 10px;
-    }
+        .logo {
+            width: 60px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
 
-    .logo h1 {
-        font-family: cursive;
-        font-size: 24px;
-        margin: 0;
-        color: #16b978;
-    }
+        .sidebar {
+            background-color: #f04e23;
+            margin-top: 65px;
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            padding-top: 30px;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .container {
-        flex-grow: 1;
-        background-color: #fff;
-        width: 100%;
-        padding: 20px;
-    }
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 15px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
 
-    button {
-        background-color: #16b978;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        text-decoration: none;
-        font-size: 16px;
-        margin-top: 10px;
-        margin-left: 10px;
-        display: inline-block;
-    }
+        .sidebar a.active {
+            background-color:#ffcccb;
+            color: darkred;
+        }
 
-    .delete-comment-btn,
-        .submit-comment-btn {
+        .sidebar a.active {
+            background-color: #ffcccb;
+            color: darkred;
+        }
+
+        .sidebar a i {
+            margin-right: 15px;
+        }
+        .container {
+            background-color: #fff;
+            width: 60%;
+            margin-right: 900px;
+            justify-content: center;
+            margin: 40px auto;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .views {
+            
+            font-size: 16px;
+            background-color: #f04e23;
+            color: white;
+            border-radius: 20px;
+            width: 10%;
+            padding: 15px;
+            margin-left: 875px;
+            display: flex;
+        }
+        button {
+            background-color: darkred;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .comment-item {
+            border-radius: 5px;
+            margin: 20px 0 0 40px;
+            background-color: #f3f3f3;
+            padding: 15px;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            word-wrap: break-word;
+            max-width: 100%;
+        }
+
+       
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .comment-text-wrapper {
+            flex-grow: 1;
+        }
+
+        .comment-text {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            word-wrap: break-word;
+            max-width: 90%;
+            margin-left: 20px;
+        }
+
+        .comment-info {
+            font-size: 14px;
+            color: #555;
+            margin-top: 5px;
+            margin-left: 20px;
+        }
+        .delete-form {
+            margin-left: 10px;
+            display: flex;
+            width: 50px;
+        }
+        .delete-comment-btn {
             background: none;
             border: none;
             cursor: pointer;
-            padding: 5px; /* Add padding for better visual appearance */
-        }
-
-        .delete-comment-btn {
-            margin-left: 850px;
+            padding: 5px;
             color: grey;
         }
+        .comment-form {
+            display: flex;
+            width: calc(150% - 100px);
+            margin-top: 15px;
+        }
+
+        .comment-form textarea {
+            width: calc(150% - 50px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: none;
+            word-wrap: break-word;
+            margin-right: 60px;
+        }
+
         .submit-comment-btn {
-            background-color: #16b978;
+            background-color: #f04e23;
             color: white;
-            border-radius: 5px;         
-            padding: 25px; /* Adjust padding for better visual appearance */
+            border: none;
+            border-radius: 5px;
+            padding: 25px 30px;
+            cursor: pointer;
+            margin-left: 15px;
+            font-size: 16px;
         }
-
-
-        .submit-comment-btn:hover {
-            background-color: #128d63;
-        }
-    .views {
-        font-size: 16px;
-        font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        font-weight: 1000;
-        border: #16b978;
-        background-color: #16b978;
-        color: white;
-        border-radius: 20px;
-        width: 8%;
-        padding: 15px;
-        margin-left: 739px;
-        text-align: center;
-    }
-
-    .comments-list {
-        list-style-type: none;
-        padding: 0;
-        align-items: center;
-    }
-
-    .comment-item {
-        border-radius: 20px;
-        margin-bottom: 10px;
-        text-align: left; 
-        margin-right: 624px;
-        margin-left: 60px;
-        background-color: #f3f3f3;
-        padding-bottom: 10px;
-    }
-
-    .comment-text {
-        margin-right: 20px;
-        padding-right: 10px;
-        margin-bottom: 10px;
-    }
-
-    .comment-info {
-        font-size: 14px;
-        color: #555;
-    }
-
-    form {
-        margin-top: 20px;
-        width: 100%;
-        display: flex;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 5px;
-        margin-left: 20px;
-    }
-
-    form textarea {
-        width: 55%; /* Adjusted width to 60% */
-        box-sizing: border-box;
-        padding: 10px;
-        border-radius: 5px;
-        border: 1px solid #ddd;
-        margin-left: 60px;
-    }
-
-    .comments-box p.no-comments {
-       margin-left: 30%;
-       padding: 20px;
-    }
-   
-    .add-comment-link {
-        color: #16b978;
-        cursor: pointer;
-        text-decoration: underline;
-        margin-top: 10px;
-        margin-left: 10px;
-        margin-right: 100px;
-        display: inline-block;
-        width: 55%; /* Adjusted width to 60% */
-       
-    }
-    .button-success{
-        margin-left: 60px; /* Adjusted margin to 40px */
-        color: white;
-        padding: 8px 16px;
-        display: inline-block;
-        border: none;
-        font-size: 16px;
-        text-align: center;
-    }
-
-    .button-secondary {
-        margin-top: 140px;
-        margin-left: 60px; /* Adjusted margin to 40px */
-        color: grey;
-        padding: 8px 16px;
-        display: inline-block;
-        border: none;
-        font-size: 16px;
-        text-align: center;
-        background-color: transparent; /* Remove the green background */
-        margin-bottom: -100%;
-    }
-
-
-    .topnav a.active {
-        background-color: lightgray;
-        color: black;
-    }
-    .watch-video {
-        margin-left: 30%;
-       padding: 20px;
-    }
-    img {
-        padding: 20px;
-        margin-right: 10px;
-        width: 60%;
-        height: 60vh;
-        object-fit: cover;
-        border-radius: 30px;
-        margin-left: 40px;
-    }
-    h3 {
-        font-weight: bold;
-        font-family: sans-serif;
-        margin-top: 30px;
-        margin-left: 60px;
-    }
-    p{
-        margin-left: 60px;
-    }
-    .meal-details-box {
-        margin-top: 60px;
-        align-items: center;
-    }
-
-    .meal-details-box h1,
-    .meal-details-box p,
-    .meal-details-box button {
-        margin-left: 60px; /* Adjusted margin to 40px */
-
-    }
-    .list-box {
-        width: 63%;
-        margin-top: 20px;
-        overflow: hidden;
-        margin-bottom: 15px;
-        margin-left: 20px;
-
-    }
-
-    .list-box h3 {
-            background: #16b978; /* Adjust the color */
-            padding: 10px 20px;
-            font-size: 20px;
-            font-weight: 700;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
-
-    .list-box ul {
-            position: relative;
-        }
-
-    .list-box ul li {
-        list-style: none;
-        padding: 10px;
-        width: 100%;
-        background: #fff;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-        transition: transform 0.5s;
-    }
-
-    .list-box ul li:hover {
-        transform: scale(1.1);
-        z-index: 5;
-        background: #16b978; /* Change hover color to green */
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-        color: #fff;
-    }
-
-    .list-box ul li span {
-        width: 20px;
-        height: 20px;
-        text-align: center;
-        line-height: 20px;
-        background: #16b978; /* Change initial color */
-        color: #fff;
-        display: inline-block;
-        border-radius: 50%;
-        margin-right: 10px;
-        font-size: 12px;
-        font-weight: 600;
-        transform: translateY(-2px);
-    }
-
-    .list-box ul li:hover span {
-        background: #fff;
-        color: #16b978; /* Change hover color to green */
-    }
-ol.rounded-list {
-            counter-reset: li;
-            list-style: none;
-            font: 15px 'trebuchet MS', 'lucida sans';
+        .comments-list {
             padding: 0;
-            width: 115%;
-            
-
+            margin: 0;
+            list-style-type: none;
+        }
+          form {
+            margin-top: 20px;
+            width: 100%;
+            display: flex;
+        }
+        form textarea {
+            width: 120%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            margin-left: 60px;
+        }
+        .button-success {
+            margin-left: 60px;
+            color: white;
+            padding: 8px 16px;
+            display: inline-block;
+            border: none;
+            font-size: 16px;
+            text-align: center;
         }
 
-        ol.rounded-list ol {
-            margin: 0 0 0 2em;
+        .button-secondary {
+            margin-top: 140px;
+            margin-left: 60px;
+            color: grey;
+            padding: 8px 16px;
+            display: inline-block;
+            border: none;
+            font-size: 16px;
+            text-align: center;
+            background-color: transparent;
+            margin-bottom: -100%;
+        }
+        img {
+            margin-bottom: 20px;
+            margin-left: 60px;
+            width: 95%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 30px;
         }
 
-        ol.rounded-list a {
+        p {
+            margin-left: 60px;
+        }
+
+        .meal-details-box {
+            margin-top: 60px;
+            align-items: center;
+        }
+
+        .meal-details-box h1,
+        .meal-details-box p,
+        .meal-details-box button {
+            margin-left: 60px;
+        }
+
+        ol.rounded-list {
+            counter-reset: li;
+        }
+
+        .list-box ol.rounded-list li {
             position: relative;
-            display: block;
-            padding: .4em .4em .4em 2em;
-            padding: .4em;
-            margin: .5em 0;
-            background: #ddd;
-            color: #444;
-            text-decoration: none;
-            border-radius: 15px;
-            transition: all .3s ease-out;
+            padding: 15px;
+            background: #f3f3f3;
+            border-radius: 5px;
+            margin-top: 12px;
+            margin-left: 60px;
+            list-style: none;
         }
 
-        ol.rounded-list a:hover {
-            background: #eee;
-        }
-
-        ol.rounded-list a:hover:before {
-            transform: rotate(360deg);
-        }
-
-        ol.rounded-list a:before {
+        .list-box ol.rounded-list li:before,
+        .instructions ol.rounded-list li:before {
             content: counter(li);
             counter-increment: li;
             position: absolute;
-            left: -1.3em;
+            left: -2em;
             top: 50%;
-            background: #87ceeb;
-            height: 2em;
-            width: 2em;
-            line-height: 2em;
-            border: .3em solid #fff;
+            margin-top: -1em;
+            background: #f04e23;
+            height: 30px;
+            width: 30px;
+            line-height: 30px;
+            border: 5px solid #fff;
             text-align: center;
             font-weight: bold;
             border-radius: 2em;
             transition: all .3s ease-out;
+            color: #fff;
+        }
+        .watch-video {
+            display: inline-block;
+            padding: 10px 16px;
+            background-color: #f04e23;
+            color: #fff;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .watch-video:hover {
+            background-color: rgb(231, 101, 99);
+            color: darkred;
         }
 
-    .rounded-list a {
-        position: relative;
-        display: block;
-        padding: .4em .4em .4em 2em;
-        padding: .4em;
-        margin: .5em 0;
-        background: #ddd;
-        color: #444;
-        text-decoration: none;
-        border-radius: .3em;
-        transition: all .3s ease-out;
-    }
+        .watch-video i {
+            margin-right: 8px;
+        }
+        .meal-header {
+            display: flex;
+            justify-content: space-between;
+            margin-left: 60px;
+        }
 
-    .rounded-list a:hover {
-        background: #eee;
-    }
+        .meal-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
 
-    .rounded-list a:hover:before {
-        transform: rotate(360deg);
-    }
-
-    .rounded-list a:before {
-        content: counter(li);
-        counter-increment: li;
-        position: absolute;
-        left: -1.3em;
-        top: 50%;
-        margin-top: -1.3em;
-        background: #87ceeb;
-        height: 2em;
-        width: 2em;
-        line-height: 2em;
-        border: .3em solid #fff;
-        text-align: center;
-        font-weight: bold;
-        border-radius: 2em;
-        transition: all .3s ease-out;
-    }
-
-    .list-box ol.rounded-list li,
-    .instructions ol.rounded-list li {
-        position: relative;
-        padding: 1rem;
-        background: #f3f3f3;
-        border-radius: .3em;
-        margin-top: 1rem;
-        margin-left: 60px;
-        list-style: none;
-    }
-
-    .list-box ol.rounded-list li:before,
-    .instructions ol.rounded-list li:before {
-        content: counter(li);
-        counter-increment: li;
-        position: absolute;
-        left: -2em;
-        top: 50%;
-        margin-top: -1em;
-        background: #16b978;
-        height: 2em;
-        width: 2em;
-        line-height: 2em;
-        border: .3em solid #fff;
-        text-align: center;
-        font-weight: bold;
-        border-radius: 2em;
-        transition: all .3s ease-out;
-        color: #fff;
-    }
-    .watch-video {
-        display: inline-block;
-        padding: 10px 16px;
-        background-color: #16b978;
-        color: #fff;
-        border: none;
-        border-radius: 20px;
-        cursor: pointer;
-        text-decoration: none;
-        font-size: 14px;
-        margin-top: 5px;
-        box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
-    }
-
-    .watch-video:hover {
-        background-color: #128a61;
-        color: WHITE;
-    }
-    .watch-video i {
-        margin-right: 8px;
-    }
-    
-
-</style>
+        .meal-header .watch-video {
+            margin-left: 20px;
+        }
+    </style>
 </head>
+
 <body>
     <div class="logo-container">
-        <div class="logo">
-            <img src="logo.png" alt="Tastebud Logo">
-            <h1>Tastebud</h1>
-        </div>
+        <img src="logo.jpg" alt="Logo" class="logo">
+        <h2 class="title">eSangkap</h2>
     </div>
-    
-    <div class="topnav">
-    <a href="12user_profile.php"><i class="fas fa-fw fa-user"></i>Profile</a>
-        <a href="view_categories.php"><i class="fa-solid fa-list"></i>Categories</a>
-        <a href="9customer.php" <?php echo (basename($_SERVER['PHP_SELF']) == '11meal_details_comments.php') ? 'class="active"' : ''; ?>><i class="fa fa-fw fa-utensils"></i>User Recipes</a>
-        <a href="14chat.php"><i class="fa-solid fa-comment"></i>Chat</a>
-        <a href="4logout.php"><i class="fas fa-fw fa-sign-out"></i> Logout</a>
-    </div>
-    <div class="container">
-    <button class="button-secondary" onclick="window.location.href='15userposts.php'">
-            <i class="fas fa-arrow-left"></i>
-    </button>
-    <div class="meal-details-box">
-    <h1><?php echo $meal['meal_name']; ?></h1>
-    <h2><p><?php echo $meal['username']; ?></p></strong><h2>
-</div>
 
-    <?php foreach ($images as $image): ?>
-        <img src="<?php echo $image['image_link']; ?>" alt="Meal Image">
-    <?php endforeach; ?><br>
-    <a class="watch-video" href="<?php echo $meal['video_link']; ?>" target="_blank">
+    <div class="sidebar">
+        <a href="9customer.php" class="active"><i class="fa fa-fw fa-home"></i>Home</a><?php echo (basename($_SERVER['PHP_SELF']) == '9customer.php') ? 'class="active"' : ''; ?>
+        <a href="favoritesreen.php"><i class="fa-solid fas fa-heart"></i>Favorites</a>
+        <a href="view_categories.php"><i class="fa-solid fa-list"></i>Categories</a>
+        <a href="12user_profile.php"><i class="fas fa-user"></i>Profile</a>
+        <a href="about_us.php"><i class="fa-solid fa-info-circle"></i>About Us</a>
+        <a href="4logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
+    </div>
+
+    <div class="container">
+        <h2><p><?php echo $meal['username']; ?></p><h2>
+                <?php foreach ($images as $image): ?>
+                    <img src="<?php echo $image['image_link']; ?>" alt="Meal Image">
+                <?php endforeach; ?><br>
+                <div class="meal-header">
+                    <h1><?php echo $meal['meal_name']; ?></h1>
+                    <a class="watch-video" href="<?php echo $meal['video_link']; ?>" target="_blank">
                         <i class="fas fa-play-circle"></i> Watch Video
                     </a>
-    <h3>Description: </h3>
-    <p><?php echo $meal['description']; ?></p>
-    <h3><p class= "views">Views: <?php echo $meal['views']; ?></p></h3>
+                </div>
+                <h3>Description: </h3><p><?php echo $meal['description']; ?></p>
+                <p class="views">Views: <?php echo $meal['views']; ?></p>
+                      <!-- Ingredients -->
+        <h3>Ingredients</h3>
+        <div class="list-box">
+            <ol class="rounded-list">
+                <?php foreach ($ingredients as $ingredient) { ?>
+                    <li><?php echo $ingredient['ingredient_name']; ?></li>
+                <?php } ?>
+            </ol>
+        </div>
 
-  
-    <h3>Ingredients</h3>
-    <div class="list-box">
-        <ol class="rounded-list">
-            <?php foreach ($ingredients as $key => $ingredient): ?>
-                <li>
-                    <span><?php echo $key + 1; ?></span>
-                    <?php echo $ingredient['ingredient_name']; ?>
-                </li>
-            <?php endforeach; ?>
-        </ol>
-    </div>
-    <h3>Instructions</h3>
-<div class="list-box">
-  <ol class="rounded-list">
-    <?php foreach ($instructions as $key => $instruction): ?>
-      <li>
-        <span><?php echo $key + 1; ?></span>
-        <?php echo $instruction['step_description']; ?>
-      </li>
-    <?php endforeach; ?>
-  </ol>
-</div>
+        <!-- Instructions -->
+        <h3>Instructions</h3>
+        <div class="list-box">
+            <ol class="rounded-list">
+                <?php foreach ($instructions as $instruction) { ?>
+                    <li><?php echo $instruction['step_description']; ?></li>
+                <?php } ?>
+            </ol>
+        </div>
 
-<button class="button-success" onclick="window.location.href='ratings.php?meal_id=<?php echo $meal_id; ?>'">
-    <i class="fa-solid fa-star" style="color: #FDCC0D;"></i> Rate this Meal
-</button>
+                <button class="button-success" onclick="window.location.href='ratings.php?meal_id=<?php echo $meal_id; ?>'">
+                    <i class="fa-solid fa-star" style="color: #FDCC0D;"></i> Rate this Meal
+                </button>
 
-
-   
-        <h3>Comments</h3>
-    <div class="comments-box">
-        <ul class="comments-list">
-            <?php if (count($comments) > 0): ?>
-                <?php foreach ($comments as $comment): ?>
-                    <li class="comment-item">
-                        <div class="comment-header">
-                        <form method="post" action="">
-                                <input type="hidden" name="delete_comment" value="<?php echo $comment['comment_id']; ?>">
-                                <button type="submit" class="delete-comment-btn"><i class="fas fa-trash-alt"></i></button>
-                            </form>
-                            <p class="comment-text">
-                                <strong><?php echo $comment['user_name']; ?>:</strong> <?php echo $comment['comment_text']; ?>
-            
-                            </p>
-                            <p class="comment-info"><?php echo $comment['created_at']; ?></p>
-                        </div>
-                        <?php if ($userLoggedIn && $_SESSION['username'] === $comment['user_name']): ?>
-        
+                <div class="comments-box">
+                    <h3>Comments</h3>
+                    <ul class="comments-list">
+                        <?php if (count($comments) > 0): ?>
+                            <?php foreach ($comments as $comment): ?>
+                                <li class="comment-item">
+                                    <div class="comment-header">
+                                        <div class="comment-text-wrapper">
+                                            <p class="comment-text">
+                                                <strong><?php echo $comment['user_name']; ?>:</strong>
+                                                <?php echo $comment['comment_text']; ?>
+                                            </p>
+                                            <p class="comment-info"><?php echo $comment['created_at']; ?></p>
+                                        </div>
+                                        <form method="post" action="" class="delete-form">
+                                            <input type="hidden" name="delete_comment" value="<?php echo $comment['comment_id']; ?>">
+                                            <button type="submit" class="delete-comment-btn">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </li>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>No comments available.</p>
                         <?php endif; ?>
-                    </li>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p>No comments available.</p>
-            <?php endif; ?>
-        </ul>
+                    </ul>
 
 
-            <!-- Your comment form goes here -->
-            <?php if ($allowComments): ?>
-                <form method="post" action="">
-                    <textarea name="comment" placeholder="Write a comment..." id="comment" rows="3" required></textarea>
-                    <!-- Use Font Awesome paper-plane icon for submit button -->
-                    <button type="submit" class="submit-comment-btn"><i class="fas fa-paper-plane"></i></button>
-                </form>
-            <?php else: ?>
-                <p>Login to post comments.</p>
-            <?php endif; ?>
-        </ul>
-    </div>
+                    <!-- Your comment form goes here -->
+                    <?php if ($allowComments): ?>
+                        <form method="post" action="">
+                            <textarea name="comment" placeholder="Write a comment..." id="comment" rows="3" required></textarea>
+                            <button type="submit" class="submit-comment-btn"><i class="fas fa-paper-plane"></i></button>
+                        </form>
+                    <?php else: ?>
+                        <p>Login to post comments.</p>
+                    <?php endif; ?>
+                    </ul>
+                </div>
 
-        <script>
-            function toggleCommentForm() {
-                const commentForm = document.querySelector('.comment-form');
-                commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
-            }
-        </script>
+                <script>
+                    function toggleCommentForm() {
+                        const commentForm = document.querySelector('.comment-form');
+                        commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
+                    }
+                </script>
     </div>
 </body>
+
 </html>
