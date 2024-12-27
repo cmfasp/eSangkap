@@ -503,7 +503,7 @@ function getTimeElapsedString($datetime)
             ?>
                 <div class="recipe-box">
                     <?php
-                    $meal_id = $recipe['meal_id'];  // Assuming $recipe contains the meal data
+                    $meal_id = $recipe['meal_id'];
                     $imageStmt = $pdo->prepare("SELECT * FROM meal_images WHERE meal_id = ? LIMIT 1");
                     $imageStmt->execute([$meal_id]);
                     $firstImage = $imageStmt->fetch(PDO::FETCH_ASSOC);
@@ -512,12 +512,23 @@ function getTimeElapsedString($datetime)
                         echo '<img src="' . $firstImage['image_link'] . '" style="max-width: 100%;">';
                     }
                     ?>
+                    <?php
+                    $favStmt = $pdo->prepare("SELECT * FROM favorites WHERE meal_id = ? AND username = ?");
+                    $favStmt->execute([$meal_id, $loggedInUsername]);
+                    $isFavorite = $favStmt->rowCount() > 0;
+                    ?>
+
                     <div class="meal-header">
                         <h2><?php echo $recipe['meal_name']; ?></h2>
-                        <a href="add_to_favorites.php?meal_id=<?php echo $meal_id; ?>" class="favorite-button">
-                            <i class="fas fa-heart"></i> Favorite
-                        </a>
-
+                        <?php if ($isFavorite): ?>
+                            <button class="favorite-button" disabled>
+                                <i class="fas fa-heart"></i> Already in Favorites
+                            </button>
+                        <?php else: ?>
+                            <a href="add_to_favorites.php?meal_id=<?php echo $meal_id; ?>" class="favorite-button">
+                                <i class="fas fa-heart"></i> Favorite
+                            </a>
+                        <?php endif; ?>
                     </div>
                     <p><strong><?php echo $recipe['username']; ?></strong></p>
                     <?php
@@ -539,30 +550,25 @@ function getTimeElapsedString($datetime)
     </div>
 
     <script>
-        // jQuery to handle favorite button click
         $(document).ready(function() {
             $(".favorite-button").click(function() {
-                var meal_id = $(this).data("meal-id"); // Get meal_id from the button's data attribute
+                var meal_id = $(this).data("meal-id");
 
-                // Make AJAX request to add the meal to favorites
+
                 $.ajax({
-                    url: '9customer.php', // The PHP file that processes the request
+                    url: 'add_to_favorite.php',
                     type: 'GET',
                     data: {
                         meal_id: meal_id
-                    }, // Send meal_id as a GET parameter
+                    },
                     success: function(response) {
-                        // Check if the response is "success"
                         if (response === "success") {
-                            // Show a pop-up message
                             alert("Successfully added to favorites!");
                         } else {
                             alert("Error: " + response);
                         }
                     },
-                    error: function() {
-                        alert("An error occurred. Please try again.");
-                    }
+
                 });
             });
         });
@@ -570,3 +576,4 @@ function getTimeElapsedString($datetime)
 </body>
 
 </html>
+<?php echo "Meal ID: " . $meal_id; ?>

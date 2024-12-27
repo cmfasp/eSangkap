@@ -1,45 +1,42 @@
 <?php
 session_start();
-require('0conn.php'); // Include your database connection file
+require('0conn.php'); 
 
-// Check if user is logged in
+
 if (!isset($_SESSION['username'])) {
     echo "Please log in to add meals to your favorites.";
     exit;
 }
 
-$username = $_SESSION['username'];  // Get username from session
+$username = $_SESSION['username'];  
 
-// Check if meal_id is provided
+
 if (isset($_GET['meal_id'])) {
     $meal_id = $_GET['meal_id'];
 
-    // Prepare SQL query to insert the meal into favorites table
-    $sql = "INSERT INTO favorites (username, meal_id, date_added) VALUES (?, ?, NOW())";
-
-    // Prepare the statement
-    $stmt = mysqli_prepare($conn, $sql);
-
-    if ($stmt === false) {
-        echo "Error preparing the query: " . mysqli_error($conn);
-        exit;
+  // checkingg if meal is exists
+    $checkStmt = $conn->prepare("SELECT * FROM favorites WHERE username = ? AND meal_id = ?");
+    $checkStmt->bind_param("si", $username, $meal_id);
+    if (!$checkStmt->execute()) {
+        die("Query Error: " . $checkStmt->error);
     }
+    $checkStmt->store_result();
 
-    // Bind parameters and execute the query
-    mysqli_stmt_bind_param($stmt, 'si', $username, $meal_id);
-
-    if (mysqli_stmt_execute($stmt)) {
-        echo "Meal added to favorites successfully!";
+    if ($checkStmt->num_rows > 0) {
+        echo "<script>alert('This meal is already in your favorites.');</script>";
     } else {
-        echo "Error adding meal to favorites: " . mysqli_error($conn);
+        
+        $stmt = $conn->prepare("INSERT INTO favorites (username, meal_id, date_added) VALUES (?, ?, NOW())");
+        $stmt->bind_param("si", $username, $meal_id);
+
+        if ($stmt->execute()) {
+            echo "<script>alert('Meal successfully added to favorites!');</script>";
+        } else {
+            die("Error adding meal: " . $stmt->error);
+        }
     }
-
-    // Close statement
-    mysqli_stmt_close($stmt);
+    header("Location: favoritescreen.php");
+    exit;
 } else {
-    echo "No meal ID specified.";
+    echo "No meal ID provided.";
 }
-
-// Close the database connection
-mysqli_close($conn);
-?>

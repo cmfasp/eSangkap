@@ -57,6 +57,7 @@ function getTimeElapsedString($datetime)
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -111,7 +112,8 @@ function getTimeElapsedString($datetime)
         }
 
         .sidebar {
-            background-color: #f04e23;;
+            background-color: #f04e23;
+            ;
             margin-top: 65px;
             height: 100%;
             width: 250px;
@@ -136,14 +138,15 @@ function getTimeElapsedString($datetime)
         }
 
         .sidebar a:hover {
-            background-color:white;
+            background-color: white;
             color: darkred;
         }
 
         .sidebar a.active {
-            background-color:#ffcccb;
+            background-color: #ffcccb;
             color: darkred;
         }
+
         .sidebar a i {
             margin-right: 15px;
         }
@@ -163,11 +166,13 @@ function getTimeElapsedString($datetime)
             text-decoration: none;
             font-size: 14px;
         }
+
         .action-button i {
             margin-right: 10px;
         }
+
         .action-button:hover {
-            background-color:#ffcccb;
+            background-color: #ffcccb;
             color: darkred;
         }
 
@@ -180,6 +185,7 @@ function getTimeElapsedString($datetime)
             margin-bottom: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         .recipe-box img {
             width: 100%;
             height: 400px;
@@ -192,13 +198,14 @@ function getTimeElapsedString($datetime)
             font-size: 14px;
             color: #666;
         }
-        
+
         .timeline-section {
             max-width: 800px
         }
+
         .content {
             max-width: 900px;
-            margin-left:  400px;
+            margin-left: 400px;
             margin-right: auto;
         }
 
@@ -236,30 +243,33 @@ function getTimeElapsedString($datetime)
         .add-recipe-button i {
             margin-right: 10px;
         }
-    
+
         .recipe-box {
             background-color: #fff;
             box-sizing: border-box;
-            border-bottom: 3px ;
+            border-bottom: 3px;
             background: white;
             margin-bottom: 5px;
             margin-top: 25px;
             width: calc(180% - 100px);
             margin-bottom: 25px;
-            margin-right:  100px;
+            margin-right: 100px;
         }
+
         .recipe-box img {
             width: 100%;
             height: 400px;
             object-fit: cover;
             border-radius: 10px;
         }
+
         .recipe-details h2 {
             margin: 0;
             font-size: 20px;
             color: #333;
             display: inline-block;
         }
+
         .recipe-list {
             list-style: none;
             padding: 0;
@@ -269,17 +279,17 @@ function getTimeElapsedString($datetime)
         }
 
         h1 {
-            color:black;
+            color: black;
             margin-top: 140px;
-        }  
+        }
 
         h3 {
-            color:  #f04e23;
+            color: #f04e23;
             margin-left: 2px;
         }
 
         h2 {
-            color:black;
+            color: black;
             margin-left: 2px;
             display: inline-block;
         }
@@ -303,7 +313,7 @@ function getTimeElapsedString($datetime)
             color: white;
         }
 
-        
+
         .header-image {
             position: relative;
             margin-top: 20px;
@@ -317,7 +327,7 @@ function getTimeElapsedString($datetime)
 
         .header-image h1 {
             position: absolute;
-            top:0%;
+            top: 0%;
             left: 40%;
             transform: translate(-50%, -50%);
             color: white;
@@ -325,6 +335,7 @@ function getTimeElapsedString($datetime)
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
             text-align: left;
         }
+
         .view-details-button {
             padding: 8px 16px;
             background-color: darkred;
@@ -336,19 +347,19 @@ function getTimeElapsedString($datetime)
             font-size: 14px;
             margin-top: 10px;
         }
-    
     </style>
 </head>
+
 <body>
 
     <div class="logo-container">
         <img src="logo.jpg" alt="Logo" class="logo">
-            <h2 class="title">eSangkap</h2>
-        </div>
+        <h2 class="title">eSangkap</h2>
+    </div>
 
     <div class="sidebar">
         <a href="9customer.php"><i class="fa fa-fw fa-home"></i>Home</a>
-        <a href="favoritesreen.php"><i class="fa-solid fas fa-heart"></i>Favorites</a>
+        <a href="favoritescreen.php"><i class="fa-solid fas fa-heart"></i>Favorites</a>
         <a href="view_categories.php"><i class="fa-solid fa-list"></i>Categories</a>
         <a href="12user_profile.php" class="active"><i class="fas fa-user"></i>Profile</a>
         <a href="about_us.php"><i class="fa-solid fa-info-circle"></i>About Us</a>
@@ -356,8 +367,8 @@ function getTimeElapsedString($datetime)
     </div>
 
     <div class="content">
-    <h1>Hi <?php echo htmlspecialchars($username); ?>!</h1>
-    <div class="header-image">
+        <h1>Hi <?php echo htmlspecialchars($username); ?>!</h1>
+        <div class="header-image">
             <img src="dishes.jpg" alt="Create Your Own Dish">
             <h1>Get creative and share your cooking! Upload or share your recipe details, and let’s celebrate delicious food together!</h1>
         </div>
@@ -371,7 +382,7 @@ function getTimeElapsedString($datetime)
                     <i class="fa-solid fa-comment"></i> Write Testimonies
                 </a>
             </div>
-         <ul class="recipe-list">
+            <ul class="recipe-list">
                 <?php foreach ($userRecipes as $recipe) { ?>
                     <li>
                         <div class="recipe-box">
@@ -395,7 +406,7 @@ function getTimeElapsedString($datetime)
                                 <p>Date: <?php echo getTimeElapsedString($recipe['date_created']); ?></p>
                                 <a class="view-details-button" href="15userposts.php?meal_id=<?php echo $meal_id; ?>">Show more</a>
                             </div>
-                            
+
                         </div>
                     </li>
                 <?php } ?>
@@ -403,4 +414,5 @@ function getTimeElapsedString($datetime)
         </div>
     </div>
 </body>
+
 </html>
