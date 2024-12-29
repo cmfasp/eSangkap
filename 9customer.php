@@ -86,7 +86,7 @@ function getTimeElapsedString($datetime)
     } elseif ($diff->d < 7) {
         return $diff->d . ' days ago';
     } else {
-        return $ago->format('F j, Y'); // Display actual date if more than 7 days
+        return $ago->format('F j, Y'); 
     }
 }
 ?>
@@ -400,25 +400,34 @@ function getTimeElapsedString($datetime)
         }
 
         .meal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-        .favorite-button {
-            background-color: #ffcccb;
-            color: darkred;
-            font-size: 16px;
-            text-decoration: none;
-            padding: 8px 10px;
-            border-radius: 25px;
-        }
+.favorite-button {
+    background-color: #ffcccb;
+    color: darkred;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none;
+    padding: 8px 10px;
+    border-radius: 25px;
+    border: none;
+}
 
-        .favorite-button:hover {
-            background-color: darkred;
-            color: white;
-        }
-    </style>
+
+.favorite-button.added {
+    background-color:darkred;
+    color:  white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    padding: 8px 10px;
+    border-radius: 25px;
+    box-shadow: none;
+    border: none;
+}
+            </style>
 </head>
 
 <body>
@@ -521,8 +530,8 @@ function getTimeElapsedString($datetime)
                     <div class="meal-header">
                         <h2><?php echo $recipe['meal_name']; ?></h2>
                         <?php if ($isFavorite): ?>
-                            <button class="favorite-button" disabled>
-                                <i class="fas fa-heart"></i> Already in Favorites
+                            <button class="favorite-button added" disabled>
+                                <i class="fas fa-heart"></i> Added to Favorites
                             </button>
                         <?php else: ?>
                             <a href="add_to_favorites.php?meal_id=<?php echo $meal_id; ?>" class="favorite-button">

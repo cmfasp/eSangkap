@@ -34,11 +34,22 @@ if (isset($_GET['meal_id'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_recipe'])) {
-    $deleteStmt = $pdo->prepare("DELETE FROM meals WHERE meal_id = ?");
-    $deleteStmt->execute([$meal_id]);
-    header("Location: 9customer.php");
-    exit();
+    try {
+        // Delete related entries in 'favorites' first
+        $deleteFavoritesStmt = $pdo->prepare("DELETE FROM favorites WHERE meal_id = ?");
+        $deleteFavoritesStmt->execute([$meal_id]);
+
+        // Now delete the meal
+        $deleteMealStmt = $pdo->prepare("DELETE FROM meals WHERE meal_id = ?");
+        $deleteMealStmt->execute([$meal_id]);
+
+        header("Location: 12user_profile.php");
+        exit();
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
 }
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
     header("Location: 16editpost.php?meal_id=$meal_id");

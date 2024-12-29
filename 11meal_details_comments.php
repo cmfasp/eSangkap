@@ -420,7 +420,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
 
     <div class="sidebar">
         <a href="9customer.php" class="active"><i class="fa fa-fw fa-home"></i>Home</a><?php echo (basename($_SERVER['PHP_SELF']) == '9customer.php') ? 'class="active"' : ''; ?>
-        <a href="favoritesreen.php"><i class="fa-solid fas fa-heart"></i>Favorites</a>
+        <a href="favoritescreen.php"><i class="fa-solid fas fa-heart"></i>Favorites</a>
         <a href="view_categories.php"><i class="fa-solid fa-list"></i>Categories</a>
         <a href="12user_profile.php"><i class="fas fa-user"></i>Profile</a>
         <a href="about_us.php"><i class="fa-solid fa-info-circle"></i>About Us</a>
