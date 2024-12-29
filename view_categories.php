@@ -17,250 +17,198 @@ if ($result && mysqli_num_rows($result) > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <link rel="icon" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <style>
          body {
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f3f3f3;
-            display: flex;
-            flex-wrap: wrap;
         }
 
-        .topnav {
-            background-color: #16b978;
-            overflow: hidden;
+        .sidebar {
+            background-color: #f04e23;
+            ;
+            margin-top: 65px;
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            padding-top: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-container {
             position: fixed;
             top: 0;
             width: 100%;
             display: flex;
             justify-content: center;
-            padding-top: 90px;
-            transition: top 0.3s;
+            align-items: center;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
         }
 
-        .topnav a {
-            float: center;
-            color: #f2f2f2;
-            text-align: center;
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 50px;
+            padding: 20px;
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .logo-container {
+            text-align: left;
+            padding-bottom: 20px;
+            display: flex;
+            /* Align logo and text in a row */
+            align-items: center;
+            /* Vertically align the logo and text */
+        }
+
+        .logo {
+            width: 60px;
+            /* Circular logo size */
+            height: 60px;
+            /* Make the height same as width to make it circular */
+            border-radius: 50%;
+            /* This makes the image circular */
+            object-fit: cover;
+            /* Ensures the image is properly scaled inside the circle */
+            margin-right: 10px;
+            /* 10px space between the logo and the text */
+        }
+
+        .title {
+            color: #f04e23;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
             padding: 15px 25px;
             text-decoration: none;
-            font-size: 17px;
+            font-size: 15px;
+            text-align: left;
             display: flex;
             align-items: center;
         }
 
-        .topnav a:hover {
-            background-color: #ddd;
-            color: black;
+        .sidebar a:hover {
+            background-color: white;
+            color: darkred;
         }
 
-        .topnav a.active {
-            background-color: #04AA6D;
-            color: white;
+        .sidebar a.active {
+            background-color: #ffcccb;
+            color: darkred;
         }
 
-        .topnav a i {
-            margin-right: 30px;
+        .sidebar a i {
+            margin-right: 15px;
         }
-
-        .button-primary {
-            background-color: #16b978;
-            color: #fff;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .button-primary:hover {
-            background-color: #128a61;
-        }
-
-        .clearfix::after {
-            content: "";
-            clear: both;
-            display: table;
-        }
-
-        .logo-container {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo img {
-            height: 50px;
-            padding: 20px;
-            width: auto;
-            margin-right: 10px;
-        }
-
-        .logo h1 {
-            font-family: cursive;
-            font-size: 24px;
-            margin: 0;
-            color: #16b978;
-        }  
 
         .container {
-            width: 100%;
-            min-height: 100vh;
+            margin-left: 250px;
             padding: 20px;
             background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            overflow-y: auto;
         }
+ 
 
-        h2 {
-            font-size: 24px;
-            margin-left: 60px;
-            margin-top: 160px;
-            margin-bottom: 20px;
-            color: black;
-        }
-
-        h3 {
-            color: #16b978;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        ul li {
-            margin: 10px 0;
-        }
-
-        .meals-container {
-            border: 1px solid #ddd;
+        .recipe-box {
+            box-sizing: border-box;
+            float: left;
             padding: 10px;
-            border-radius: 5px;
+            border-radius: 15px;
+            background: white;
+            margin: 10px;
+            justify-content: space-evenly;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            width: calc(33.33% - 20px);
+            box-sizing: border-box;
+            margin-bottom: 10px;
         }
 
-        .meal-name {
-            font-size: 18px; 
-            display: block;
-            margin: 10px 0; 
-            color: #16b978;
-        }
-
-        .logo-container {
-            position: fixed;
-            top: 0;
+        .recipe-box img {
             width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
+        h1 {
+            margin-top: 100px;
+            color: #c53b18;
+            text-align: left;
         }
 
-        .logo img {
-            height: 50px;
-            padding: 20px;
-            width: auto;
-            margin-right: 10px;
-        }
 
-        .logo h1 {
-            font-family: cursive;
-            font-size: 24px;
-            margin: 0;
-            color: #16b978;
-        }
-        
-        .container {
-            flex-grow: 1;
-            margin-top: 120px;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            height: 78vh;
-            
-        }
-
+      
         form {
             padding: 20px;
             width: 50%;
-            margin: 0 auto;
+            margin: 100px auto; /* Centers the form */
             box-sizing: border-box;
             text-align: center;
         }
 
         label {
-            font-size: 18px;
+            font-size: 17px;
             margin-right: 10px;
         }
 
         select {
             padding: 10px;
-            font-size: 16px;
+            font-size: 15px;
             border-radius: 5px;
             margin-left: 10px;
             background-color: #f2f2f2;
             border: none;
             box-sizing: border-box;
             margin-top: 15px;
+            width: 30%; 
+            font-family: 'Poppins', sans-serif;
         }
 
         input[type="submit"] {
+            font-family: 'Poppins', sans-serif;
             padding: 10px 16px;
-            font-size: 16px;
-            background-color: #16b978;
+            font-size: 15px;
+            background-color: #f04e23;
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
+            margin-top: 20px; 
         }
-        .topnav a.active {
-                background-color: lightgray;
-                color: black;
-        }
+
+
     </style>
 </head>
 <body>
 <div class="logo-container">
-        <div class="logo">
-            <img src="logo.png" alt="Tastebud Logo">
-            <h1>Tastebud</h1>
-        </div>
+        <img src="logo.jpg" alt="Logo" class="logo">
+        <h2 class="title">eSangkap</h2>
     </div>
 
-    <div class="topnav">
-        
-        <a href="12user_profile.php"> <i class="fas fa-fw fa-user"></i>Profile</a>
-        <a href="view_categories.php"<?php echo (basename($_SERVER['PHP_SELF']) == 'view_categories.php') ? 'class="active"' : ''; ?>><i class="fa-solid fa-list"></i>Categories</a>
-        <a href="9customer.php"><i class="fa-solid fa-utensils"></i>User Recipes</a>
-        <a href="14chat.php"><i class="fa-solid fa-comment"></i>Chat</a>
-        <a href="4logout.php"><i class="fas fa-fw fa-sign-out"></i> Logout</a>
+    <div class="sidebar">
+        <a href="9customer.php"><i class="fa fa-fw fa-home"></i>Home</a>
+        <a href="favoritescreen.php"><i class="fa-solid fas fa-heart"></i>Favorites</a>
+        <a href="view_categories.php"class="active"><i class="fa-solid fa-list"></i>Categories</a>
+        <a href="12user_profile.php"><i class="fas fa-user"></i>Profile</a>
+        <a href="about_us.php"><i class="fa-solid fa-info-circle"></i>About Us</a>
+        <a href="4logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
     </div>
 
     <div class="container">

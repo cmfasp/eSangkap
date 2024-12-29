@@ -1,5 +1,6 @@
 <?php
 session_start();
+date_default_timezone_set('Asia/Manila');
 require('0conn.php');  
 
 // Check if the user is logged in
@@ -10,13 +11,13 @@ if (!isset($_SESSION['username'])) {
 
 $username = $_SESSION['username'];  
 
-$sql = "SELECT m.*, f.date_added, c.category_name, 
+$sql = "SELECT m.*, f.date_created, c.category_name, 
         (SELECT image_link FROM meal_images WHERE meal_id = m.meal_id LIMIT 1) AS meal_image
         FROM favorites f
         JOIN meals m ON f.meal_id = m.meal_id
         JOIN categories c ON m.category_id = c.category_id
         WHERE f.username = ? 
-        ORDER BY f.date_added DESC";
+        ORDER BY f.date_created DESC";
 
 $stmt = mysqli_prepare($conn, $sql);
 
@@ -33,8 +34,9 @@ $favorites = mysqli_fetch_all($result, MYSQLI_ASSOC);
 mysqli_stmt_close($stmt);
 mysqli_close($conn);
 
-// Function to display time elapsed
-function getTimeElapsedString($datetime) {
+
+function getTimeElapsedString($datetime)
+{
     $now = new DateTime;
     $ago = new DateTime($datetime);
     $diff = $now->diff($ago);
@@ -58,7 +60,7 @@ function getTimeElapsedString($datetime) {
     }
 }
 
-// Function to update views count when user clicks "View Meal"
+
 if (isset($_GET['meal_id'])) {
     $meal_id = $_GET['meal_id'];
 
@@ -135,22 +137,16 @@ if (isset($_GET['meal_id'])) {
             text-align: left;
             padding-bottom: 20px;
             display: flex;
-            /* Align logo and text in a row */
             align-items: center;
-            /* Vertically align the logo and text */
+          
         }
 
         .logo {
             width: 60px;
-            /* Circular logo size */
             height: 60px;
-            /* Make the height same as width to make it circular */
             border-radius: 50%;
-            /* This makes the image circular */
             object-fit: cover;
-            /* Ensures the image is properly scaled inside the circle */
             margin-right: 10px;
-            /* 10px space between the logo and the text */
         }
 
         .title {
@@ -271,11 +267,12 @@ if (isset($_GET['meal_id'])) {
                     <img src="<?php echo htmlspecialchars($meal['meal_image'] ?? 'uploads/default.jpg'); ?>" alt="Meal">
                 </div>
                 <h3><?php echo htmlspecialchars($meal['meal_name']); ?></h3>
+                <p><strong><?php echo htmlspecialchars($meal['username']); ?></strong></p>
                 <p><b>Description:</b> 
                     <?php echo strlen($meal['description']) > 100 ? substr(htmlspecialchars($meal['description']), 0, 100) . '...' : htmlspecialchars($meal['description']); ?>
                 </p>
                 <p>Views: <?php echo htmlspecialchars($meal['views']); ?></p>
-                <p>Date: <?php echo getTimeElapsedString($meal['date_added']); ?></p>
+                <p>Date: <?php echo getTimeElapsedString($meal['date_created']); ?></p>
                 <a href="11meal_details_comments.php?meal_id=<?php echo $meal['meal_id']; ?>" class="button-primary">View Details</a>
             </div>
         <?php endforeach; ?>

@@ -26,7 +26,7 @@ if (isset($_GET['meal_id'])) {
         echo "<script>alert('This meal is already in your favorites.');</script>";
     } else {
         
-        $stmt = $conn->prepare("INSERT INTO favorites (username, meal_id, date_added) VALUES (?, ?, NOW())");
+        $stmt = $conn->prepare("INSERT INTO favorites (username, meal_id, date_created) VALUES (?, ?, NOW())");
         $stmt->bind_param("si", $username, $meal_id);
 
         if ($stmt->execute()) {

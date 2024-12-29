@@ -6,7 +6,6 @@ require("0conn.php");
 if (isset($_GET['meal_id'])) {
     $meal_id = $_GET['meal_id'];
 
-    // Check if the user is logged in
     if (!isset($_SESSION['username'])) {
         header("Location: 9customer.php");
         exit();
@@ -30,33 +29,46 @@ if (isset($_GET['meal_id'])) {
         $fetchAllRatingsStmt = $pdo->prepare("SELECT * FROM ratings WHERE meal_id = ?");
         $fetchAllRatingsStmt->execute([$meal_id]);
         $allRatings = $fetchAllRatingsStmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        die("Error: " . $e->getMessage());
-    }
+        
+        // Handle rating submission
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
+            if (isset($_POST['rating_value'])) {
+                $rating_value = filter_input(INPUT_POST, 'rating_value', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => 5)));
+                $rating_comment = $_POST['rating_comment']; 
 
-    // Check if the form is submitted
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
-        // Check if the submitted form is for adding a new rating
-        if (isset($_POST['rating_value'])) {
-            $rating_value = filter_input(INPUT_POST, 'rating_value', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => 5)));
-            $rating_comment = $_POST['rating_comment']; // Get the rating comment
+                if ($rating_value !== false) {
+                    $existingRatingStmt = $pdo->prepare("SELECT * FROM ratings WHERE meal_id = ? AND username = ?");
+                    $existingRatingStmt->execute([$meal_id, $_SESSION['username']]);
+                    $existingRating = $existingRatingStmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($rating_value !== false) {
-                // Check if the user has already rated this meal
-                $existingRatingStmt = $pdo->prepare("SELECT * FROM ratings WHERE meal_id = ? AND username = ?");
-                $existingRatingStmt->execute([$meal_id, $_SESSION['username']]);
-                $existingRating = $existingRatingStmt->fetch(PDO::FETCH_ASSOC);
-
-                // Insert or update the rating
-                if (!$existingRating) {
-                    $insertRatingStmt = $pdo->prepare("INSERT INTO ratings (meal_id, username, rating_value, rating_comment, date_rated) VALUES (?, ?, ?, ?, NOW())");
-                    $insertRatingStmt->execute([$meal_id, $_SESSION['username'], $rating_value, $rating_comment]);
+                    if (!$existingRating) {
+                        $insertRatingStmt = $pdo->prepare("INSERT INTO ratings (meal_id, username, rating_value, rating_comment, date_rated) VALUES (?, ?, ?, ?, NOW())");
+                        $insertRatingStmt->execute([$meal_id, $_SESSION['username'], $rating_value, $rating_comment]);
+                    } else {
+                        // Update existing rating if user has already rated the meal
+                        $updateRatingStmt = $pdo->prepare("UPDATE ratings SET rating_value = ?, rating_comment = ?, date_rated = NOW() WHERE meal_id = ? AND username = ?");
+                        $updateRatingStmt->execute([$rating_value, $rating_comment, $meal_id, $_SESSION['username']]);
+                    }
                 }
             }
+            // Re-fetch ratings after submit
+            $fetchAllRatingsStmt->execute([$meal_id]);
+            $allRatings = $fetchAllRatingsStmt->fetchAll(PDO::FETCH_ASSOC);
         }
-        $fetchRatingsStmt = $pdo->prepare("SELECT * FROM ratings WHERE meal_id = ?");
-        $fetchRatingsStmt->execute([$meal_id]);
-        $ratings = $fetchRatingsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Handle delete rating
+        if (isset($_GET['delete_rating_id'])) {
+            $deleteRatingId = $_GET['delete_rating_id'];
+            $deleteRatingStmt = $pdo->prepare("DELETE FROM ratings WHERE rating_id = ? AND username = ?");
+            $deleteRatingStmt->execute([$deleteRatingId, $_SESSION['username']]);
+
+            // Re-fetch ratings after deletion
+            $fetchAllRatingsStmt->execute([$meal_id]);
+            $allRatings = $fetchAllRatingsStmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        
+    } catch (PDOException $e) {
+        die("Error: " . $e->getMessage());
     }
 } else {
     header("Location: 12user_profile.php");
@@ -71,90 +83,26 @@ if (isset($_GET['meal_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <link rel="icon" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f3f3f3;
-            display: flex;
-            flex-wrap: wrap;
         }
 
-        .container {
-            width: 100%;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            margin-top: 120px;
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            height: auto;
-            text-align: center;
-        }
-
-        .topnav {
-            background-color: #16b978;
-            overflow: hidden;
+        .sidebar {
+            background-color: #f04e23;
+            margin-top: 65px;
+            height: 100%;
+            width: 250px;
             position: fixed;
             top: 0;
-            width: 100%;
+            left: 0;
+            overflow-x: hidden;
+            padding-top: 30px;
             display: flex;
-            justify-content: center;
-            padding-top: 90px;
-            transition: top 0.3s;
-        }
-
-        .topnav a {
-            float: center;
-            color: #f2f2f2;
-            text-align: center;
-            padding: 15px 25px;
-            text-decoration: none;
-            font-size: 17px;
-            display: flex;
-            align-items: center;
-        }
-
-        .topnav a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        .topnav a.active {
-            background-color: #04AA6D;
-            color: white;
-        }
-
-        .topnav a i {
-            margin-right: 30px;
-        }
-
-        .button-primary {
-            background-color: #16b978;
-            color: white;       
-            cursor: pointer;
-            text-decoration: none;
-            width: 13%;
-            align-items: center;
-            border: none; /* Removed border */
-            border-radius:30px;
-            margin-top: 5px;
-            padding-top: 15px;
-            padding-bottom: 15px;
-        }
-
-        .button-primary:hover {
-            background-color: #128d63;
-        }
-
-        .clearfix::after {
-            content: "";
-            clear: both;
-            display: table;
+            flex-direction: column;
         }
 
         .logo-container {
@@ -181,13 +129,89 @@ if (isset($_GET['meal_id'])) {
             margin-right: 10px;
         }
 
-        .logo h1 {
-            font-family: cursive;
-            font-size: 24px;
-            margin: 0;
-            color: #16b978;
+        .logo-container {
+            text-align: left;
+            padding-bottom: 20px;
+            display: flex;
+            align-items: center;
         }
 
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .title {
+            color: #f04e23;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 15px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar a:hover {
+            background-color: white;
+            color: darkred;
+        }
+
+        .sidebar a.active {
+            background-color: #ffcccb;
+            color: darkred;
+        }
+
+        .sidebar a i {
+            margin-right: 15px;
+        }
+
+        .container {
+            margin-left: 250px;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        h1 {
+            margin-top: 100px;
+            color: #c53b18;
+            text-align: left;
+        }
+
+        .button-primary {
+            background-color: darkred;
+            color: white;       
+            cursor: pointer;
+            text-decoration: none;
+            width: 13%;
+            align-items: center;
+            border: none; 
+            border-radius: 30px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .button-primary:hover {
+            background-color: #8b0000;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+    
         h2 {
             text-align: center;
             margin-top: 5px;
@@ -200,6 +224,9 @@ if (isset($_GET['meal_id'])) {
             border-radius: 10px;
             margin-right: auto;
             align-self: flex-start;
+            display: block;
+            margin-left: auto;
+            margin-bottom: 30px;
         }
 
         p {
@@ -211,117 +238,115 @@ if (isset($_GET['meal_id'])) {
             margin-bottom: 20px;
         }
 
-        ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
+        .rating-section .rating-textarea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60%; /* Adjust width as needed */
+    margin: 0 auto; /* Center the content */
+}
+
+.rating-section .rating-textarea select,
+.rating-section .rating-textarea textarea,
+.rating-section .rating-textarea button {
+    width: 100%; /* Ensure they take up the same width */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    font-size: 16px;
+    background-color: #fff;
+    font-family: 'Poppins', sans-serif;
+}
+
+.rating-section .rating-textarea select {
+    width: 100%;
+}
+
+.rating-section .rating-textarea textarea {
+    width: 97%;
+    height: 70px; 
+    background-color: #f3f3f3;
+    resize: none; /
+}
+
+.rating-section .rating-textarea button {
+    width: 40%; 
+    background-color: darkred;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    border-radius: 30px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.rating-section .rating-textarea button:hover {
+    background-color: #8b0000;
+}
+
+.rating-textarea select,
+.rating-textarea textarea,
+.rating-textarea button {
+    max-width: 200x; 
+    width: 100%;
+}
+
+.rating-section {
+            text-align: center;
         }
 
-        li {
-            margin-top: 30px;
-            margin-bottom: 25px;
-            text-align: left;
-            margin-left: 300px;
+        .rating-stars {
+            font-size: 30px;
+            color: #ccc;
+            cursor: pointer;
         }
 
-
-        .button-secondary {
-            margin-top: 30px;
-            margin-left: 25px;
-            margin-bottom: 20px;
-            color: gray;
-            padding: 5px;
-            text-decoration: none;
-            display: flex;
-            border: none;
-            font-size: 20px;
-            background-color: transparent;
+        .rating-stars.selected {
+            color: yellow;
         }
 
-        .rating-section .rating-textarea select {
-            width: 15%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            margin-bottom: 10px;
-            background-color: #fff;
-            font-size: 16px;
-            color: #333;
-        }
-
-        /* Style for the dropdown arrow */
-        .rating-section .rating-textarea select::after {
-            content: '\25BC'; /* Unicode character for down arrow */
-            position: absolute;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-
-        /* Style for the dropdown arrow in Firefox */
-        .rating-section .rating-textarea select::-ms-expand {
-            display: none;
-        }
-        .rating-textarea textarea {
-            border: none;
-            width: 59%; /* Same width as the image */
-            height: 50px; /* Same height as the image */
-            object-fit: cover;
-            border-radius: 5px;
-            margin-right: auto;
-            align-self: flex-start;
-            padding: 10px; /* Add padding for better appearance */
-            box-sizing: border-box; /* Include padding and border in the total width and height */
-             /* Add border for a neat look */
-            margin-bottom: px; /* Adjusted margin */
-            background-color: #f3f3f3;
-        }
     </style>
 </head>
 
 <body>
     <div class="logo-container">
-        <div class="logo">
-            <img src="logo.png" alt="Tastebud Logo">
-            <h1>Tastebud</h1>
-        </div>
+        <img src="logo.jpg" alt="Logo" class="logo">
+        <h2 class="title">eSangkap</h2>
     </div>
 
-    <div class="topnav">
-        <a href="12user_profile.php"<?php echo (basename($_SERVER['PHP_SELF']) == '15userposts.php') ? 'class="active"' : ''; ?>>
-            <i class="fa fa-fw fa-user"></i>Profile
-        </a>
-        <a href="view_categories.php">
-            <i class="fas fa-fw fa-user"></i>Categories
-        </a>
-        <a href="9customer.php">
-            <i class="fa-solid fa-utensils"></i>User Recipes
-        </a>
-        <a href="14chat.php">
-            <i class="fa-solid fa-comment"></i>Chat
-        </a>
-        <a href="4logout.php">
-            <i class="fas fa-fw fa-sign-out"></i> Logout
-        </a>
+    <div class="sidebar">
+        <a href="9customer.php"><i class="fa fa-fw fa-home"></i>Home</a>
+        <a href="favoritescreen.php"><i class="fa-solid fas fa-heart"></i>Favorites</a>
+        <a href="view_categories.php" class="active"><i class="fa-solid fa-list"></i>Categories</a>
+        <a href="12user_profile.php"><i class="fas fa-user"></i>Profile</a>
+        <a href="about_us.php"><i class="fa-solid fa-info-circle"></i>About Us</a>
+        <a href="4logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
     </div>
 
     <div class="container">
-        <button class="button-secondary" onclick="window.location.href='11meal_details_comments.php?meal_id=22'">
-            <i class="fas fa-arrow-left"></i>
-        </button>
         <form method="post" action="">
-            <h2>Meal Ratings</h2>
-            <!-- Display meal image -->
+            <h1>Hi <b class="meal-username"><?php echo $meal['username']; ?></b>, you can now rate this meal!</h1>
             <?php foreach ($images as $image): ?>
                 <img class="meal-image" src="<?php echo $image['image_link']; ?>" alt="Meal Image">
             <?php endforeach; ?>
+
+            <h2>Ratings:</h2>
             <?php if (count($allRatings) > 0): ?>
                 <ul>
                     <?php foreach ($allRatings as $rating): ?>
                         <li>
                             <strong><?php echo $rating['username']; ?>:</strong>
                             <?php echo $rating['rating_comment']; ?><br>
-                            <strong>Rating:</strong> <?php echo $rating['rating_value']; ?><br>
+                            <strong>Rating:</strong> <?php echo $rating['rating_value']; ?> Stars<br>
                             <strong>Date Rated:</strong> <?php echo $rating['date_rated']; ?>
+                            <?php if ($rating['username'] == $_SESSION['username']): ?>
+                                <a href="?meal_id=<?php echo $meal_id; ?>&delete_rating_id=<?php echo $rating['rating_id']; ?>" class="delete-rating">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </a>
+                            <?php endif; ?>
                         </li>
                     <?php endforeach; ?>
                 </ul>
@@ -330,28 +355,36 @@ if (isset($_GET['meal_id'])) {
             <?php endif; ?>
 
             <div class="rating-section">
-                <div class="rating-textarea">
-                    <label for="rating_value">Rate this Meal:</label>
-                    <select name="rating_value" required>
-                        <option value="1">1 - Very Bad</option>
-                        <option value="2">2 - Bad</option>
-                        <option value="3">3 - Average</option>
-                        <option value="4">4 - Good</option>
-                        <option value="5">5 - Excellent</option>
-                    </select>
-                    <br><br>
-
-                    <!-- Adjusted textarea style -->
-                    <textarea name="rating_comment" placeholder="Write a comment..." rows="4" cols="50" required></textarea>
-                    <br><br>
-
-                    <!-- Moved the submit button below the textarea -->
-                    <button class="button-primary" type="submit" name="submit">Submit</button>
+                <h3>Rate this Meal:</h3>
+                <div class="rating-stars" id="rating-stars">
+                    <span class="star" data-value="1">&#9733;</span>
+                    <span class="star" data-value="2">&#9733;</span>
+                    <span class="star" data-value="3">&#9733;</span>
+                    <span class="star" data-value="4">&#9733;</span>
+                    <span class="star" data-value="5">&#9733;</span>
                 </div>
+                <textarea name="rating_comment" placeholder="Write a comment..." rows="4" cols="50" required></textarea>
+                <input type="hidden" name="rating_value" id="rating_value">
+                <button class="button-primary" type="submit" name="submit">Submit</button>
             </div>
         </form>
     </div>
+
+    <script>
+        document.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = this.getAttribute('data-value');
+                document.getElementById('rating_value').value = rating;
+
+                document.querySelectorAll('.star').forEach(star => {
+                    if (star.getAttribute('data-value') <= rating) {
+                        star.classList.add('selected');
+                    } else {
+                        star.classList.remove('selected');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
-
 </html>
-

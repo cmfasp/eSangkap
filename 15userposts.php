@@ -32,14 +32,29 @@ if (isset($_GET['meal_id'])) {
     header("Location: 9customer.php");
     exit();
 }
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_recipe'])) {
     try {
-        // Delete related entries in 'favorites' first
+        // Delete related entries in 'ratings' table first
+        $deleteRatingsStmt = $pdo->prepare("DELETE FROM ratings WHERE meal_id = ?");
+        $deleteRatingsStmt->execute([$meal_id]);
+
+        // Delete related entries in 'favorites' table
         $deleteFavoritesStmt = $pdo->prepare("DELETE FROM favorites WHERE meal_id = ?");
         $deleteFavoritesStmt->execute([$meal_id]);
 
-        // Now delete the meal
+        // Delete related entries in 'instructions' table
+        $deleteInstructionsStmt = $pdo->prepare("DELETE FROM instructions WHERE meal_id = ?");
+        $deleteInstructionsStmt->execute([$meal_id]);
+
+        // Delete related entries in 'ingredients' table
+        $deleteIngredientsStmt = $pdo->prepare("DELETE FROM ingredients WHERE meal_id = ?");
+        $deleteIngredientsStmt->execute([$meal_id]);
+
+        // Delete related entries in 'meal_images' table
+        $deleteImagesStmt = $pdo->prepare("DELETE FROM meal_images WHERE meal_id = ?");
+        $deleteImagesStmt->execute([$meal_id]);
+
+        // Now delete the meal itself
         $deleteMealStmt = $pdo->prepare("DELETE FROM meals WHERE meal_id = ?");
         $deleteMealStmt->execute([$meal_id]);
 
@@ -49,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_recipe'])) {
         echo "Error: " . $e->getMessage();
     }
 }
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
     header("Location: 16editpost.php?meal_id=$meal_id");
@@ -280,11 +294,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
         <div class="buttons">
             <a href="shoppingList.php?meal_id=<?php echo $meal_id; ?>"><i class="fas fa-shopping-cart"></i></a>
             <a href="16editpost.php?meal_id=<?php echo $meal_id; ?>"><i class="fas fa-edit"></i></a>
-            <form method="POST">
-                <button type="submit" name="delete_recipe" onclick="return confirm('Are you sure you want to delete this recipe?')"><i class="fas fa-trash-alt"></i></button>
+            <form method="POST" onsubmit="return confirmDelete()">
+                <button type="submit" name="delete_recipe"><i class="fas fa-trash-alt"></i></button>
             </form>
-    </div>
-        <!-- Meal Content -->
+
+            <script>
+                function confirmDelete() {
+                    return confirm('Are you sure you want to delete this recipe?');
+                }
+            </script>
+        </div>
         <img src="<?php echo $images[0]['image_link']; ?>" alt="Meal Image">
         <div class="meal-header">
             <h1><?php echo $meal['meal_name']; ?></h1>

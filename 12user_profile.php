@@ -50,7 +50,7 @@ function getTimeElapsedString($datetime)
     } elseif ($diff->d < 7) {
         return $diff->d . ' days ago';
     } else {
-        return $ago->format('F j, Y'); // Display actual date if more than 7 days
+        return $ago->format('F j, Y'); 
     }
 }
 ?>
@@ -113,7 +113,6 @@ function getTimeElapsedString($datetime)
 
         .sidebar {
             background-color: #f04e23;
-            ;
             margin-top: 65px;
             height: 100%;
             width: 250px;
@@ -184,6 +183,7 @@ function getTimeElapsedString($datetime)
             padding: 15px;
             margin-bottom: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            
         }
 
         .recipe-box img {
@@ -195,8 +195,8 @@ function getTimeElapsedString($datetime)
 
 
         .recipe-details p {
-            font-size: 14px;
-            color: #666;
+            font-size: 17px;
+            color: black;
         }
 
         .timeline-section {
@@ -294,9 +294,6 @@ function getTimeElapsedString($datetime)
             display: inline-block;
         }
 
-        a {
-            color: #007BFF;
-        }
 
         .favorite-button {
             float: right;
@@ -352,7 +349,7 @@ function getTimeElapsedString($datetime)
 
 <body>
 
-    <div class="logo-container">
+<div class="logo-container">
         <img src="logo.jpg" alt="Logo" class="logo">
         <h2 class="title">eSangkap</h2>
     </div>

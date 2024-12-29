@@ -241,12 +241,8 @@ function getTimeElapsedString($datetime)
         .search-container button:hover {
             background-color: #c53b18;
         }
-
-
-        /* Main content area */
         .container {
             margin-left: 250px;
-            /* Adjust according to the sidebar width */
             padding: 20px;
             background-color: #fff;
         }
@@ -282,9 +278,6 @@ function getTimeElapsedString($datetime)
             text-decoration: none;
         }
 
-        .button-primary:hover {
-            background-color: #128a61;
-        }
 
         .clearfix::after {
             content: "";
@@ -300,7 +293,6 @@ function getTimeElapsedString($datetime)
             align-items: center;
             border-radius: 15px;
             background-image: url('dishes.jpg');
-            /* Replace with your image */
             background-size: cover;
             background-position: center;
             width: 100%;
@@ -330,12 +322,8 @@ function getTimeElapsedString($datetime)
             margin-left: 100px;
             margin-right: 2px;
             background-color: white;
-            /* White background with opacity */
             color: black;
-            /* White text inside the search box */
         }
-
-        /* Search Button */
         .search-container .search-form button {
             padding: 12px 20px;
             font-size: 16px;
@@ -345,14 +333,12 @@ function getTimeElapsedString($datetime)
             border-radius: 10px;
             cursor: pointer;
             margin-left: 10px;
-            /* Space between input and button */
         }
 
         .search-container .search-form button:hover {
             background-color: #c53b18;
         }
 
-        /* Sort Dropdown */
         .search-container .sort-form select {
             padding: 12px;
             font-size: 16px;
@@ -360,8 +346,6 @@ function getTimeElapsedString($datetime)
             margin-left: 10px;
             border: white 1px;
         }
-
-        /* Sort Button */
         .search-container .sort-form button {
             padding: 12px 20px;
             font-size: 16px;
@@ -400,36 +384,35 @@ function getTimeElapsedString($datetime)
         }
 
         .meal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.favorite-button {
-    background-color: #ffcccb;
-    color: darkred;
-    font-size: 16px;
-    font-family: 'Poppins', sans-serif;
-    text-decoration: none;
-    padding: 8px 10px;
-    border-radius: 25px;
-    border: none;
-}
+        .favorite-button {
+            background-color: #ffcccb;
+            color: darkred;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            text-decoration: none;
+            padding: 8px 10px;
+            border-radius: 25px;
+            border: none;
+        }
 
 
-.favorite-button.added {
-    background-color:darkred;
-    color:  white;
-    font-family: 'Poppins', sans-serif;
-    font-size: 16px;
-    padding: 8px 10px;
-    border-radius: 25px;
-    box-shadow: none;
-    border: none;
-}
-            </style>
+        .favorite-button.added {
+            background-color:darkred;
+            color:  white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            padding: 8px 10px;
+            border-radius: 25px;
+            box-shadow: none;
+            border: none;
+        }
+</style>
 </head>
-
 <body>
 
     <div class="sidebar">
@@ -583,6 +566,4 @@ function getTimeElapsedString($datetime)
         });
     </script>
 </body>
-
 </html>
-<?php echo "Meal ID: " . $meal_id; ?>

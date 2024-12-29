@@ -440,7 +440,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
                 </div>
                 <h3>Description: </h3><p><?php echo $meal['description']; ?></p>
                 <p class="views">Views: <?php echo $meal['views']; ?></p>
-                      <!-- Ingredients -->
         <h3>Ingredients</h3>
         <div class="list-box">
             <ol class="rounded-list">
