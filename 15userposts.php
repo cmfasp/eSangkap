@@ -28,6 +28,10 @@ if (isset($_GET['meal_id'])) {
     $imagesStmt = $pdo->prepare("SELECT * FROM meal_images WHERE meal_id = ?");
     $imagesStmt->execute([$meal_id]);
     $images = $imagesStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $nutriInfoStmt = $pdo->prepare("SELECT * FROM nutritional_info WHERE meal_id = ?");
+    $nutriInfoStmt->execute([$meal_id]);
+    $nutriInfo = $nutriInfoStmt->fetchAll(PDO::FETCH_ASSOC);
 } else {
     header("Location: 9customer.php");
     exit();
@@ -138,8 +142,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
         .sidebar a i {
             margin-right: 15px;
         }
+
         .sidebar a.active {
-            background-color:#ffcccb;
+            background-color: #ffcccb;
             color: darkred;
         }
 
@@ -165,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
 
         .buttons {
             display: flex;
-            justify-content: flex-end; 
+            justify-content: flex-end;
             margin-bottom: 10px;
         }
 
@@ -177,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
             font-family: 'Poppins', sans-serif;
             /* Set the font to Poppins */
             font-size: 1rem;
-            color:black;
+            color: black;
             padding: 10px 20px;
             border-radius: 5px;
             text-align: center;
@@ -252,8 +257,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
 
         .meal-header {
             display: flex;
-            justify-content: space-between; /* This will allow space between meal name and video button */
-            align-items: center; /* Align items vertically centered */
+            justify-content: space-between;
+            /* This will allow space between meal name and video button */
+            align-items: center;
+            /* Align items vertically centered */
             margin-top: 10px;
         }
 
@@ -313,7 +320,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
         </div>
         <h3>Description:</h3>
         <p><?php echo $meal['description']; ?></p>
-
+        <hr>
         <!-- Ingredients -->
         <h3>Ingredients</h3>
         <div class="list-box">
@@ -323,13 +330,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
                 <?php } ?>
             </ol>
         </div>
-
+        <hr>
         <!-- Instructions -->
         <h3>Instructions</h3>
         <div class="list-box">
             <ol class="rounded-list">
                 <?php foreach ($instructions as $instruction) { ?>
                     <li><?php echo $instruction['step_description']; ?></li>
+                <?php } ?>
+            </ol>
+        </div>
+        <hr>
+        <!-- Nutritional Info -->
+        <h3>Nutritional Info</h3>
+        <div class="list-box">
+            <ol class="rounded-list">
+                <?php foreach ($nutriInfo as $info) { ?>
+                    <li><?php echo $info['nutrition_text']; ?></li>
                 <?php } ?>
             </ol>
         </div>

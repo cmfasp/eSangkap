@@ -29,12 +29,12 @@ if (isset($_GET['meal_id'])) {
         $fetchAllRatingsStmt = $pdo->prepare("SELECT * FROM ratings WHERE meal_id = ?");
         $fetchAllRatingsStmt->execute([$meal_id]);
         $allRatings = $fetchAllRatingsStmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
         // Handle rating submission
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             if (isset($_POST['rating_value'])) {
                 $rating_value = filter_input(INPUT_POST, 'rating_value', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => 5)));
-                $rating_comment = $_POST['rating_comment']; 
+                $rating_comment = $_POST['rating_comment'];
 
                 if ($rating_value !== false) {
                     $existingRatingStmt = $pdo->prepare("SELECT * FROM ratings WHERE meal_id = ? AND username = ?");
@@ -66,7 +66,6 @@ if (isset($_GET['meal_id'])) {
             $fetchAllRatingsStmt->execute([$meal_id]);
             $allRatings = $fetchAllRatingsStmt->fetchAll(PDO::FETCH_ASSOC);
         }
-        
     } catch (PDOException $e) {
         die("Error: " . $e->getMessage());
     }
@@ -190,12 +189,12 @@ if (isset($_GET['meal_id'])) {
 
         .button-primary {
             background-color: darkred;
-            color: white;       
+            color: white;
             cursor: pointer;
             text-decoration: none;
             width: 13%;
             align-items: center;
-            border: none; 
+            border: none;
             border-radius: 30px;
             padding-top: 15px;
             padding-bottom: 15px;
@@ -211,7 +210,7 @@ if (isset($_GET['meal_id'])) {
             clear: both;
             display: table;
         }
-    
+
         h2 {
             text-align: center;
             margin-top: 5px;
@@ -239,62 +238,65 @@ if (isset($_GET['meal_id'])) {
         }
 
         .rating-section .rating-textarea {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 60%; /* Adjust width as needed */
-    margin: 0 auto; /* Center the content */
-}
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 60%;
+            /* Adjust width as needed */
+            margin: 0 auto;
+            /* Center the content */
+        }
 
-.rating-section .rating-textarea select,
-.rating-section .rating-textarea textarea,
-.rating-section .rating-textarea button {
-    width: 100%; /* Ensure they take up the same width */
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    margin-bottom: 15px;
-    font-size: 16px;
-    background-color: #fff;
-    font-family: 'Poppins', sans-serif;
-}
+        .rating-section .rating-textarea select,
+        .rating-section .rating-textarea textarea,
+        .rating-section .rating-textarea button {
+            width: 100%;
+            /* Ensure they take up the same width */
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+            font-size: 16px;
+            background-color: #fff;
+            font-family: 'Poppins', sans-serif;
+        }
 
-.rating-section .rating-textarea select {
-    width: 100%;
-}
+        .rating-section .rating-textarea select {
+            width: 100%;
+        }
 
-.rating-section .rating-textarea textarea {
-    width: 97%;
-    height: 70px; 
-    background-color: #f3f3f3;
-    resize: none; /
-}
+        .rating-section .rating-textarea textarea {
+            width: 97%;
+            height: 70px;
+            background-color: #f3f3f3;
+            resize: none;/
+        }
 
-.rating-section .rating-textarea button {
-    width: 40%; 
-    background-color: darkred;
-    color: white;
-    cursor: pointer;
-    text-decoration: none;
-    border: none;
-    border-radius: 30px;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    font-family: 'Poppins', sans-serif;
-}
+        .rating-section .rating-textarea button {
+            width: 40%;
+            background-color: darkred;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            border-radius: 30px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
 
-.rating-section .rating-textarea button:hover {
-    background-color: #8b0000;
-}
+        .rating-section .rating-textarea button:hover {
+            background-color: #8b0000;
+        }
 
-.rating-textarea select,
-.rating-textarea textarea,
-.rating-textarea button {
-    max-width: 200x; 
-    width: 100%;
-}
+        .rating-textarea select,
+        .rating-textarea textarea,
+        .rating-textarea button {
+            max-width: 200x;
+            width: 100%;
+        }
 
-.rating-section {
+        .rating-section {
             text-align: center;
         }
 
@@ -308,6 +310,18 @@ if (isset($_GET['meal_id'])) {
             color: yellow;
         }
 
+        .rating-stars .star {
+            font-size: 30px;
+            color: #ccc;
+            cursor: pointer;
+            margin: 0 5px;
+            transition: color 0.2s ease-in-out;
+        }
+
+        .rating-stars .star.selected {
+            color: #ffcc00;
+            /* Highlight selected stars */
+        }
     </style>
 </head>
 
@@ -387,4 +401,5 @@ if (isset($_GET['meal_id'])) {
         });
     </script>
 </body>
+
 </html>

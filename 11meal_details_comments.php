@@ -36,6 +36,10 @@ if (isset($_GET['meal_id'])) {
     $incrementViewsStmt = $pdo->prepare("UPDATE meals SET views = views + 1 WHERE meal_id = ?");
     $incrementViewsStmt->execute([$meal_id]);
 
+    $nutriInfoStmt = $pdo->prepare("SELECT * FROM nutritional_info WHERE meal_id = ?");
+    $nutriInfoStmt->execute([$meal_id]);
+    $nutriInfo = $nutriInfoStmt->fetchAll(PDO::FETCH_ASSOC);
+
     // Fetch meal data after incrementing views
     $stmt = $pdo->prepare("SELECT * FROM meals WHERE meal_id = ?");
     $stmt->execute([$meal_id]);
@@ -92,6 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             display: flex;
             flex-wrap: wrap;
         }
+
         .logo-container {
             position: fixed;
             width: 100%;
@@ -107,7 +112,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             display: flex;
             align-items: center;
         }
-        h2{
+
+        h2 {
             margin-top: 40px;
             color: #f04e23;
             align-items: center;
@@ -162,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
         }
 
         .sidebar a.active {
-            background-color:#ffcccb;
+            background-color: #ffcccb;
             color: darkred;
         }
 
@@ -174,6 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
         .sidebar a i {
             margin-right: 15px;
         }
+
         .container {
             background-color: #fff;
             width: 60%;
@@ -183,8 +190,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             padding: 20px;
             border-radius: 10px;
         }
+
         .views {
-            
+
             font-size: 16px;
             background-color: #f04e23;
             color: white;
@@ -194,6 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             margin-left: 875px;
             display: flex;
         }
+
         button {
             background-color: darkred;
             color: #fff;
@@ -204,6 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             font-size: 16px;
             margin-top: 10px;
         }
+
         .comment-item {
             border-radius: 5px;
             margin: 20px 0 0 40px;
@@ -216,7 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             max-width: 100%;
         }
 
-       
+
         .comment-header {
             display: flex;
             justify-content: space-between;
@@ -242,11 +252,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             margin-top: 5px;
             margin-left: 20px;
         }
+
         .delete-form {
             margin-left: 10px;
             display: flex;
             width: 50px;
         }
+
         .delete-comment-btn {
             background: none;
             border: none;
@@ -254,6 +266,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             padding: 5px;
             color: grey;
         }
+
         .comment-form {
             display: flex;
             width: calc(150% - 100px);
@@ -280,16 +293,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             margin-left: 15px;
             font-size: 16px;
         }
+
         .comments-list {
             padding: 0;
             margin: 0;
             list-style-type: none;
         }
-          form {
+
+        form {
             margin-top: 20px;
             width: 100%;
             display: flex;
         }
+
         form textarea {
             width: 120%;
             padding: 10px;
@@ -297,6 +313,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             border: 1px solid #ddd;
             margin-left: 60px;
         }
+
         .button-success {
             margin-left: 60px;
             color: white;
@@ -319,6 +336,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             background-color: transparent;
             margin-bottom: -100%;
         }
+
         img {
             margin-bottom: 20px;
             margin-left: 60px;
@@ -376,6 +394,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             transition: all .3s ease-out;
             color: #fff;
         }
+
         .watch-video {
             display: inline-block;
             padding: 10px 16px;
@@ -387,6 +406,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             font-size: 14px;
             margin-top: 5px;
         }
+
         .watch-video:hover {
             background-color: rgb(231, 101, 99);
             color: darkred;
@@ -395,6 +415,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
         .watch-video i {
             margin-right: 8px;
         }
+
         .meal-header {
             display: flex;
             justify-content: space-between;
@@ -428,18 +449,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
     </div>
 
     <div class="container">
-        <h2><p><?php echo $meal['username']; ?></p><h2>
-                <?php foreach ($images as $image): ?>
-                    <img src="<?php echo $image['image_link']; ?>" alt="Meal Image">
-                <?php endforeach; ?><br>
-                <div class="meal-header">
-                    <h1><?php echo $meal['meal_name']; ?></h1>
-                    <a class="watch-video" href="<?php echo $meal['video_link']; ?>" target="_blank">
-                        <i class="fas fa-play-circle"></i> Watch Video
-                    </a>
-                </div>
-                <h3>Description: </h3><p><?php echo $meal['description']; ?></p>
-                <p class="views">Views: <?php echo $meal['views']; ?></p>
+        <h2>
+            <p><?php echo $meal['username']; ?></p>
+        </h2>
+        <h2>
+            <?php foreach ($images as $image): ?>
+                <img src="<?php echo $image['image_link']; ?>" alt="Meal Image">
+            <?php endforeach; ?>
+        </h2><br>
+        <div class="meal-header">
+            <h1><?php echo $meal['meal_name']; ?></h1>
+            <div>
+                <a class="watch-video" href="<?php echo $meal['video_link']; ?>" target="_blank">
+                    <i class="fas fa-play-circle"></i> Watch Video
+                </a>
+            </div>
+
+        </div>
+        <h3>Description: </h3>
+        <p><?php echo $meal['description']; ?></p>
+        <p class="views">Views: <?php echo $meal['views']; ?></p>
+
         <h3>Ingredients</h3>
         <div class="list-box">
             <ol class="rounded-list">
@@ -447,6 +477,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
                     <li><?php echo $ingredient['ingredient_name']; ?></li>
                 <?php } ?>
             </ol>
+            <div style="margin-left:100px;">
+
+                <a class="watch-video" href="shoppingList.php?meal_id=<?php echo $meal_id; ?>" target="_blank">
+                    <i class="fas fa-shopping-cart"></i> Where to Buy
+                </a>
+            </div>
         </div>
 
         <!-- Instructions -->
@@ -459,57 +495,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             </ol>
         </div>
 
-                <button class="button-success" onclick="window.location.href='ratings.php?meal_id=<?php echo $meal_id; ?>'">
-                    <i class="fa-solid fa-star" style="color: #FDCC0D;"></i> Rate this Meal
-                </button>
+        <h3>Nutritional Info</h3>
+        <div class="list-box">
+            <ol class="rounded-list">
+                <?php foreach ($nutriInfo as $info) { ?>
+                    <li><?php echo $info['nutrition_text']; ?></li>
+                <?php } ?>
+            </ol>
+        </div>
 
-                <div class="comments-box">
-                    <h3>Comments</h3>
-                    <ul class="comments-list">
-                        <?php if (count($comments) > 0): ?>
-                            <?php foreach ($comments as $comment): ?>
-                                <li class="comment-item">
-                                    <div class="comment-header">
-                                        <div class="comment-text-wrapper">
-                                            <p class="comment-text">
-                                                <strong><?php echo $comment['user_name']; ?>:</strong>
-                                                <?php echo $comment['comment_text']; ?>
-                                            </p>
-                                            <p class="comment-info"><?php echo $comment['created_at']; ?></p>
-                                        </div>
-                                        <form method="post" action="" class="delete-form">
-                                            <input type="hidden" name="delete_comment" value="<?php echo $comment['comment_id']; ?>">
-                                            <button type="submit" class="delete-comment-btn">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </li>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <p>No comments available.</p>
-                        <?php endif; ?>
-                    </ul>
+        <button class="button-success" onclick="window.location.href='ratings.php?meal_id=<?php echo $meal_id; ?>'">
+            <i class="fa-solid fa-star" style="color: #FDCC0D;"></i> Rate this Meal
+        </button>
+
+        <div class="comments-box">
+            <h3>Comments</h3>
+            <ul class="comments-list">
+                <?php if (count($comments) > 0): ?>
+                    <?php foreach ($comments as $comment): ?>
+                        <li class="comment-item">
+                            <div class="comment-header">
+                                <div class="comment-text-wrapper">
+                                    <p class="comment-text">
+                                        <strong><?php echo $comment['user_name']; ?>:</strong>
+                                        <?php echo $comment['comment_text']; ?>
+                                    </p>
+                                    <p class="comment-info"><?php echo $comment['created_at']; ?></p>
+                                </div>
+                                <form method="post" action="" class="delete-form">
+                                    <input type="hidden" name="delete_comment" value="<?php echo $comment['comment_id']; ?>">
+                                    <button type="submit" class="delete-comment-btn">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>No comments available.</p>
+                <?php endif; ?>
+            </ul>
 
 
-                    <!-- Your comment form goes here -->
-                    <?php if ($allowComments): ?>
-                        <form method="post" action="">
-                            <textarea name="comment" placeholder="Write a comment..." id="comment" rows="3" required></textarea>
-                            <button type="submit" class="submit-comment-btn"><i class="fas fa-paper-plane"></i></button>
-                        </form>
-                    <?php else: ?>
-                        <p>Login to post comments.</p>
-                    <?php endif; ?>
-                    </ul>
-                </div>
+            <!-- Your comment form goes here -->
+            <?php if ($allowComments): ?>
+                <form method="post" action="">
+                    <textarea name="comment" placeholder="Write a comment..." id="comment" rows="3" required></textarea>
+                    <button type="submit" class="submit-comment-btn"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            <?php else: ?>
+                <p>Login to post comments.</p>
+            <?php endif; ?>
+            </ul>
+        </div>
 
-                <script>
-                    function toggleCommentForm() {
-                        const commentForm = document.querySelector('.comment-form');
-                        commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
-                    }
-                </script>
+        <script>
+            function toggleCommentForm() {
+                const commentForm = document.querySelector('.comment-form');
+                commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
+            }
+        </script>
     </div>
 </body>
 
