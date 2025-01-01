@@ -40,6 +40,34 @@ if (isset($_GET['meal_id'])) {
     $stmt = $pdo->prepare("SELECT * FROM meals WHERE meal_id = ?");
     $stmt->execute([$meal_id]);
     $meal = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    //Alternative Ingridients
+    $altIngredientsStmt = $pdo->prepare("
+    SELECT alt_ingredients 
+    FROM ingredients 
+    WHERE meal_id = ? 
+      AND alt_ingredients IS NOT NULL
+");
+$altIngredientsStmt->execute([$meal_id]);
+$alternative_ingredients = $altIngredientsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+$filtered_ingredients = array_filter($alternative_ingredients, function ($item) {
+    return !empty($item['alt_ingredients']) && $item['alt_ingredients'] !== '0';
+});
+
+
+// if (!empty($filtered_ingredients)) {
+//     foreach ($filtered_ingredients as $ingredient) {
+//         echo htmlspecialchars($ingredient['alt_ingredients']) . '<br>';
+//     }
+    
+// } else {
+//     echo "No valid alternative ingredients found.";
+// }
+//commented out just in case needed, since it kinda interferring with the alt_ingridient
+    
+    
 } else {
     header("Location: 9customer.php");
     exit();
@@ -409,6 +437,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
         .meal-header .watch-video {
             margin-left: 20px;
         }
+        .button {
+            padding: 8px 40px;
+            font-size: 14px;
+            margin-left:355px;
+            border: 1px solid #ccc;
+            font-family: 'Poppins', sans-serif;
+            background-color:rgb(255, 0, 0);
+            cursor: pointer;
+            border-radius: 20px;
+            
+        }
+        
+        .button:hover {
+            background-color:rgb(226, 120, 71);
+            color:rgb(43, 42, 42);
+        }
+        .row {
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+        .text {
+            margin-right: 10px;
+        }
     </style>
 </head>
 
@@ -440,14 +492,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
                 </div>
                 <h3>Description: </h3><p><?php echo $meal['description']; ?></p>
                 <p class="views">Views: <?php echo $meal['views']; ?></p>
-        <h3>Ingredients</h3>
-        <div class="list-box">
-            <ol class="rounded-list">
-                <?php foreach ($ingredients as $ingredient) { ?>
-                    <li><?php echo $ingredient['ingredient_name']; ?></li>
-                <?php } ?>
-            </ol>
-        </div>
+                
+                <div class="row">
+    <h3 class="text">Ingredients</h3>
+    <button class="button" id="toggleButton">Show Alternative Ingredients</button>
+</div>
+
+<div class="list-box" id="mainIngredients">
+    <ol class="rounded-list">
+        <?php foreach ($ingredients as $ingredient) { ?>
+            <li><?php echo $ingredient['ingredient_name']; ?></li>
+        <?php } ?>
+    </ol>
+</div>
+
+
+<div class="list-box" id="alternativeIngredients" style="display:none;">
+    <ol class="rounded-list">
+        <?php foreach ($alternative_ingredients as $alt_ingredient) { ?>
+            <li><?php echo htmlspecialchars($alt_ingredient['alt_ingredients']); ?></li>
+        <?php } ?>
+    </ol>
+</div>
+<script>
+    document.getElementById('toggleButton').onclick = function() {
+        var mainIngredients = document.getElementById('mainIngredients');
+        var altIngredients = document.getElementById('alternativeIngredients');
+
+        if (mainIngredients.style.display !== 'none') {
+            mainIngredients.style.display = 'none';
+            altIngredients.style.display = 'block';
+            this.textContent = 'Show Original Ingredients';
+        } else {
+            mainIngredients.style.display = 'block';
+            altIngredients.style.display = 'none';
+            this.textContent = 'Show Alternative Ingredients';
+        }
+    }
+</script>
 
         <!-- Instructions -->
         <h3>Instructions</h3>
@@ -458,6 +540,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
                 <?php } ?>
             </ol>
         </div>
+    
 
                 <button class="button-success" onclick="window.location.href='ratings.php?meal_id=<?php echo $meal_id; ?>'">
                     <i class="fa-solid fa-star" style="color: #FDCC0D;"></i> Rate this Meal
