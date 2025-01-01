@@ -20,10 +20,10 @@ if (isset($_GET['meal_id'])) {
     $instructionsStmt->execute([$meal_id]);
     $instructions = $instructionsStmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $ingredientsStmt = $pdo->prepare("SELECT * FROM ingredients WHERE meal_id = ?");
+    $ingredientsStmt = $pdo->prepare("SELECT ingredient_name, alt_ingredients FROM ingredients WHERE meal_id = ?");
     $ingredientsStmt->execute([$meal_id]);
     $ingredients = $ingredientsStmt->fetchAll(PDO::FETCH_ASSOC);
-
+    
     // Fetch all images associated with the meal_id from meal_images table
     $imagesStmt = $pdo->prepare("SELECT * FROM meal_images WHERE meal_id = ?");
     $imagesStmt->execute([$meal_id]);
@@ -322,15 +322,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
         <p><?php echo $meal['description']; ?></p>
         <hr>
         <!-- Ingredients -->
-        <h3>Ingredients</h3>
-        <div class="list-box">
-            <ol class="rounded-list">
-                <?php foreach ($ingredients as $ingredient) { ?>
-                    <li><?php echo $ingredient['ingredient_name']; ?></li>
+       
+<h3>Ingredients</h3>
+<div class="list-box">
+    <ol class="rounded-list">
+        <?php foreach ($ingredients as $ingredient) { ?>
+            <li>
+                <?php echo $ingredient['ingredient_name']; ?>
+                <?php if (!empty($ingredient['alt_ingredients'])) { ?>
+                    <br><span style="font-size: 0.9rem; color: #888;">Alternative: <?php echo $ingredient['alt_ingredients']; ?></span>
                 <?php } ?>
+<<<<<<< HEAD
             </ol>
         </div>
         <hr>
+=======
+            </li>
+        <?php } ?>
+    </ol>
+</div>
+
+
+<div class="buttons">
+    <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients</button>
+</div>
+
+<script>
+    document.getElementById("toggle-alt-ingredients").addEventListener("click", function() {
+        // Toggle visibility of alternative ingredients
+        const ingredientsList = document.querySelectorAll(".rounded-list li span");
+        ingredientsList.forEach(ingredient => {
+            ingredient.style.display = ingredient.style.display === "none" ? "inline" : "none";
+        });
+    });
+</script>
+
+
+>>>>>>> c7309906277cd27614d1627067c583d2e05402ca
         <!-- Instructions -->
         <h3>Instructions</h3>
         <div class="list-box">
