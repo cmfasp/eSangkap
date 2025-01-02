@@ -23,12 +23,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         isset($_POST["ingredients"]) &&
         isset($_POST["image_links"]) &&
         isset($_POST["short_description"]) &&
-<<<<<<< HEAD
         isset($_POST["whereBuy"]) &&
-        isset($_POST["nutriInfo"])
-=======
+        isset($_POST["nutriInfo"]) &&
         isset($_POST["alt_ingredients"])
->>>>>>> c7309906277cd27614d1627067c583d2e05402ca
     ) {
         $userCheckStmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
         $userCheckStmt->execute([$username]);
@@ -40,11 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $video_link = $_POST["video_link"];
             $image_links = $_POST["image_links"];
             $short_description = $_POST["short_description"];
-<<<<<<< HEAD
             $whereBuy = $_POST["whereBuy"];
-=======
-            $alt_ingredients = $_POST["alt_ingredients"]; 
->>>>>>> c7309906277cd27614d1627067c583d2e05402ca
 
             // Fetch category name based on category ID
             $categoryStmt = $pdo->prepare("SELECT * FROM categories WHERE category_id = ?");
@@ -75,26 +68,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $alt_ingredients = explode("\n", $_POST["alt_ingredients"]);
 
             for ($i = 0; $i < max(count($ingredients), count($alt_ingredients)); $i++) {
-     
+
                 $ingredient_name = isset($ingredients[$i]) && !empty($ingredients[$i]) ? trim($ingredients[$i]) : null;
-                
- 
+
+
                 $alt_ingredient_name = isset($alt_ingredients[$i]) && !empty($alt_ingredients[$i]) ? trim($alt_ingredients[$i]) : null;
-            
-  
+
+
                 $stmt = $pdo->prepare("INSERT INTO ingredients (meal_id, ingredient_name, alt_ingredients) VALUES (?, ?, ?)");
                 $stmt->execute([$meal_id, $ingredient_name, $alt_ingredient_name]);
             }
-<<<<<<< HEAD
 
             $nutriInfo = explode("\n", $_POST["nutriInfo"]);
             foreach ($nutriInfo as $info) {
                 $stmt = $pdo->prepare("INSERT INTO nutritional_info (meal_id, nutrition_text) VALUES (?, ?)");
                 $stmt->execute([$meal_id, trim($info)]);
             }
-=======
-            
->>>>>>> c7309906277cd27614d1627067c583d2e05402ca
         } else {
             echo "Error: User does not exist.";
         }
@@ -564,45 +553,42 @@ function generateRecipePreview($pdo, $meal_id)
                         <label for="ingredients">Ingredients:</label>
                         <textarea name="ingredients" id="ingredients" rows="5" required></textarea>
                     </div>
-                  
+
                 </div>
                 <div class="form-group">
-<<<<<<< HEAD
                     <label for="instructions">Nutritional Info:</label>
                     <textarea name="nutriInfo" id="nutriInfo" rows="5" required></textarea>
                 </div>
 
-=======
-                        <label for="ingredients">Alternative Ingredients:</label>
-                        <textarea name="alt_ingredients" id="alt_ingredients" rows="5" placeholder="Add alternative ingredients here"></textarea>
-                    </div>
->>>>>>> c7309906277cd27614d1627067c583d2e05402ca
-                <div class="form-buttons">
-                    <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
-                    <button id="add-button" type="submit">Add Recipe</button>
-                    <button id="edit-button" type="button" style="display: none;">Edit</button>
-                </div>
-            </form>
+                <label for="ingredients">Alternative Ingredients:</label>
+                <textarea name="alt_ingredients" id="alt_ingredients" rows="5" placeholder="Add alternative ingredients here"></textarea>
         </div>
+        <div class="form-buttons">
+            <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
+            <button id="add-button" type="submit">Add Recipe</button>
+            <button id="edit-button" type="button" style="display: none;">Edit</button>
+        </div>
+        </form>
+    </div>
 
-        <div id="popup" style="display: none;">
-            <p id="popup-message"></p>
+    <div id="popup" style="display: none;">
+        <p id="popup-message"></p>
+    </div>
+    <div id="preview-section" style="display: none;">
+        <div id="readonly-section">
+            <p>Meal Name: <span class="readonly-input meal-name"></span></p>
+            <p>Video Link: <span class="readonly-input short-description"></span></p>
+            <p>Image: <span class="readonly-input video-link"></span></p>
+            <img id="recipe-image" src="" alt="Recipe Image" style="max-width: 100%; display: none;">
+            <h3>Short Description</h3>
+            <p class="readonly-input instructions"></p>
+            <h3>Instruction</h3>
+            <p class="readonly-input ingredients"></p>
         </div>
-        <div id="preview-section" style="display: none;">
-            <div id="readonly-section">
-                <p>Meal Name: <span class="readonly-input meal-name"></span></p>
-                <p>Video Link: <span class="readonly-input short-description"></span></p>
-                <p>Image: <span class="readonly-input video-link"></span></p>
-                <img id="recipe-image" src="" alt="Recipe Image" style="max-width: 100%; display: none;">
-                <h3>Short Description</h3>
-                <p class="readonly-input instructions"></p>
-                <h3>Instruction</h3>
-                <p class="readonly-input ingredients"></p>
-            </div>
-            <div class="form-buttons">
-                <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
-                <button id="add-button" type="submit">Add</button>
-                <button id="edit-button" type="button" style="display: none;" onclick="toggleEdit()">Edit</button>
-            </div>
+        <div class="form-buttons">
+            <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
+            <button id="add-button" type="submit">Add</button>
+            <button id="edit-button" type="button" style="display: none;" onclick="toggleEdit()">Edit</button>
         </div>
+    </div>
 </body>

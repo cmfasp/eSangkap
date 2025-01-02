@@ -52,26 +52,26 @@ if (isset($_GET['meal_id'])) {
     WHERE meal_id = ? 
       AND alt_ingredients IS NOT NULL
 ");
-$altIngredientsStmt->execute([$meal_id]);
-$alternative_ingredients = $altIngredientsStmt->fetchAll(PDO::FETCH_ASSOC);
+    $altIngredientsStmt->execute([$meal_id]);
+    $alternative_ingredients = $altIngredientsStmt->fetchAll(PDO::FETCH_ASSOC);
 
 
-$filtered_ingredients = array_filter($alternative_ingredients, function ($item) {
-    return !empty($item['alt_ingredients']) && $item['alt_ingredients'] !== '0';
-});
+    $filtered_ingredients = array_filter($alternative_ingredients, function ($item) {
+        return !empty($item['alt_ingredients']) && $item['alt_ingredients'] !== '0';
+    });
 
 
-// if (!empty($filtered_ingredients)) {
-//     foreach ($filtered_ingredients as $ingredient) {
-//         echo htmlspecialchars($ingredient['alt_ingredients']) . '<br>';
-//     }
-    
-// } else {
-//     echo "No valid alternative ingredients found.";
-// }
-//commented out just in case needed, since it kinda interferring with the alt_ingridient
-    
-    
+    // if (!empty($filtered_ingredients)) {
+    //     foreach ($filtered_ingredients as $ingredient) {
+    //         echo htmlspecialchars($ingredient['alt_ingredients']) . '<br>';
+    //     }
+
+    // } else {
+    //     echo "No valid alternative ingredients found.";
+    // }
+    //commented out just in case needed, since it kinda interferring with the alt_ingridient
+
+
 } else {
     header("Location: 9customer.php");
     exit();
@@ -458,27 +458,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
         .meal-header .watch-video {
             margin-left: 20px;
         }
+
         .button {
             padding: 8px 40px;
             font-size: 14px;
-            margin-left:355px;
+            margin-left: 355px;
             border: 1px solid #ccc;
             font-family: 'Poppins', sans-serif;
-            background-color:rgb(255, 0, 0);
+            background-color: rgb(255, 0, 0);
             cursor: pointer;
             border-radius: 20px;
-            
+
         }
-        
+
         .button:hover {
-            background-color:rgb(226, 120, 71);
-            color:rgb(43, 42, 42);
+            background-color: rgb(226, 120, 71);
+            color: rgb(43, 42, 42);
         }
+
         .row {
             white-space: nowrap;
             display: flex;
             align-items: center;
         }
+
         .text {
             margin-right: 10px;
         }
@@ -501,44 +504,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
     </div>
 
     <div class="container">
-<<<<<<< HEAD
         <h2>
             <p><?php echo $meal['username']; ?></p>
-        </h2>
-        <h2>
-            <?php foreach ($images as $image): ?>
-                <img src="<?php echo $image['image_link']; ?>" alt="Meal Image">
-            <?php endforeach; ?>
-        </h2><br>
-        <div class="meal-header">
-            <h1><?php echo $meal['meal_name']; ?></h1>
-            <div>
-                <a class="watch-video" href="<?php echo $meal['video_link']; ?>" target="_blank">
-                    <i class="fas fa-play-circle"></i> Watch Video
-                </a>
-            </div>
-
-        </div>
-        <h3>Description: </h3>
-        <p><?php echo $meal['description']; ?></p>
-        <p class="views">Views: <?php echo $meal['views']; ?></p>
-
-        <h3>Ingredients</h3>
-        <div class="list-box">
-            <ol class="rounded-list">
-                <?php foreach ($ingredients as $ingredient) { ?>
-                    <li><?php echo $ingredient['ingredient_name']; ?></li>
-                <?php } ?>
-            </ol>
-            <div style="margin-left:100px;">
-
-                <a class="watch-video" href="shoppingList.php?meal_id=<?php echo $meal_id; ?>" target="_blank">
-                    <i class="fas fa-shopping-cart"></i> Where to Buy
-                </a>
-            </div>
-        </div>
-=======
-        <h2><p><?php echo $meal['username']; ?></p><h2>
+            <h2>
                 <?php foreach ($images as $image): ?>
                     <img src="<?php echo $image['image_link']; ?>" alt="Meal Image">
                 <?php endforeach; ?><br>
@@ -548,119 +516,119 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
                         <i class="fas fa-play-circle"></i> Watch Video
                     </a>
                 </div>
-                <h3>Description: </h3><p><?php echo $meal['description']; ?></p>
+                <h3>Description: </h3>
+                <p><?php echo $meal['description']; ?></p>
                 <p class="views">Views: <?php echo $meal['views']; ?></p>
-                
+
                 <div class="row">
-    <h3 class="text">Ingredients</h3>
-    <button class="button" id="toggleButton">Show Alternative Ingredients</button>
-</div>
+                    <h3 class="text">Ingredients</h3>
+                    <button class="button" id="toggleButton">Show Alternative Ingredients</button>
+                </div>
 
-<div class="list-box" id="mainIngredients">
-    <ol class="rounded-list">
-        <?php foreach ($ingredients as $ingredient) { ?>
-            <li><?php echo $ingredient['ingredient_name']; ?></li>
-        <?php } ?>
-    </ol>
-</div>
-
-
-<div class="list-box" id="alternativeIngredients" style="display:none;">
-    <ol class="rounded-list">
-        <?php foreach ($alternative_ingredients as $alt_ingredient) { ?>
-            <li><?php echo htmlspecialchars($alt_ingredient['alt_ingredients']); ?></li>
-        <?php } ?>
-    </ol>
-</div>
-<script>
-    document.getElementById('toggleButton').onclick = function() {
-        var mainIngredients = document.getElementById('mainIngredients');
-        var altIngredients = document.getElementById('alternativeIngredients');
-
-        if (mainIngredients.style.display !== 'none') {
-            mainIngredients.style.display = 'none';
-            altIngredients.style.display = 'block';
-            this.textContent = 'Show Original Ingredients';
-        } else {
-            mainIngredients.style.display = 'block';
-            altIngredients.style.display = 'none';
-            this.textContent = 'Show Alternative Ingredients';
-        }
-    }
-</script>
->>>>>>> c7309906277cd27614d1627067c583d2e05402ca
-
-        <!-- Instructions -->
-        <h3>Instructions</h3>
-        <div class="list-box">
-            <ol class="rounded-list">
-                <?php foreach ($instructions as $instruction) { ?>
-                    <li><?php echo $instruction['step_description']; ?></li>
-                <?php } ?>
-            </ol>
-        </div>
-    
-
-        <h3>Nutritional Info</h3>
-        <div class="list-box">
-            <ol class="rounded-list">
-                <?php foreach ($nutriInfo as $info) { ?>
-                    <li><?php echo $info['nutrition_text']; ?></li>
-                <?php } ?>
-            </ol>
-        </div>
-
-        <button class="button-success" onclick="window.location.href='ratings.php?meal_id=<?php echo $meal_id; ?>'">
-            <i class="fa-solid fa-star" style="color: #FDCC0D;"></i> Rate this Meal
-        </button>
-
-        <div class="comments-box">
-            <h3>Comments</h3>
-            <ul class="comments-list">
-                <?php if (count($comments) > 0): ?>
-                    <?php foreach ($comments as $comment): ?>
-                        <li class="comment-item">
-                            <div class="comment-header">
-                                <div class="comment-text-wrapper">
-                                    <p class="comment-text">
-                                        <strong><?php echo $comment['user_name']; ?>:</strong>
-                                        <?php echo $comment['comment_text']; ?>
-                                    </p>
-                                    <p class="comment-info"><?php echo $comment['created_at']; ?></p>
-                                </div>
-                                <form method="post" action="" class="delete-form">
-                                    <input type="hidden" name="delete_comment" value="<?php echo $comment['comment_id']; ?>">
-                                    <button type="submit" class="delete-comment-btn">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </li>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p>No comments available.</p>
-                <?php endif; ?>
-            </ul>
+                <div class="list-box" id="mainIngredients">
+                    <ol class="rounded-list">
+                        <?php foreach ($ingredients as $ingredient) { ?>
+                            <li><?php echo $ingredient['ingredient_name']; ?></li>
+                        <?php } ?>
+                    </ol>
+                </div>
 
 
-            <!-- Your comment form goes here -->
-            <?php if ($allowComments): ?>
-                <form method="post" action="">
-                    <textarea name="comment" placeholder="Write a comment..." id="comment" rows="3" required></textarea>
-                    <button type="submit" class="submit-comment-btn"><i class="fas fa-paper-plane"></i></button>
-                </form>
-            <?php else: ?>
-                <p>Login to post comments.</p>
-            <?php endif; ?>
-            </ul>
-        </div>
+                <div class="list-box" id="alternativeIngredients" style="display:none;">
+                    <ol class="rounded-list">
+                        <?php foreach ($alternative_ingredients as $alt_ingredient) { ?>
+                            <li><?php echo htmlspecialchars($alt_ingredient['alt_ingredients']); ?></li>
+                        <?php } ?>
+                    </ol>
+                </div>
+                <script>
+                    document.getElementById('toggleButton').onclick = function() {
+                        var mainIngredients = document.getElementById('mainIngredients');
+                        var altIngredients = document.getElementById('alternativeIngredients');
 
-        <script>
-            function toggleCommentForm() {
-                const commentForm = document.querySelector('.comment-form');
-                commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
-            }
-        </script>
+                        if (mainIngredients.style.display !== 'none') {
+                            mainIngredients.style.display = 'none';
+                            altIngredients.style.display = 'block';
+                            this.textContent = 'Show Original Ingredients';
+                        } else {
+                            mainIngredients.style.display = 'block';
+                            altIngredients.style.display = 'none';
+                            this.textContent = 'Show Alternative Ingredients';
+                        }
+                    }
+                </script>
+
+                <!-- Instructions -->
+                <h3>Instructions</h3>
+                <div class="list-box">
+                    <ol class="rounded-list">
+                        <?php foreach ($instructions as $instruction) { ?>
+                            <li><?php echo $instruction['step_description']; ?></li>
+                        <?php } ?>
+                    </ol>
+                </div>
+
+
+                <h3>Nutritional Info</h3>
+                <div class="list-box">
+                    <ol class="rounded-list">
+                        <?php foreach ($nutriInfo as $info) { ?>
+                            <li><?php echo $info['nutrition_text']; ?></li>
+                        <?php } ?>
+                    </ol>
+                </div>
+
+                <button class="button-success" onclick="window.location.href='ratings.php?meal_id=<?php echo $meal_id; ?>'">
+                    <i class="fa-solid fa-star" style="color: #FDCC0D;"></i> Rate this Meal
+                </button>
+
+                <div class="comments-box">
+                    <h3>Comments</h3>
+                    <ul class="comments-list">
+                        <?php if (count($comments) > 0): ?>
+                            <?php foreach ($comments as $comment): ?>
+                                <li class="comment-item">
+                                    <div class="comment-header">
+                                        <div class="comment-text-wrapper">
+                                            <p class="comment-text">
+                                                <strong><?php echo $comment['user_name']; ?>:</strong>
+                                                <?php echo $comment['comment_text']; ?>
+                                            </p>
+                                            <p class="comment-info"><?php echo $comment['created_at']; ?></p>
+                                        </div>
+                                        <form method="post" action="" class="delete-form">
+                                            <input type="hidden" name="delete_comment" value="<?php echo $comment['comment_id']; ?>">
+                                            <button type="submit" class="delete-comment-btn">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </li>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>No comments available.</p>
+                        <?php endif; ?>
+                    </ul>
+
+
+                    <!-- Your comment form goes here -->
+                    <?php if ($allowComments): ?>
+                        <form method="post" action="">
+                            <textarea name="comment" placeholder="Write a comment..." id="comment" rows="3" required></textarea>
+                            <button type="submit" class="submit-comment-btn"><i class="fas fa-paper-plane"></i></button>
+                        </form>
+                    <?php else: ?>
+                        <p>Login to post comments.</p>
+                    <?php endif; ?>
+                    </ul>
+                </div>
+
+                <script>
+                    function toggleCommentForm() {
+                        const commentForm = document.querySelector('.comment-form');
+                        commentForm.style.display = commentForm.style.display === 'none' ? 'block' : 'none';
+                    }
+                </script>
     </div>
 </body>
 
