@@ -23,7 +23,7 @@ if (isset($_GET['meal_id'])) {
     $ingredientsStmt = $pdo->prepare("SELECT ingredient_name, alt_ingredients FROM ingredients WHERE meal_id = ?");
     $ingredientsStmt->execute([$meal_id]);
     $ingredients = $ingredientsStmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
     // Fetch all images associated with the meal_id from meal_images table
     $imagesStmt = $pdo->prepare("SELECT * FROM meal_images WHERE meal_id = ?");
     $imagesStmt->execute([$meal_id]);
@@ -291,7 +291,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
     </div>
     <div class="sidebar">
         <a href="9customer.php"><i class="fa fa-fw fa-home"></i> Home</a>
-        <a href="favoritesreen.php"><i class="fas fa-heart"></i> Favorites</a>
+        <a href="favoritescreen.php"><i class="fas fa-heart"></i> Favorites</a>
         <a href="view_categories.php"><i class="fas fa-list"></i> Categories</a>
         <a href="12user_profile.php" class="active"><i class="fas fa-user"></i> Profile</a>
         <a href="about_us.php"><i class="fas fa-info-circle"></i> About Us</a>
@@ -322,62 +322,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
         <p><?php echo $meal['description']; ?></p>
         <hr>
         <!-- Ingredients -->
-       
-<h3>Ingredients</h3>
-<div class="list-box">
-    <ol class="rounded-list">
-        <?php foreach ($ingredients as $ingredient) { ?>
-            <li>
-                <?php echo $ingredient['ingredient_name']; ?>
-                <?php if (!empty($ingredient['alt_ingredients'])) { ?>
-                    <br><span style="font-size: 0.9rem; color: #888;">Alternative: <?php echo $ingredient['alt_ingredients']; ?></span>
-                <?php } ?>
-<<<<<<< HEAD
+
+        <h3>Ingredients</h3>
+        <div class="list-box">
+            <ol class="rounded-list">
+                <?php foreach ($ingredients as $ingredient) { ?>
+                    <li>
+                        <?php echo $ingredient['ingredient_name']; ?>
+                        <?php if (!empty($ingredient['alt_ingredients'])) { ?>
+                            <br><span style="font-size: 0.9rem; color: #888;">Alternative: <?php echo $ingredient['alt_ingredients']; ?></span>
+                        <?php } ?>
+
             </ol>
         </div>
         <hr>
-=======
-            </li>
-        <?php } ?>
+
+        </li>
+    <?php } ?>
     </ol>
-</div>
+    </div>
 
 
-<div class="buttons">
-    <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients</button>
-</div>
+    <div class="buttons">
+        <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients</button>
+    </div>
 
-<script>
-    document.getElementById("toggle-alt-ingredients").addEventListener("click", function() {
-        // Toggle visibility of alternative ingredients
-        const ingredientsList = document.querySelectorAll(".rounded-list li span");
-        ingredientsList.forEach(ingredient => {
-            ingredient.style.display = ingredient.style.display === "none" ? "inline" : "none";
+    <script>
+        document.getElementById("toggle-alt-ingredients").addEventListener("click", function() {
+            // Toggle visibility of alternative ingredients
+            const ingredientsList = document.querySelectorAll(".rounded-list li span");
+            ingredientsList.forEach(ingredient => {
+                ingredient.style.display = ingredient.style.display === "none" ? "inline" : "none";
+            });
         });
-    });
-</script>
+    </script>
 
 
->>>>>>> c7309906277cd27614d1627067c583d2e05402ca
-        <!-- Instructions -->
-        <h3>Instructions</h3>
-        <div class="list-box">
-            <ol class="rounded-list">
-                <?php foreach ($instructions as $instruction) { ?>
-                    <li><?php echo $instruction['step_description']; ?></li>
-                <?php } ?>
-            </ol>
-        </div>
-        <hr>
-        <!-- Nutritional Info -->
-        <h3>Nutritional Info</h3>
-        <div class="list-box">
-            <ol class="rounded-list">
-                <?php foreach ($nutriInfo as $info) { ?>
-                    <li><?php echo $info['nutrition_text']; ?></li>
-                <?php } ?>
-            </ol>
-        </div>
+
+    <!-- Instructions -->
+    <h3>Instructions</h3>
+    <div class="list-box">
+        <ol class="rounded-list">
+            <?php foreach ($instructions as $instruction) { ?>
+                <li><?php echo $instruction['step_description']; ?></li>
+            <?php } ?>
+        </ol>
+    </div>
+    <hr>
+    <!-- Nutritional Info -->
+    <h3>Nutritional Info</h3>
+    <div class="list-box">
+        <ol class="rounded-list">
+            <?php foreach ($nutriInfo as $info) { ?>
+                <li><?php echo $info['nutrition_text']; ?></li>
+            <?php } ?>
+        </ol>
+    </div>
     </div>
 </body>
 
