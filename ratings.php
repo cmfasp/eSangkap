@@ -322,6 +322,76 @@ if (isset($_GET['meal_id'])) {
             color: #ffcc00;
             /* Highlight selected stars */
         }
+
+        .ratings-container {
+            display: flex;
+            width: 60%;
+            flex-direction: column;
+            gap: 20px;
+            margin: 20px auto;
+            align-self: center;
+        }
+
+        .rating-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .rating-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .rating-username {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .rating-stars i {
+            color: #ddd;
+            margin-right: 5px;
+            font-size: 18px;
+        }
+
+        .rating-stars i.filled {
+            color: #ffcc00;
+        }
+
+        .rating-comment {
+            font-size: 20px;
+            font-weight: bolder;
+            color: #666;
+            margin: 10px 0;
+        }
+
+        .rating-date {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .delete-rating {
+            font-size: 18px;
+            color: darkred;
+            text-decoration: none;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .delete-rating:hover {
+            color: #8b0000;
+        }
+
+        .no-ratings {
+            font-size: 14px;
+            color: #aaa;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -342,31 +412,38 @@ if (isset($_GET['meal_id'])) {
 
     <div class="container">
         <form method="post" action="">
-            <h1>Hi <b class="meal-username"><?php echo $meal['username']; ?></b>, you can now rate this meal!</h1>
+            <h1>Hi <b class="meal-username"><?php echo $_SESSION['username']; ?></b>, you can now rate this meal!</h1>
             <?php foreach ($images as $image): ?>
                 <img class="meal-image" src="<?php echo $image['image_link']; ?>" alt="Meal Image">
             <?php endforeach; ?>
 
             <h2>Ratings:</h2>
-            <?php if (count($allRatings) > 0): ?>
-                <ul>
+            <div class="ratings-container">
+                <?php if (count($allRatings) > 0): ?>
                     <?php foreach ($allRatings as $rating): ?>
-                        <li>
-                            <strong><?php echo $rating['username']; ?>:</strong>
-                            <?php echo $rating['rating_comment']; ?><br>
-                            <strong>Rating:</strong> <?php echo $rating['rating_value']; ?> Stars<br>
-                            <strong>Date Rated:</strong> <?php echo $rating['date_rated']; ?>
+                        <div class="rating-card">
+                            <div class="rating-header">
+                                <strong class="rating-username"><?php echo $rating['username']; ?></strong>
+                                <span class="rating-stars">
+                                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                                        <i class="fa fa-star <?php echo $i <= $rating['rating_value'] ? 'filled' : ''; ?>"></i>
+                                    <?php endfor; ?>
+                                </span>
+                            </div>
+                            <p class="rating-comment"><?php echo $rating['rating_comment']; ?></p>
+                            <p class="rating-date"><i class="fa fa-calendar"></i> <?php echo $rating['date_rated']; ?></p>
                             <?php if ($rating['username'] == $_SESSION['username']): ?>
                                 <a href="?meal_id=<?php echo $meal_id; ?>&delete_rating_id=<?php echo $rating['rating_id']; ?>" class="delete-rating">
                                     <i class="fas fa-trash-alt"></i> Delete
                                 </a>
                             <?php endif; ?>
-                        </li>
+                        </div>
                     <?php endforeach; ?>
-                </ul>
-            <?php else: ?>
-                <p>No ratings available for this meal.</p>
-            <?php endif; ?>
+                <?php else: ?>
+                    <p class="no-ratings">No ratings available for this meal.</p>
+                <?php endif; ?>
+            </div>
+
 
             <div class="rating-section">
                 <h3>Rate this Meal:</h3>
@@ -378,7 +455,7 @@ if (isset($_GET['meal_id'])) {
                     <span class="star" data-value="5">&#9733;</span>
                 </div>
                 <textarea name="rating_comment" placeholder="Write a comment..." rows="4" cols="50" required></textarea>
-                <input type="hidden" name="rating_value" id="rating_value">
+                <input type="hidden" name="rating_value" id="rating_value"><br>
                 <button class="button-primary" type="submit" name="submit">Submit</button>
             </div>
         </form>

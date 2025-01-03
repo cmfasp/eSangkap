@@ -155,6 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
 
         .container {
             margin: 0 auto;
+            width: 50%;
             padding: 20px;
             max-width: 900px;
             background-color: #fff;
@@ -320,7 +321,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
         </div>
         <h3>Description:</h3>
         <p><?php echo $meal['description']; ?></p>
-        <hr>
+
         <!-- Ingredients -->
 
         <h3>Ingredients</h3>
@@ -332,52 +333,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
                         <?php if (!empty($ingredient['alt_ingredients'])) { ?>
                             <br><span style="font-size: 0.9rem; color: #888;">Alternative: <?php echo $ingredient['alt_ingredients']; ?></span>
                         <?php } ?>
-
+                    </li>
+                <?php } ?>
             </ol>
         </div>
-        <hr>
-
-        </li>
-    <?php } ?>
-    </ol>
-    </div>
 
 
-    <div class="buttons">
-        <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients</button>
-    </div>
+        <div class="buttons">
+            <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients</button>
+        </div>
 
-    <script>
-        document.getElementById("toggle-alt-ingredients").addEventListener("click", function() {
-            // Toggle visibility of alternative ingredients
-            const ingredientsList = document.querySelectorAll(".rounded-list li span");
-            ingredientsList.forEach(ingredient => {
-                ingredient.style.display = ingredient.style.display === "none" ? "inline" : "none";
+        <script>
+            document.getElementById("toggle-alt-ingredients").addEventListener("click", function() {
+                // Toggle visibility of alternative ingredients
+                const ingredientsList = document.querySelectorAll(".rounded-list li span");
+                ingredientsList.forEach(ingredient => {
+                    ingredient.style.display = ingredient.style.display === "none" ? "inline" : "none";
+                });
             });
-        });
-    </script>
+        </script>
 
 
+        <!-- Instructions -->
+        <h3>Instructions</h3>
+        <div class="list-box">
+            <ol class="rounded-list">
+                <?php foreach ($instructions as $instruction) { ?>
+                    <li><?php echo $instruction['step_description']; ?></li>
+                <?php } ?>
+            </ol>
+        </div>
 
-    <!-- Instructions -->
-    <h3>Instructions</h3>
-    <div class="list-box">
-        <ol class="rounded-list">
-            <?php foreach ($instructions as $instruction) { ?>
-                <li><?php echo $instruction['step_description']; ?></li>
-            <?php } ?>
-        </ol>
-    </div>
-    <hr>
-    <!-- Nutritional Info -->
-    <h3>Nutritional Info</h3>
-    <div class="list-box">
-        <ol class="rounded-list">
-            <?php foreach ($nutriInfo as $info) { ?>
-                <li><?php echo $info['nutrition_text']; ?></li>
-            <?php } ?>
-        </ol>
-    </div>
+        <!-- Nutritional Info -->
+        <h3>Nutritional Info</h3>
+        <div class="list-box">
+            <ol class="rounded-list">
+                <?php foreach ($nutriInfo as $info) { ?>
+                    <li><?php echo $info['nutrition_text']; ?></li>
+                <?php } ?>
+            </ol>
+        </div>
     </div>
 </body>
 

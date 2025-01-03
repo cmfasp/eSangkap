@@ -511,10 +511,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
                     <img src="<?php echo $image['image_link']; ?>" alt="Meal Image">
                 <?php endforeach; ?><br>
                 <div class="meal-header">
-                    <h1><?php echo $meal['meal_name']; ?></h1>
-                    <a class="watch-video" href="<?php echo $meal['video_link']; ?>" target="_blank">
-                        <i class="fas fa-play-circle"></i> Watch Video
-                    </a>
+                    <div>
+                        <h1><?php echo $meal['meal_name']; ?></h1>
+
+                    </div>
+                    <div>
+                        <a class="watch-video" href="shoppingList.php?meal_id=<?php echo $meal_id; ?>" target="_blank">
+                            <i class="fas fa-shopping-cart"></i> Where to Buy Ingredients
+                        </a>
+                        <a class="watch-video" href="<?php echo $meal['video_link']; ?>" target="_blank">
+                            <i class="fas fa-play-circle"></i> Watch Video
+                        </a>
+                    </div>
+
                 </div>
                 <h3>Description: </h3>
                 <p><?php echo $meal['description']; ?></p>
