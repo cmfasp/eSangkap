@@ -55,56 +55,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_selected"])) {
 <html lang="en">
 
 <head>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    
-    <!-- Add jQuery before Bootstrap JavaScript -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <!-- Additional script for closing the alert messages -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $(".alert").alert();
         });
     </script>
     <style>
         body {
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
         }
 
-        body::before {
-            content: '';
+        .sidebar {
+            background-color: #f04e23;
+            ;
+            margin-top: 65px;
+            height: 100%;
+            width: 250px;
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('foodBackground.jpeg') no-repeat center center fixed;
-            background-size: cover;
-            filter: blur(15px);
-            z-index: -1;
-        }
-
-        h1 {
-            font-size: 25px;
-            justify-content: center;
-        }
-        .logo {
+            overflow-x: hidden;
+            padding-top: 30px;
             display: flex;
-            align-items: center;
-        }
-        .logo h1{
-            color: #16b978;
+            flex-direction: column;
         }
 
-        .logo img {
-            width: 40px; /* Adjust the width as needed */
-            margin-right: 10px;
-        }
         .logo-container {
             position: fixed;
             top: 0;
@@ -115,49 +97,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_selected"])) {
             background-color: #fff;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             z-index: 1000;
-            height: 90px;
         }
 
-        .topnav {
-            background-color: #16b978;
-            overflow: hidden;
-            position: fixed;
-            top: 0;
-            width: 100%;
+        .logo {
             display: flex;
-            justify-content: center;
-            padding-top: 90px;
-            transition: top 0.3s;
-            z-index: 1; /* Set a lower z-index */
+            align-items: center;
         }
 
-        .topnav a {
-            color: #f2f2f2;
-            text-align: center;
-            padding: 15px 25px;
-            text-decoration: none;
-            font-size: 17px;
-            display: inline-block;
-        }
-
-        .topnav a:hover {
-            background-color: #04AA6D;
-            color: white;
-        }
-
-        .topnav a.active {
-            background-color: #04AA6D;
-            color: white;
-        }
-
-        .topnav a i {
+        .logo img {
+            height: 50px;
+            padding: 20px;
+            width: auto;
             margin-right: 10px;
         }
 
-        .add-category-form {
-            margin-bottom: 20px;
+        .logo-container {
+            text-align: left;
+            padding-bottom: 20px;
+            display: flex;
+            align-items: center;
         }
 
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .title {
+            color: #f04e23;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 15px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar a:hover {
+            background-color: white;
+            color: darkred;
+        }
+
+        .sidebar a.active {
+            background-color: #ffcccb;
+            color: darkred;
+        }
+
+        .sidebar a i {
+            margin-right: 15px;
+        }
+
+     
         .list-group {
             text-align: left;
         }
@@ -173,22 +174,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_selected"])) {
 
         a {
             text-decoration: none;
-            color: #007BFF;
+            color: black;
         }
 
-        .delete-button {
-            color: #fff;
-            background-color: #dc3545;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .delete-button:hover {
-            background-color: #c82333;
-        }
-
+      
         .btn-margin {
             margin-top: 20px;
         }
@@ -206,7 +195,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_selected"])) {
         .add {
             margin: 20px auto;
             background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
             padding: 20px;
             margin-top: 60px;
@@ -215,33 +203,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_selected"])) {
         .categories {
             margin: 20px auto;
             background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
             padding: 20px;
             margin-top: 5px;
         }
 
-        h3 {
-            margin-top: 70px;
-            Color: #18392B;
-            font-weight: bold;
-        }
+        .add-recipe-btn {
+    padding: 8px 16px;
+    background-color: #f04e23;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+}
 
-        .manage {
-            margin: 20px auto;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            padding: 20px;
-            margin-top: 5px;
-        }
+/* Remove hover effect */
+.add-recipe-btn:hover {
+    background-color: #f04e23; /* Keep the same background color */
+    color: #fff; /* Keep the same text color */
+    text-decoration: none;
+}
 
-        .userprofile {
-            text-align: right;
-            margin-top:150px;
-        }
+        .delete-btn {
+    padding: 8px 16px;
+    background-color: #f04e23; /* orange color */
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+}
 
-        .container{
+
+
+        .container {
 
             margin-top: 150px;
         }
@@ -250,22 +248,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_selected"])) {
 
 <body>
     <div class="logo-container">
-        <div class="logo">
-            <img src="logo.png" alt="Tastebud Logo">
-            <h1>Tastebud</h1>
-        </div>
+        <img src="logo.jpg" alt="Logo" class="logo">
+        <h2 class="title">eSangkap</h2>
     </div>
 
-    <div class="topnav">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <div class="sidebar">
         <a class="nav-link" href="adminViewPost.php">
             <i class="fa fa-fw fa-home"></i>Home
-        </a>
-        <a class="nav-link" href="adminprofile.php">
-            <i class="fas fa-fw fa-user"></i>Admin Profile
         </a>
         <a class="nav-link" href="5admin.php">
             <i class="fa-solid fa-utensils"></i>Manage Recipe
@@ -274,6 +263,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_selected"])) {
             <i class="fas fa-fw fa-sign-out"></i>Logout
         </a>
     </div>
+
+
 
     <div class="container">
         <?php if (isset($_SESSION["category_added"]) && $_SESSION["category_added"]): ?>
@@ -308,6 +299,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_selected"])) {
             </form>
         </div>
 
+   
+            <p>Manage Recipes</p>
+            <p><a href="6add_recipe.php" class="add-recipe-btn">Add New Recipe</a></p>
+
+
         <div class="categories">
             <p>Categories</p>
             <form method="post" id="deleteForm">
@@ -323,16 +319,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_selected"])) {
                         </li>
                     <?php endforeach; ?>
                 </ul>
-                <button type="submit" name="delete_selected" class="btn btn-danger mt-3" onclick="deleteSelectedCategories()">Delete Selected</button>
+                <button type="submit" name="delete_selected" class="delete-btn mt-3" onclick="deleteSelectedCategories()">Delete Selected</button>
+
             </form>
         </div>
 
-        <div class="manage">
-            <p>Manage Recipes</p>
-            <p><a href="6add_recipe.php" class="btn btn-success">Add New Recipe</a></p>
-        </div>
     </div>
-
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

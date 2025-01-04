@@ -208,7 +208,6 @@ if (isset($_GET['meal_id'])) {
             border-radius: 10px;
             height: 400px;
             object-fit: cover;
-            /* Ensures the image fills the width without stretching */
             border-radius: 15px;
             margin-top: 20px;
         }

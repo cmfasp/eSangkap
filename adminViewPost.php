@@ -78,113 +78,34 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Home Page</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <script>
+        $(document).ready(function() {
+            $(".alert").alert();
+        });
+    </script>
     <style>
         body {
-            padding-top: 70px; /* Adjusted for fixed navbar height */
-            background-color: #f9f9f9;
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
-        .navbar {
-            background-color: #FFFF;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); /* Shadow */
-            height: 80px; /* Increased navbar height */
-        }
-
-        .navbar-dark .navbar-nav .nav-link {
-            color: #182c25 !important; /* Updated color for better visibility */
-        }
-
-        .navbar-toggler-icon {
-            background-color: #16b978; /* Green color for the toggle icon */
-        }
-
-        .logo {
+        .sidebar {
+            background-color: #f04e23;
+            ;
+            margin-top: 65px;
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            padding-top: 30px;
             display: flex;
-            align-items: center;
-        }
-        .logo h1{
-            color: #16b978;
-        }
-
-        .logo img {
-            width: 40px; /* Adjust the width as needed */
-            margin-right: 10px;
-        }
-
-        .search-container {
-            margin-top: 20px;
-            margin-bottom: 20px;
-            width: 60%; /* Adjust the width as needed */
-        }
-
-        .container {
-            flex-grow: 1;
-            width: 100%;
-            margin-top: 120px;
-        }
-
-        p {
-            font-size: 16px;
-            color: #000;
-        }
-
-        .search-container input {
-            width: 100%;
-        }
-
-        .recipe-box {
-     box-sizing: border-box;
-            flex: 0 0 calc(33.33% - 20px); /* Updated width to ensure 3 items in a row */
-            margin: 10px;
-            padding: 10px;
-            border-radius: 15px;
-            background: white;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
-}
-
-.recipe-card img {
-    object-fit: cover;
-    width: 100%;
-    height: 230px; /* Updated height */
-    object-fit: cover;
-    border-radius: 10px;
-}
-
-.recipe-card-body h2 {
-    margin-top: 0;
-    margin-bottom: 2px;
-    font-size: 20px; /* Adjusted font size */
-}
-
-.recipe-card-body h3 {
-    margin-bottom: 2px;
-    font-size: 16px; /* Adjusted font size */
-}
-
-.recipe-card-body p {
-    margin: 5px 0;
-    font-size: 14px; /* Adjusted font size */
-    flex-grow: 1; /* Allow content to grow within the container */
-}
-
-.view-details-button {
-    display: inline-block;
-    padding: 8px 16px;
-    background-color: #04AA6D; /* Darker green button color */
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    margin-top: 10px;
-    font-size: 14px; /* Adjusted font size */
-    align-self: flex-end; /* Align button to the bottom right */
-}
-
-        h1 {
-            font-size: 25px;
-            justify-content: center;
+            flex-direction: column;
         }
 
         .logo-container {
@@ -197,65 +118,177 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
             background-color: #fff;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             z-index: 1000;
-            height: 90px;
         }
 
-        .topnav {
-            background-color: #16b978;
-            overflow: hidden;
-            position: fixed;
-            top: 0;
-            width: 100%;
+        .logo {
             display: flex;
-            justify-content: center;
-            padding-top: 90px;
-            transition: top 0.3s;
-            z-index: 1; /* Set a lower z-index */
+            align-items: center;
         }
 
-        .topnav a {
-            color: #f2f2f2;
-            text-align: center;
-            padding: 15px 25px;
-            text-decoration: none;
-            font-size: 17px;
-            display: inline-block;
-        }
-
-        .topnav a:hover {
-            background-color: #04AA6D;
-            color: white;
-        }
-
-        .topnav a.active {
-            background-color: #04AA6D;
-            color: white;
-        }
-
-        .topnav a i {
+        .logo img {
+            height: 50px;
+            padding: 20px;
+            width: auto;
             margin-right: 10px;
         }
+
+        .logo-container {
+            text-align: left;
+            padding-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .title {
+            color: #f04e23;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 15px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar a:hover {
+            background-color: white;
+            color: darkred;
+        }
+
+        .sidebar a.active {
+            background-color: #ffcccb;
+            color: darkred;
+        }
+
+        .sidebar a i {
+            margin-right: 15px;
+        }
+
+
+        .search-container {
+            margin-top: 100px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            border-radius: 15px;
+            background-image: url('dishes.jpg');
+            background-size: cover;
+            background-position: center;
+            width: 98%;
+            height: 300px;
+            margin-bottom: 15px;
+        }
+
+
+.search-container input[type="text"] {
+    width: 400px;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.search-container .btn {
+    background-color: #f04e23;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.search-container .btn:hover {
+    background-color: #d03a1e;
+}
+.recipe-box {
+    box-sizing: border-box;
+    flex: 0 0 calc(33.33% - 20px); /* Ensures 3 items in a row */
+    margin: 10px;
+    padding: 15px;
+    border-radius: 15px;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ensure images fit properly */
+.recipe-box img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Styling for recipe title and description */
+.recipe-box h2 {
+    margin: 10px 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.recipe-box p {
+    font-size: 14px;
+    margin: 5px 0;
+    color: #555;
+}
+
+.recipe-box .btn {
+    display: inline-block;
+    padding: 8px  20px;
+    background-color:darkred;
+    color: white;
+    text-decoration: none;
+    border-radius: 20px;
+    margin-top: 10px;
+    font-size: 14px;
+    max-width: fit-content;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.container {
+    margin-left: 270px; 
+    padding: 20px;
+    font-size: 16px;
+    color: black;
+}
+    
+     
+
     </style>
 </head>
 
 <body>
-    <div class="logo-container">
-        <div class="logo">
-            <img src="logo.png" alt="Tastebud Logo">
-            <h1>Tastebud</h1>
-        </div>
+<div class="logo-container">
+        <img src="logo.jpg" alt="Logo" class="logo">
+        <h2 class="title">eSangkap</h2>
     </div>
 
-    <div class="topnav">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="nav-link" href="adminViewPost.php">
+    <div class="sidebar">
+    <a class="nav-link" href="adminViewPost.php">
             <i class="fa fa-fw fa-home"></i>Home
-        </a>
-        <a class="nav-link" href="adminprofile.php">
-            <i class="fas fa-fw fa-user"></i>Admin Profile
         </a>
         <a class="nav-link" href="5admin.php">
             <i class="fa-solid fa-utensils"></i>Manage Recipe
@@ -263,7 +296,10 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <a class="nav-link" href="4logout.php">
             <i class="fas fa-fw fa-sign-out"></i>Logout
         </a>
+        </a>
     </div>
+
+   
 
     <div class="container">
         <div class="search-container">
@@ -277,35 +313,26 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
         <div class="row">
+    <?php foreach ($posts as $post): ?>
+        <div class="recipe-box">
             <?php
-            foreach ($posts as $post):
-                ?>
-                <div class="col-md-4 recipe-box">
-                    <div class="card recipe-card">
-                        <?php
-                        $mealId = $post['meal_id'];
-                        $imageStmt = $pdo->prepare("SELECT * FROM meal_images WHERE meal_id = ?");
-                        $imageStmt->execute([$mealId]);
-                        $images = $imageStmt->fetchAll(PDO::FETCH_ASSOC);
+            $mealId = $post['meal_id'];
+            $imageStmt = $pdo->prepare("SELECT * FROM meal_images WHERE meal_id = ?");
+            $imageStmt->execute([$mealId]);
+            $images = $imageStmt->fetchAll(PDO::FETCH_ASSOC);
 
-                        if (!empty($images)) {
-                            echo '<img class="card-img-top" src="' . $images[0]['image_link'] . '" alt="Recipe Image">';
-                        }
-                        ?>
-                        <div class="card-body recipe-card-body">
-                            <h2 class="card-title"><?php echo $post['meal_name']; ?></h2>
-                            <h3 class="card-text"><strong></strong><?php echo substr($post['description'], 0, 100); ?>....</h3>
-                            <p class="card-text">Views: <?php echo $post['views']; ?></p>
-                            <p class="card-text">Posted by: <?php echo $post['username']; ?></p>
-                            <p class="card-text">Date: <?php echo getTimeElapsedString($post['date_created']); ?></p>
-                            <a href="admin_view_details.php?meal_id=<?php echo $post['meal_id']; ?>"
-                                class="btn btn-success">View Details</a>
-                        </div>
-                    </div>
-                </div>
-                <?php
-            endforeach;
+            if (!empty($images)) {
+                echo '<img src="' . $images[0]['image_link'] . '" alt="Recipe Image">';
+            }
             ?>
+            <h2><?php echo $post['meal_name']; ?></h2>
+            <p><strong>Description:</strong> <?php echo substr($post['description'], 0, 100); ?>...</p>
+            <p><strong>Views:</strong> <?php echo $post['views']; ?></p>
+            <p><strong>Date:</strong> <?php echo getTimeElapsedString($post['date_created']); ?></p>
+            <a href="admin_view_details.php?meal_id=<?php echo $post['meal_id']; ?>" class="btn">View Details</a>
+        </div>
+    <?php endforeach; ?>
+</div>
         </div>
     </div>
 
