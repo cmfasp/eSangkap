@@ -213,12 +213,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             background-color: #fff;
             width: 60%;
             margin-right: 900px;
+            
             justify-content: center;
             margin: 40px auto;
             padding: 20px;
             border-radius: 10px;
         }
 
+/* 
         .views {
 
             font-size: 16px;
@@ -229,7 +231,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             padding: 15px;
             margin-left: 875px;
             display: flex;
-        }
+        } */
 
         button {
             background-color: darkred;
@@ -489,6 +491,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             display: table;
             clear: both;
         }
+        .username {
+    font-weight: bold;
+    color:rgb(228, 33, 33); 
+    font-size: 1.1em;
+}
+.views {
+    font-size: 14px;
+    background-color: #f04e23;
+    color: white;
+    border-radius: 20px;
+    padding: 8px 15px;
+    margin-left: 460px;
+    display: flex;
+    align-items: center; 
+    gap: 8px; 
+    white-space: nowrap;
+    max-width: 100%; 
+
+.info-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px; 
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .views {
+        font-size: 12px; 
+        padding: 6px 10px; 
+    }
+
+    .info-row {
+        justify-content: center; 
+    }
+}
+
+@media (max-width: 480px) {
+    .views {
+        font-size: 10px;
+        padding: 5px 8px;
+    }
+
+    .info-row {
+        flex-direction: column; 
+        gap: 5px; 
+        text-align: center; 
+    }
+}
+
+.invisible-margin {
+    visibility: hidden; 
+}
+
     </style>
 </head>
 
@@ -509,7 +565,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
 
     <div class="container">
         <h2>
-            <p><?php echo $meal['username']; ?></p>
+      <p class="invisible-margin">This is a margin.</p>
+
+            <!-- <p><?php echo $meal['username']; ?></p> -->
             <h2>
                 <?php foreach ($images as $image): ?>
                     <img src="<?php echo htmlspecialchars($image['image_link']); ?>">
@@ -532,7 +590,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
                 </div>
                 <h3>Description: </h3>
                 <p><?php echo $meal['description']; ?></p>
-                <p class="views">Views: <?php echo $meal['views']; ?></p>
+                <div class="info-row">
+    <p>Added by: <span class="username"><?php echo htmlspecialchars($meal['username']); ?></span></p>
+    <p class="views"><i class="fas fa-eye"></i> Views: <?php echo $meal['views']; ?></p>
+</div>
+ <!-- <p class="views">Views: <?php echo $meal['views']; ?></p> -->
                 <div class="buttons">
                     <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients &#9660;</button>
                 </div>
