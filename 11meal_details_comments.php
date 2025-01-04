@@ -485,7 +485,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             display: table;
             clear: both;
         }
-
     </style>
 </head>
 
@@ -529,57 +528,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
                 <h3>Description: </h3>
                 <p><?php echo $meal['description']; ?></p>
                 <p class="views">Views: <?php echo $meal['views']; ?></p>
-                <div class="buttons">
-    <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients &#9660;</button>
-</div>
-<div class="list-box">
-    <ol class="rounded-list">
-        <?php foreach ($ingredients as $ingredient) { ?>
-            <li>
-                <?php echo $ingredient['ingredient_name']; ?>
-                <?php if (!empty($ingredient['alt_ingredients'])) { ?>
-                    <br><span class="alt-ingredient" style="font-size: 0.9rem; color: #888; display: none;">Alternative: <?php echo $ingredient['alt_ingredients']; ?></span>
+        <h3>Ingredients</h3>
+        <div class="list-box">
+            <ol class="rounded-list">
+                <?php foreach ($ingredients as $ingredient) { ?>
+                    <li><?php echo $ingredient['ingredient_name']; ?></li>
                 <?php } ?>
-            </li>
-        <?php } ?>
-    </ol>
-</div>
+            </ol>
+        </div>
 
-<script>
-    document.getElementById("toggle-alt-ingredients").addEventListener("click", function() {
-        // Get all alternative ingredients elements
-        const altIngredients = document.querySelectorAll(".alt-ingredient");
-        
-        // Toggle visibility for each alternative ingredient
-        altIngredients.forEach(ingredient => {
-            if (ingredient.style.display === "none" || ingredient.style.display === "") {
-                ingredient.style.display = "inline"; // Show alternative ingredient
-            } else {
-                ingredient.style.display = "none"; // Hide alternative ingredient
-            }
-        });
-
-        // Change button text based on the current state
-        const button = document.getElementById("toggle-alt-ingredients");
-        if (button.textContent.includes("Show")) {
-            button.innerHTML = "Hide Alternative Ingredients &#9650;"; // Up arrow when hidden
-        } else {
-            button.innerHTML = "Show Alternative Ingredients &#9660;"; // Down arrow when shown
-        }
-    });
-</script>
-
-
-
-                <!-- Instructions -->
-                <h3>Instructions</h3>
-                <div class="list-box">
-                    <ol class="rounded-list">
-                        <?php foreach ($instructions as $instruction) { ?>
-                            <li><?php echo $instruction['step_description']; ?></li>
-                        <?php } ?>
-                    </ol>
-                </div>
+        <!-- Instructions -->
+        <h3>Instructions</h3>
+        <div class="list-box">
+            <ol class="rounded-list">
+                <?php foreach ($instructions as $instruction) { ?>
+                    <li><?php echo $instruction['step_description']; ?></li>
+                <?php } ?>
+            </ol>
+        </div>
 
 
                 <h3>Nutritional Info</h3>

@@ -154,7 +154,17 @@ if (isset($_GET['meal_id'])) {
     border-radius: 5px;
     transition: all 0.3s ease;
     width: 150%;
-}
+
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            width: 95%;
+            /* Utilizes more space in the container */
+        }
 
         .ingredient-list li:hover {
             background-color: rgb(224, 224, 224);
@@ -272,7 +282,14 @@ if (isset($_GET['meal_id'])) {
                 <div class="no-ingredients">You completed all the ingredients!</div>
             <?php } ?>
         </ul>
+<<<<<<< HEAD
        
+=======
+        <div style="border-radius: 10px; background-color:rgb(231, 231, 231); border: #555 solid 1px; padding-left: 20px; padding-right:50px; padding-top:5px; padding-bottom:5px;">
+            <p style="font-size: 16px; margin: 0px;"><b>Where to buy this ingredients?</b></p>
+            <p style="font-size: 12px; margin: 0px;"><?= $meal['where_buy'] ?></p>
+        </div>
+>>>>>>> 0fbdf534f6667d3363bbf15eb3286a139af4170f
 
         <div class="bought-ingredients">
             <h3>Bought Ingredients</h3>
