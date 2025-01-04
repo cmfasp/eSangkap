@@ -25,6 +25,10 @@ if (isset($_GET['meal_id'])) {
     $imagesStmt = $pdo->prepare("SELECT * FROM meal_images WHERE meal_id = ?");
     $imagesStmt->execute([$meal_id]);
     $images = $imagesStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $nutriInfoStmt = $pdo->prepare("SELECT * FROM nutritional_info WHERE meal_id = ?");
+    $nutriInfoStmt->execute([$meal_id]);
+    $nutriInfo = $nutriInfoStmt->fetchAll(PDO::FETCH_ASSOC);
 } else {
     header("Location: 9customer.php");
     exit();
@@ -45,7 +49,8 @@ if (isset($_GET['meal_id'])) {
             margin: 0;
             display: flex;
             flex-wrap: wrap;
-            background-color: #ffffff; /* Set to white */
+            background-color: #ffffff;
+            /* Set to white */
         }
 
         .logo-container {
@@ -99,8 +104,9 @@ if (isset($_GET['meal_id'])) {
         .sidebar a i {
             margin-right: 15px;
         }
+
         .sidebar a.active {
-            background-color:#ffcccb;
+            background-color: #ffcccb;
             color: darkred;
         }
 
@@ -112,7 +118,8 @@ if (isset($_GET['meal_id'])) {
         .container {
             margin: 0 auto;
             padding: 20px;
-            max-width: 1100px; /* Increased width for wider content */
+            max-width: 1100px;
+            /* Increased width for wider content */
             background-color: #fff;
             margin-top: 100px;
             margin-left: 380px;
@@ -120,7 +127,7 @@ if (isset($_GET['meal_id'])) {
 
 
         h1 {
-            color:darkred;
+            color: darkred;
         }
 
         h2 {
@@ -139,18 +146,18 @@ if (isset($_GET['meal_id'])) {
         }
 
         .ingredient-list li {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            background-color: #f9f9f9;
-            padding: 10px;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            width: 95%; /* Utilizes more space in the container */
-        }
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    width: 150%;
+}
 
         .ingredient-list li:hover {
-            background-color:rgb(224, 224, 224);
+            background-color: rgb(224, 224, 224);
             color: black;
         }
 
@@ -171,7 +178,7 @@ if (isset($_GET['meal_id'])) {
             cursor: pointer;
         }
 
-        .ingredient-list input:checked + label {
+        .ingredient-list input:checked+label {
             text-decoration: line-through;
             color: darkred;
         }
@@ -188,9 +195,10 @@ if (isset($_GET['meal_id'])) {
         .bought-ingredients li {
             margin: 5px 0;
             color: darkgreen;
-            background-color:rgb(192, 255, 206);
+            background-color: rgb(192, 255, 206);
             padding: 10px;
             border-radius: 5px;
+            width: 150%;
         }
 
         .meal-image {
@@ -199,7 +207,8 @@ if (isset($_GET['meal_id'])) {
             width: 150%;
             border-radius: 10px;
             height: 400px;
-            object-fit: cover; /* Ensures the image fills the width without stretching */
+            object-fit: cover;
+            /* Ensures the image fills the width without stretching */
             border-radius: 15px;
             margin-top: 20px;
         }
@@ -224,7 +233,6 @@ if (isset($_GET['meal_id'])) {
             color: darkred;
             margin-top: 30px;
         }
-
     </style>
 </head>
 
@@ -247,6 +255,10 @@ if (isset($_GET['meal_id'])) {
 
         <img src="<?php echo $images[0]['image_link']; ?>" alt="Meal Image" class="meal-image">
         <h2><?php echo $meal['meal_name']; ?></h2>
+        <div style="border-radius: 10px;">
+            <p style="font-size: 17px;"><b>Where to buy this ingredients?</b></p>
+            <p style="font-size: 17px; "><?= $meal['where_buy'] ?></p>
+        </div>
         <h3>Ingredients</h3>
         <ul class="ingredient-list">
             <?php if (count($ingredients) > 0) { ?>
@@ -260,6 +272,7 @@ if (isset($_GET['meal_id'])) {
                 <div class="no-ingredients">You completed all the ingredients!</div>
             <?php } ?>
         </ul>
+       
 
         <div class="bought-ingredients">
             <h3>Bought Ingredients</h3>
@@ -267,40 +280,40 @@ if (isset($_GET['meal_id'])) {
         </div>
     </div>
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        var boughtIngredientsList = document.getElementById('boughtIngredients');
-        var noIngredientsMessage = document.querySelector('.no-ingredients');
+        document.addEventListener("DOMContentLoaded", function() {
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            var boughtIngredientsList = document.getElementById('boughtIngredients');
+            var noIngredientsMessage = document.querySelector('.no-ingredients');
 
-        checkboxes.forEach(function (checkbox) {
-            checkbox.addEventListener('change', function () {
-                if (this.checked) {
-                    addToBoughtIngredients(this.nextElementSibling.textContent, this.id);
-                    this.parentNode.remove(); // Remove the ingredient from the checklist
-                }
+            checkboxes.forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        addToBoughtIngredients(this.nextElementSibling.textContent, this.id);
+                        this.parentNode.remove(); // Remove the ingredient from the checklist
+                    }
+                });
             });
+
+            function addToBoughtIngredients(ingredientName, ingredientId) {
+                // Check if the ingredient is already in the bought list
+                if (!boughtIngredientsList.querySelector(`[data-id="${ingredientId}"]`)) {
+                    var listItem = document.createElement('li');
+                    listItem.textContent = ingredientName;
+                    listItem.setAttribute('data-id', ingredientId); // Add a unique identifier
+                    boughtIngredientsList.appendChild(listItem);
+                    updateNoIngredientsMessage();
+                }
+            }
+
+            function updateNoIngredientsMessage() {
+                if (boughtIngredientsList.children.length > 0) {
+                    noIngredientsMessage.style.display = 'none';
+                } else {
+                    noIngredientsMessage.style.display = 'block';
+                }
+            }
         });
-
-        function addToBoughtIngredients(ingredientName, ingredientId) {
-            // Check if the ingredient is already in the bought list
-            if (!boughtIngredientsList.querySelector(`[data-id="${ingredientId}"]`)) {
-                var listItem = document.createElement('li');
-                listItem.textContent = ingredientName;
-                listItem.setAttribute('data-id', ingredientId); // Add a unique identifier
-                boughtIngredientsList.appendChild(listItem);
-                updateNoIngredientsMessage();
-            }
-        }
-
-        function updateNoIngredientsMessage() {
-            if (boughtIngredientsList.children.length > 0) {
-                noIngredientsMessage.style.display = 'none';
-            } else {
-                noIngredientsMessage.style.display = 'block';
-            }
-        }
-    });
-</script>
+    </script>
 
 </body>
 

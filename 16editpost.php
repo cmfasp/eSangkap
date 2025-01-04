@@ -36,6 +36,10 @@ if (isset($_GET['meal_id'])) {
     $categoryStmt = $pdo->prepare("SELECT * FROM categories");
     $categoryStmt->execute();
     $categories = $categoryStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $nutriInfoStmt = $pdo->prepare("SELECT * FROM nutritional_info WHERE meal_id = ?");
+    $nutriInfoStmt->execute([$meal_id]);
+    $nutriInfo = $nutriInfoStmt->fetchAll(PDO::FETCH_ASSOC);
 } else {
     header("Location: 9customer.php");
     exit();
@@ -104,18 +108,19 @@ if (isset($_GET['meal_id'])) {
             text-decoration: none;
             font-size: 15px;
         }
+
         .sidebar a.active {
-            background-color:#ffcccb;
+            background-color: #ffcccb;
             color: darkred;
         }
 
-        .sidebar a:hover{
+        .sidebar a:hover {
             background-color: white;
             color: darkred;
         }
 
         .container {
-            margin: 100px auto 20px; 
+            margin: 100px auto 20px;
             padding: 20px;
             max-width: 1300px;
             background-color: #fff;
@@ -140,14 +145,16 @@ if (isset($_GET['meal_id'])) {
             margin-bottom: 15px;
             gap: 65px;
         }
+
         .form-row div {
-            width: 32%; /* Ensures both fields (video and image) fit within the container */
+            width: 32%;
+            /* Ensures both fields (video and image) fit within the container */
         }
 
         .form-container input,
         .form-container textarea,
         .form-container select {
-            width: 210%; 
+            width: 210%;
             max-width: 700px;
             padding: 15px;
             margin: 5px;
@@ -224,25 +231,36 @@ if (isset($_GET['meal_id'])) {
                 </div>
                 <div>
                     <label for="image_links">Image Links:</label>
-                    <input type="text" name="image_links" value="<?php foreach ($existingImages as $image){
-                        echo htmlspecialchars($image['image_link']) . " "; } ?>" placeholder="Enter image links separated by spaces" required>
+                    <input type="text" name="image_links" value="<?php foreach ($existingImages as $image) {
+                                                                        echo htmlspecialchars($image['image_link']) . " ";
+                                                                    } ?>" placeholder="Enter image links separated by spaces" required>
                 </div>
             </div>
 
             <label for="description">Short Description:</label>
             <textarea name="description" rows="3"><?php echo htmlspecialchars($meal['description']); ?></textarea>
 
+            <label for="meal_name">Where to Buy:</label>
+            <input type="text" name="whereBuy" value="<?php echo htmlspecialchars($meal['where_buy']); ?>" required>
+
             <label for="all_ingredients">Ingredients:</label>
-            <textarea name="all_ingredients" rows="5"><?php foreach ($ingredients as $ingredient){
-                echo htmlspecialchars($ingredient['ingredient_name']) . "\n"; }?></textarea>
+            <textarea name="all_ingredients" rows="5"><?php foreach ($ingredients as $ingredient) {
+                                                            echo htmlspecialchars($ingredient['ingredient_name']) . "\n";
+                                                        } ?></textarea>
 
             <label for="all_steps">Instructions:</label>
             <textarea name="all_steps" rows="5"><?php foreach ($instructions as $instruction) {
-                echo htmlspecialchars($instruction['step_description']) . "\n";
-                 }?></textarea>
+                                                    echo htmlspecialchars($instruction['step_description']) . "\n";
+                                                } ?></textarea>
+
+            <label for="all_steps">Nutritional Info:</label>
+            <textarea name="all_nutriInfo" rows="5"><?php foreach ($nutriInfo as $info) {
+                                                        echo htmlspecialchars($info['nutrition_text']) . "\n";
+                                                    } ?></textarea>
 
             <button type="submit">Save Changes</button>
         </form>
     </div>
 </body>
+
 </html>

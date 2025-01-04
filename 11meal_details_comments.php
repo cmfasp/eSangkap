@@ -36,6 +36,10 @@ if (isset($_GET['meal_id'])) {
     $incrementViewsStmt = $pdo->prepare("UPDATE meals SET views = views + 1 WHERE meal_id = ?");
     $incrementViewsStmt->execute([$meal_id]);
 
+    $nutriInfoStmt = $pdo->prepare("SELECT * FROM nutritional_info WHERE meal_id = ?");
+    $nutriInfoStmt->execute([$meal_id]);
+    $nutriInfo = $nutriInfoStmt->fetchAll(PDO::FETCH_ASSOC);
+
     // Fetch meal data after incrementing views
     $stmt = $pdo->prepare("SELECT * FROM meals WHERE meal_id = ?");
     $stmt->execute([$meal_id]);
@@ -48,26 +52,26 @@ if (isset($_GET['meal_id'])) {
     WHERE meal_id = ? 
       AND alt_ingredients IS NOT NULL
 ");
-$altIngredientsStmt->execute([$meal_id]);
-$alternative_ingredients = $altIngredientsStmt->fetchAll(PDO::FETCH_ASSOC);
+    $altIngredientsStmt->execute([$meal_id]);
+    $alternative_ingredients = $altIngredientsStmt->fetchAll(PDO::FETCH_ASSOC);
 
 
-$filtered_ingredients = array_filter($alternative_ingredients, function ($item) {
-    return !empty($item['alt_ingredients']) && $item['alt_ingredients'] !== '0';
-});
+    $filtered_ingredients = array_filter($alternative_ingredients, function ($item) {
+        return !empty($item['alt_ingredients']) && $item['alt_ingredients'] !== '0';
+    });
 
 
-// if (!empty($filtered_ingredients)) {
-//     foreach ($filtered_ingredients as $ingredient) {
-//         echo htmlspecialchars($ingredient['alt_ingredients']) . '<br>';
-//     }
-    
-// } else {
-//     echo "No valid alternative ingredients found.";
-// }
-//commented out just in case needed, since it kinda interferring with the alt_ingridient
-    
-    
+    // if (!empty($filtered_ingredients)) {
+    //     foreach ($filtered_ingredients as $ingredient) {
+    //         echo htmlspecialchars($ingredient['alt_ingredients']) . '<br>';
+    //     }
+
+    // } else {
+    //     echo "No valid alternative ingredients found.";
+    // }
+    //commented out just in case needed, since it kinda interferring with the alt_ingridient
+
+
 } else {
     header("Location: 9customer.php");
     exit();
@@ -120,17 +124,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             display: flex;
             flex-wrap: wrap;
         }
-        h1 {
-            margin-top: 60px;
-        }
-        h3 {
-            margin-top: 20px;
-            margin-left: 60px;
-        }
 
         .logo-container {
             position: fixed;
-            top: 0;
             width: 100%;
             display: flex;
             justify-content: center;
@@ -145,6 +141,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             align-items: center;
         }
 
+        h2 {
+            margin-top: 40px;
+            color: #f04e23;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1,
+        h3 {
+            font-weight: bold;
+            margin-top: 20px;
+            margin-left: 60px;
+        }
+
         .logo img {
             height: 50px;
             padding: 20px;
@@ -152,27 +162,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             margin-right: 10px;
         }
 
-        .logo-container {
-            text-align: left;
-            padding-bottom: 20px;
-            display: flex;
-            align-items: center;
-        }
-
-
         .logo {
             width: 60px;
-            height: 60px;
+            height: 55px;
             border-radius: 50%;
             object-fit: cover;
             margin-right: 10px;
-        }
-
-        .title {
-            color: #f04e23;
-            font-size: 24px;
-            font-weight: bold;
-            text-align: left;
         }
 
         .sidebar {
@@ -200,8 +195,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             align-items: center;
         }
 
-        .sidebar a:hover {
-            background-color: white;
+        .sidebar a.active {
+            background-color: #ffcccb;
             color: darkred;
         }
 
@@ -213,6 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
         .sidebar a i {
             margin-right: 15px;
         }
+
         .container {
             background-color: #fff;
             width: 60%;
@@ -222,8 +218,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             padding: 20px;
             border-radius: 10px;
         }
+
         .views {
-            
+
             font-size: 16px;
             background-color: #f04e23;
             color: white;
@@ -233,6 +230,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             margin-left: 875px;
             display: flex;
         }
+
         button {
             background-color: darkred;
             color: #fff;
@@ -243,6 +241,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             font-size: 16px;
             margin-top: 10px;
         }
+
         .comment-item {
             border-radius: 5px;
             margin: 20px 0 0 40px;
@@ -255,7 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             max-width: 100%;
         }
 
-       
+
         .comment-header {
             display: flex;
             justify-content: space-between;
@@ -281,11 +280,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             margin-top: 5px;
             margin-left: 20px;
         }
+
         .delete-form {
             margin-left: 10px;
             display: flex;
             width: 50px;
         }
+
         .delete-comment-btn {
             background: none;
             border: none;
@@ -293,6 +294,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             padding: 5px;
             color: grey;
         }
+
         .comment-form {
             display: flex;
             width: calc(150% - 100px);
@@ -319,16 +321,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             margin-left: 15px;
             font-size: 16px;
         }
+
         .comments-list {
             padding: 0;
             margin: 0;
             list-style-type: none;
         }
-          form {
+
+        form {
             margin-top: 20px;
             width: 100%;
             display: flex;
         }
+
         form textarea {
             width: 120%;
             padding: 10px;
@@ -336,6 +341,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             border: 1px solid #ddd;
             margin-left: 60px;
         }
+
         .button-success {
             margin-left: 60px;
             color: white;
@@ -358,6 +364,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             background-color: transparent;
             margin-bottom: -100%;
         }
+
         img {
             margin-bottom: 20px;
             margin-left: 60px;
@@ -415,6 +422,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             transition: all .3s ease-out;
             color: #fff;
         }
+
         .watch-video {
             display: inline-block;
             padding: 10px 16px;
@@ -424,16 +432,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             cursor: pointer;
             text-decoration: none;
             font-size: 14px;
-            margin-top: 5px;
         }
+
         .watch-video:hover {
-            background-color: rgb(231, 101, 99);
-            color: darkred;
+            background-color: darkred;
+            color: white;
         }
 
         .watch-video i {
             margin-right: 8px;
         }
+
         .meal-header {
             display: flex;
             justify-content: space-between;
@@ -445,9 +454,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             font-size: 24px;
         }
 
-        .meal-header .watch-video {
-            margin-left: 20px;
-        }
+ 
+
         .button {
             margin-left: 30px;
             border: 2px #f04e23 ;
@@ -477,11 +485,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             display: table;
             clear: both;
         }
+
     </style>
 </head>
 
 <body>
-<div class="logo-container">
+    <div class="logo-container">
         <img src="logo.jpg" alt="Logo" class="logo">
         <h2 class="title">eSangkap</h2>
     </div>
@@ -491,25 +500,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
         <a href="favoritescreen.php"><i class="fa-solid fas fa-heart"></i>Favorites</a>
         <a href="view_categories.php"><i class="fa-solid fa-list"></i>Categories</a>
         <a href="12user_profile.php"><i class="fas fa-user"></i>Profile</a>
-        <a href="about_us.php"><i class="fa-solid fa-info-circle"></i>About Us</a>
+      
         <a href="4logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
     </div>
+
     <div class="container">
-        <h1><p><?php echo $meal['username']; ?></p><h1>
+        <h2>
+            <p><?php echo $meal['username']; ?></p>
+            <h2>
                 <?php foreach ($images as $image): ?>
                     <img src="<?php echo $image['image_link']; ?>" alt="Meal Image">
                 <?php endforeach; ?><br>
                 <div class="meal-header">
-                    <h1><?php echo $meal['meal_name']; ?></h1>
-                    <a class="watch-video" href="<?php echo $meal['video_link']; ?>" target="_blank">
-                        <i class="fas fa-play-circle"></i> Watch Video
-                    </a>
+                    <div>
+                        <h1><?php echo $meal['meal_name']; ?></h1>
+
+                    </div>
+                    <div>
+                        <a class="watch-video" href="shoppingList.php?meal_id=<?php echo $meal_id; ?>" target="_blank">
+                            <i class="fas fa-shopping-cart"></i> Where to Buy Ingredients
+                        </a>
+                        <a class="watch-video" href="<?php echo $meal['video_link']; ?>" target="_blank">
+                            <i class="fas fa-play-circle"></i> Watch Video
+                        </a>
+                    </div>
+
                 </div>
-                <h3>Description: </h3><p><?php echo $meal['description']; ?></p>
+                <h3>Description: </h3>
+                <p><?php echo $meal['description']; ?></p>
                 <p class="views">Views: <?php echo $meal['views']; ?></p>
-                
                 <div class="buttons">
-    <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients</button>
+    <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients &#9660;</button>
 </div>
 <div class="list-box">
     <ol class="rounded-list">
@@ -540,39 +561,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
 
         // Change button text based on the current state
         const button = document.getElementById("toggle-alt-ingredients");
-        if (button.textContent === "Show Alternative Ingredients") {
-            button.textContent = "Hide Alternative Ingredients"; // Change button text when showing
+        if (button.textContent.includes("Show")) {
+            button.innerHTML = "Hide Alternative Ingredients &#9650;"; // Up arrow when hidden
         } else {
-            button.textContent = "Show Alternative Ingredients"; // Change button text when hiding
+            button.innerHTML = "Show Alternative Ingredients &#9660;"; // Down arrow when shown
         }
     });
 </script>
 
-        <!-- Instructions -->
-        <h3>Instructions</h3>
-        <div class="list-box">
-            <ol class="rounded-list">
-                <?php foreach ($instructions as $instruction) { ?>
-                    <li><?php echo $instruction['step_description']; ?></li>
-                <?php } ?>
-            </ol>
-        </div>
-        <script>
-    document.getElementById('toggleButton').onclick = function() {
-        var mainIngredients = document.getElementById('mainIngredients');
-        var altIngredients = document.getElementById('alternativeIngredients');
 
-        if (mainIngredients.style.display !== 'none') {
-            mainIngredients.style.display = 'none';
-            altIngredients.style.display = 'block';
-            this.textContent = 'Ingredients ▼';
-        } else {
-            mainIngredients.style.display = 'block';
-            altIngredients.style.display = 'none';
-            this.textContent = 'Alternative Ingredients ▼';
-        }
-    }
-</script>
+
+                <!-- Instructions -->
+                <h3>Instructions</h3>
+                <div class="list-box">
+                    <ol class="rounded-list">
+                        <?php foreach ($instructions as $instruction) { ?>
+                            <li><?php echo $instruction['step_description']; ?></li>
+                        <?php } ?>
+                    </ol>
+                </div>
+
+
+                <h3>Nutritional Info</h3>
+                <div class="list-box">
+                    <ol class="rounded-list">
+                        <?php foreach ($nutriInfo as $info) { ?>
+                            <li><?php echo $info['nutrition_text']; ?></li>
+                        <?php } ?>
+                    </ol>
+                </div>
 
                 <button class="button-success" onclick="window.location.href='ratings.php?meal_id=<?php echo $meal_id; ?>'">
                     <i class="fa-solid fa-star" style="color: #FDCC0D;"></i> Rate this Meal

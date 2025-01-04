@@ -417,17 +417,11 @@ function getTimeElapsedString($datetime)
             <a href="12user_profile.php">
                 <i class="fas fa-fw fa-user"></i>Profile
             </a>
-            <a href="about_us.php">
-                <i class="fa-solid fa-info-circle"></i>About Us
-            </a>
             <a href="4logout.php"><i class="fas fa-fw fa-sign-out"></i>Logout
             </a>
         <?php else : ?>
             <a href="1registration.php">
                 <i class="fa fa-fw fa-home"></i>Home
-            </a>
-            <a href="about_us.php">
-                <i class="fa-solid fa-info-circle"></i>About Us
             </a>
             <a href="favoritescreen.php">
                 <i class="fa-solid fas fa-heart"></i>Favorites

@@ -23,6 +23,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         isset($_POST["ingredients"]) &&
         isset($_POST["image_links"]) &&
         isset($_POST["short_description"]) &&
+        isset($_POST["whereBuy"]) &&
+        isset($_POST["nutriInfo"]) &&
         isset($_POST["alt_ingredients"])
     ) {
         $userCheckStmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
@@ -35,15 +37,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $video_link = $_POST["video_link"];
             $image_links = $_POST["image_links"];
             $short_description = $_POST["short_description"];
-            $alt_ingredients = $_POST["alt_ingredients"]; 
+            $whereBuy = $_POST["whereBuy"];
 
             // Fetch category name based on category ID
             $categoryStmt = $pdo->prepare("SELECT * FROM categories WHERE category_id = ?");
             $categoryStmt->execute([$category_id]);
             $category = $categoryStmt->fetch();
 
-            $stmt = $pdo->prepare("INSERT INTO meals (meal_name, category_id, video_link, date_created, username, description) VALUES (?, ?, ?, NOW(), ?, ?)");
-            $stmt->execute([$recipe_name, $category_id, $video_link, $username, $short_description]);
+            $stmt = $pdo->prepare("INSERT INTO meals (meal_name, category_id, video_link, date_created, username, description, where_buy) VALUES (?, ?, ?, NOW(), ?, ?, ?)");
+            $stmt->execute([$recipe_name, $category_id, $video_link, $username, $short_description, $whereBuy]);
 
             $meal_id = $pdo->lastInsertId();
 
@@ -66,24 +68,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $alt_ingredients = explode("\n", $_POST["alt_ingredients"]);
 
             for ($i = 0; $i < max(count($ingredients), count($alt_ingredients)); $i++) {
-     
+
                 $ingredient_name = isset($ingredients[$i]) && !empty($ingredients[$i]) ? trim($ingredients[$i]) : null;
-                
- 
+
+
                 $alt_ingredient_name = isset($alt_ingredients[$i]) && !empty($alt_ingredients[$i]) ? trim($alt_ingredients[$i]) : null;
-            
-  
+
+
                 $stmt = $pdo->prepare("INSERT INTO ingredients (meal_id, ingredient_name, alt_ingredients) VALUES (?, ?, ?)");
                 $stmt->execute([$meal_id, $ingredient_name, $alt_ingredient_name]);
             }
-            
+
+            $nutriInfo = explode("\n", $_POST["nutriInfo"]);
+            foreach ($nutriInfo as $info) {
+                $stmt = $pdo->prepare("INSERT INTO nutritional_info (meal_id, nutrition_text) VALUES (?, ?)");
+                $stmt->execute([$meal_id, trim($info)]);
+            }
         } else {
             echo "Error: User does not exist.";
         }
     }
 }
 
-function generateRecipePreview($pdo, $meal_id) {
+function generateRecipePreview($pdo, $meal_id)
+{
     $stmt = $pdo->prepare("SELECT * FROM meals WHERE meal_id = ?");
     $stmt->execute([$meal_id]);
     $recipe = $stmt->fetch();
@@ -223,7 +231,7 @@ function generateRecipePreview($pdo, $meal_id) {
         }
 
         .sidebar a.active {
-            background-color:#ffcccb;
+            background-color: #ffcccb;
             color: darkred;
         }
 
@@ -470,7 +478,7 @@ function generateRecipePreview($pdo, $meal_id) {
             var popupMessage = document.getElementById("popup-message");
             popupMessage.innerText = message;
             popup.style.display = "block";
-            setTimeout(function () {
+            setTimeout(function() {
                 popup.style.display = "none";
             }, 5000);
         }
@@ -526,9 +534,15 @@ function generateRecipePreview($pdo, $meal_id) {
                         <input name="image_links" id="image_links" rows="3" placeholder="Add image links here"></input>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="short_description">Short Description:</label>
-                    <textarea name="short_description" id="short_description" rows="3" placeholder="Add a short description of your recipe" required></textarea>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="short_description">Short Description:</label>
+                        <textarea name="short_description" id="short_description" rows="3" placeholder="Add a short description of your recipe" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipe_name">Where to buy:</label>
+                        <input type="text" name="whereBuy" id="whereBuy" placeholder="Write your meal name here" required>
+                    </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -539,43 +553,42 @@ function generateRecipePreview($pdo, $meal_id) {
                         <label for="ingredients">Ingredients:</label>
                         <textarea name="ingredients" id="ingredients" rows="5" required></textarea>
                     </div>
-                  
+
                 </div>
                 <div class="form-group">
-                        <label for="ingredients">Alternative Ingredients:</label>
-                        <textarea name="alt_ingredients" id="alt_ingredients" rows="5" placeholder="Add alternative ingredients here"></textarea>
-                    </div>
-                <div class="form-buttons">
-                    <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
-                    <button id="add-button" type="submit">Add Recipe</button>
-                    <button id="edit-button" type="button" style="display: none;">Edit</button>
+                    <label for="instructions">Nutritional Info:</label>
+                    <textarea name="nutriInfo" id="nutriInfo" rows="5" required></textarea>
                 </div>
-            </form>
-        </div>
 
-        <div id="popup" style="display: none;">
-            <p id="popup-message"></p>
+                <label for="ingredients">Alternative Ingredients:</label>
+                <textarea name="alt_ingredients" id="alt_ingredients" rows="5" placeholder="Add alternative ingredients here"></textarea>
         </div>
-        <div id="preview-section" style="display: none;">
-    <div id="readonly-section">
-        <p>Meal Name: <span class="readonly-input meal-name"></span></p>
-        <p>Video Link: <span class="readonly-input short-description"></span></p>
-        <p>Image: <span class="readonly-input video-link"></span></p>
-        <img id="recipe-image" src="" alt="Recipe Image" style="max-width: 100%; display: none;">
-        <h3>Category</h3>
-        <p class="readonly-input category"></p>
-        <h3>Short Description</h3>
-        <p class="readonly-input description"></p>
-        <h3>Instruction</h3>
-        <p class="readonly-input instructions"></p>
-        <h3>Ingredients</h3>
-        <p class="readonly-input ingredients"></p>
+        <div class="form-buttons">
+            <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
+            <button id="add-button" type="submit">Add Recipe</button>
+            <button id="edit-button" type="button" style="display: none;">Edit</button>
+        </div>
+        </form>
     </div>
-    <div class="form-buttons">
-        <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
-        <button id="add-button" type="submit">Add</button>
-        <button id="edit-button" type="button" style="display: none;" onclick="toggleEdit()">Edit</button>
+
+    <div id="popup" style="display: none;">
+        <p id="popup-message"></p>
     </div>
-</div>
+    <div id="preview-section" style="display: none;">
+        <div id="readonly-section">
+            <p>Meal Name: <span class="readonly-input meal-name"></span></p>
+            <p>Video Link: <span class="readonly-input short-description"></span></p>
+            <p>Image: <span class="readonly-input video-link"></span></p>
+            <img id="recipe-image" src="" alt="Recipe Image" style="max-width: 100%; display: none;">
+            <h3>Short Description</h3>
+            <p class="readonly-input instructions"></p>
+            <h3>Instruction</h3>
+            <p class="readonly-input ingredients"></p>
+        </div>
+        <div class="form-buttons">
+            <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
+            <button id="add-button" type="submit">Add</button>
+            <button id="edit-button" type="button" style="display: none;" onclick="toggleEdit()">Edit</button>
+        </div>
+    </div>
 </body>
-

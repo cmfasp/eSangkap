@@ -20,7 +20,7 @@ if (isset($_GET['meal_id'])) {
     $instructionsStmt->execute([$meal_id]);
     $instructions = $instructionsStmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $ingredientsStmt = $pdo->prepare("SELECT * FROM ingredients WHERE meal_id = ?");
+    $ingredientsStmt = $pdo->prepare("SELECT ingredient_name, alt_ingredients FROM ingredients WHERE meal_id = ?");
     $ingredientsStmt->execute([$meal_id]);
     $ingredients = $ingredientsStmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -28,6 +28,10 @@ if (isset($_GET['meal_id'])) {
     $imagesStmt = $pdo->prepare("SELECT * FROM meal_images WHERE meal_id = ?");
     $imagesStmt->execute([$meal_id]);
     $images = $imagesStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $nutriInfoStmt = $pdo->prepare("SELECT * FROM nutritional_info WHERE meal_id = ?");
+    $nutriInfoStmt->execute([$meal_id]);
+    $nutriInfo = $nutriInfoStmt->fetchAll(PDO::FETCH_ASSOC);
 } else {
     header("Location: 9customer.php");
     exit();
@@ -138,8 +142,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
         .sidebar a i {
             margin-right: 15px;
         }
+
         .sidebar a.active {
-            background-color:#ffcccb;
+            background-color: #ffcccb;
             color: darkred;
         }
 
@@ -149,7 +154,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
         }
 
         .container {
-            margin: 100px auto;
+            margin: 0 auto;
+            width: 50%;
             padding: 20px;
             max-width: 900px;
             background-color: #fff;
@@ -165,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
 
         .buttons {
             display: flex;
-            justify-content: flex-end; 
+            justify-content: flex-end;
             margin-bottom: 10px;
         }
 
@@ -177,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
             font-family: 'Poppins', sans-serif;
             /* Set the font to Poppins */
             font-size: 1rem;
-            color:black;
+            color: black;
             padding: 10px 20px;
             border-radius: 5px;
             text-align: center;
@@ -188,16 +194,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
         }
 
         img {
-            width: 100%; 
-            height: 400px; 
-            object-fit: cover; 
-            border-radius: 15px; 
-            margin-bottom: 20px;
+            width: 100%;
+            height: 400px;
+            margin-bottom: 10px;
+            border-radius: 10px;
         }
 
         h2 {
             color: #f04e23;
-            margin: 15px 0;
         }
 
         h3 {
@@ -209,7 +213,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
             color: #333;
             margin: 10px 0;
         }
-        
 
         .list-box ol.rounded-list {
             counter-reset: li;
@@ -221,7 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
             background: #f3f3f3;
             border-radius: 5px;
             margin-top: 12px;
-            word-wrap: break-word; /* Prevent text overflow for long ingredients or instructions */
+            list-style: none;
         }
 
         .list-box ol.rounded-list li:before {
@@ -240,7 +243,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
             border-radius: 50%;
             color: white;
         }
-
         .watch-video {
             display: inline-block;
             padding: 10px 16px;
@@ -250,57 +252,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
             cursor: pointer;
             text-decoration: none;
             font-size: 14px;
-            margin-top: 5px;
-        }
-
-        .meal-header {
-            display: flex;
-            justify-content: space-between; /* This will allow space between meal name and video button */
-            align-items: center; /* Align items vertically centered */
-            margin-top: 10px;
-        }
-
-        .meal-header h1 {
-            font-size: 24px;
-            margin: 0;
-        }
-
-        .meal-header .watch-video {
-            margin-left: 20px;
         }
 
         .watch-video:hover {
-            background-color: rgb(231, 101, 99);
-            color: darkred;
+            background-color: darkred;
+            color: white;
         }
 
         .watch-video i {
             margin-right: 8px;
         }
-        .views {
-            
-            font-size: 16px;
-            background-color: #f04e23;
-            color: white;
-            border-radius: 20px;
-            width: 10%;
-            padding: 15px;
-            margin-left: 800px;
+
+        .meal-header {
             display: flex;
+            justify-content: space-between;
         }
-        .row {
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
+
+        .meal-header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #f04e23;
         }
-        .text {
-            margin-right: 10px;
-        }
-        .clearfix::after {
-            content: "";
-            display: table;
-            clear: both;
-        }
+
+
+      
+   
     </style>
 </head>
 
@@ -311,7 +287,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
     </div>
     <div class="sidebar">
         <a href="9customer.php"><i class="fa fa-fw fa-home"></i> Home</a>
-        <a href="favoritesreen.php"><i class="fas fa-heart"></i> Favorites</a>
+        <a href="favoritescreen.php"><i class="fas fa-heart"></i> Favorites</a>
         <a href="view_categories.php"><i class="fas fa-list"></i> Categories</a>
         <a href="12user_profile.php" class="active"><i class="fas fa-user"></i> Profile</a>
         <a href="about_us.php"><i class="fas fa-info-circle"></i> About Us</a>
@@ -331,20 +307,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
                 }
             </script>
         </div>
-        <div class ="image-wrapper"> 
-        <img src="<?php echo $images[0]['image_link']; ?>" alt="Meal Image"></div>
+        <img src="<?php echo $images[0]['image_link']; ?>" alt="Meal Image">
         <div class="meal-header">
-            <h1><?php echo $meal['meal_name']; ?></h1>
-            <a class="watch-video" href="<?php echo $meal['video_link']; ?>" target="_blank">
-                <i class="fas fa-play-circle"></i> Watch Video
-            </a>
-        </div>
+                    <div>
+                        <h1><?php echo $meal['meal_name']; ?></h1>
+
+                    </div>
+                    <div>
+                        <a class="watch-video" href="shoppingList.php?meal_id=<?php echo $meal_id; ?>" target="_blank">
+                            <i class="fas fa-shopping-cart"></i> Where to Buy Ingredients
+                        </a>
+                        <a class="watch-video" href="<?php echo $meal['video_link']; ?>" target="_blank">
+                            <i class="fas fa-play-circle"></i> Watch Video
+                        </a>
+                    </div>
+
+                </div>
         <h3>Description:</h3>
         <p><?php echo $meal['description']; ?></p>
-        <p class="views">Views: <?php echo $meal['views']; ?></p>
-
         <div class="buttons">
-    <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients</button>
+    <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients &#9660;</button>
 </div>
 <div class="list-box">
     <ol class="rounded-list">
@@ -375,22 +357,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
 
         // Change button text based on the current state
         const button = document.getElementById("toggle-alt-ingredients");
-        if (button.textContent === "Show Alternative Ingredients") {
-            button.textContent = "Hide Alternative Ingredients"; // Change button text when showing
+        if (button.textContent.includes("Show")) {
+            button.innerHTML = "Hide Alternative Ingredients &#9650;"; // Up arrow when hidden
         } else {
-            button.textContent = "Show Alternative Ingredients"; // Change button text when hiding
+            button.innerHTML = "Show Alternative Ingredients &#9660;"; // Down arrow when shown
         }
     });
 </script>
-<!-- Instructions Section -->
-<h3>Instructions</h3>
-<div class="list-box">
-    <ol class="rounded-list">
-        <?php foreach ($instructions as $instruction) { ?>
-            <li><?php echo htmlspecialchars($instruction['step_description']); ?></li>
-        <?php } ?>
-    </ol>
-</div>
+
+
+
+        <!-- Instructions -->
+        <h3>Instructions</h3>
+        <div class="list-box">
+            <ol class="rounded-list">
+                <?php foreach ($instructions as $instruction) { ?>
+                    <li><?php echo $instruction['step_description']; ?></li>
+                <?php } ?>
+            </ol>
+        </div>
+
+        <!-- Nutritional Info -->
+        <h3>Nutritional Info</h3>
+        <div class="list-box">
+            <ol class="rounded-list">
+                <?php foreach ($nutriInfo as $info) { ?>
+                    <li><?php echo $info['nutrition_text']; ?></li>
+                <?php } ?>
+            </ol>
+        </div>
     </div>
 </body>
 

@@ -304,7 +304,7 @@ function getTimeElapsedString($datetime)
                             <p><b>Description: </b><?php echo nl2br($meal['description']); ?></p>
                             <p class="views">Views: <?php echo $meal['views']; ?></p>
                             <p>Date: <?php echo getTimeElapsedString($meal['date_created']); ?></p>
-                            <a class="view-details-button" href="meal_details.php?meal_id=<?php echo $meal['meal_id']; ?>">View More</a>
+                            <a class="view-details-button" href="11meal_details_comments.php?meal_id=<?php echo $meal['meal_id']; ?>">View More</a>
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
