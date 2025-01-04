@@ -520,9 +520,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
 
                     </div>
                     <div>
-                        <a class="watch-video" href="shoppingList.php?meal_id=<?php echo $meal_id; ?>" target="_blank">
-                            <i class="fas fa-shopping-cart"></i> Where to Buy Ingredients
-                        </a>
                         <a class="watch-video" href="<?php echo $meal['video_link']; ?>" target="_blank">
                             <i class="fas fa-play-circle"></i> Watch Video
                         </a>

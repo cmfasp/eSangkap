@@ -594,7 +594,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
     <p>Added by: <span class="username"><?php echo htmlspecialchars($meal['username']); ?></span></p>
     <p class="views"><i class="fas fa-eye"></i> Views: <?php echo $meal['views']; ?></p>
 </div>
- <!-- <p class="views">Views: <?php echo $meal['views']; ?></p> -->
+  <?php echo $meal['views']; ?></p> -->
                 <div class="buttons">
                     <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients &#9660;</button>
                 </div>
@@ -710,5 +710,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
                 </script>
     </div>
 </body>
-
 </html>

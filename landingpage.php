@@ -41,14 +41,15 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
 
         .logo-container {
             position: fixed;
-            top: 0;
             width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
             background-color: #fff;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
+            z-index: 900;
+            text-align: left;
+            display: flex;
         }
 
         .logo {
@@ -63,16 +64,21 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
             margin-right: 10px;
         }
 
-        .logo h1 {
-            font-family: cursive;
-            font-size: 24px;
-            margin: 0;
-            color: #16b978;
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .title {
+            color: #f04e23;
         }
 
         .topnav {
-            background-color: rgba(22, 185, 120, 0.9);
-            background-color: #16b978;
+            margin-top: 10px;
+            background-color: #f04e23;
             overflow: hidden;
             position: fixed;
             top: 0;
@@ -101,21 +107,17 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         .topnav a:hover {
-            background-color: #ddd;
+           background-color:rgb(255, 212, 200);
             color: black;
         }
 
-        .topnav a.active {
-            background-color: #04AA6D;
-            color: white;
-        }
+   
 
         .container {
             display: flex;
             width: 100%;
             border-radius: 20px;
             background-color: #DAF2E8;
-            /* Updated background color */
             position: relative;
             overflow: hidden;
             /* Updated to hide scroll bars */
@@ -126,38 +128,27 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
 
         .left-panel {
             flex: 0.8;
-            /* Width of the left panel */
             padding: 30px;
-            background-color: #DAF2E8;
-            /* Light background color */
-            color: #18B877;
-            /* Green text color */
+            background-color:rgb(255, 203, 189);
+            color:darkred;
             position: sticky;
             top: 140px;
-            /* This is the height of the navbar. Adjust if necessary */
             z-index: 2;
-            /* Ensure the left panel stays above other content */
             overflow: auto;
-            /* Allows scrolling within the left panel */
             max-height: calc(100vh - 140px);
-            /* Ensure the panel is constrained to the visible height */
         }
 
         .left-panel h2 {
             font-size: 45px;
-            /* Adjusted font size */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* Changed font family */
             font-weight: bold;
-            color: #18B877;
+            color:darkred;
             margin-bottom: 10px;
-            /* Increased margin-bottom for spacing */
         }
 
         .left-panel p {
             text-align: left;
             color: black;
-            /* Updated text color */
         }
 
         .dish-section {
@@ -165,20 +156,17 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
             justify-content: space-between;
             margin-top: 20px;
             width: 100%;
-            /* Make sure it takes 100% width inside the container */
         }
 
         .dish {
             text-align: center;
             flex-basis: 30%;
-            /* Adjusted flex basis */
             position: relative;
         }
 
         .dish img {
             width: 90%;
             height: 170px;
-            /* Updated height */
             object-fit: cover;
             border-radius: 10px;
         }
@@ -193,10 +181,8 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
             top: 5px;
             right: 5px;
             color: #ff6347;
-            /* Tomato color for heart */
             font-size: 24px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            /* Added box shadow */
             background-color: white;
             border-radius: 20px;
             padding: 5px;
@@ -213,7 +199,6 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
             flex-direction: column;
             align-items: center;
             overflow: hidden;
-            /* Updated to hide scroll bars */
         }
 
         .breakfast-section {
@@ -238,41 +223,31 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
         .meal-container {
             display: flex;
             justify-content: space-evenly;
-            /* Evenly spaced cards */
             flex-wrap: wrap;
-            /* Allow wrapping on smaller screens */
             gap: 30px;
-            /* Added spacing between cards */
             margin-top: 40px;
-            /* Adjusted top margin */
         }
 
         .meal-card {
             position: relative;
             width: calc(33% - 20px);
-            /* Made cards wider */
             text-align: center;
-            background-color: #E6F4E6;
+            background-color:rgb(255, 203, 189);
             border-radius: 15px;
-            /* Softer rounded corners */
             cursor: pointer;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-            /* Enhanced shadow for a modern look */
             transition: transform 0.3s, box-shadow 0.3s;
-            /* Added smooth hover effects */
             padding-bottom: 15px;
-            /* Added padding for card content */
         }
 
         .meal-card .favorite-icon {
             position: absolute;
             top: 10px;
             margin-left: 30px;
-            color: #ff6347;
-            /* Tomato color for heart */
+            color: #f04e23;
             font-size: 24px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            /* Added box shadow */
+
             background-color: white;
             border-radius: 20px;
             padding: 5px;
@@ -284,32 +259,28 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
             object-fit: cover;
             width: 100%;
             height: 230px;
-            /* Updated height */
             object-fit: cover;
             border-radius: 10px;
         }
 
         .meal-card h3 {
             font-family: 'Poppins', sans-serif;
-            /* Apply Poppins font */
             font-weight: 700;
-            /* Bold weight for "Regular" */
             font-size: 18px;
-            color: #18B877;
+            color:darkred;
             margin-top: 10px;
         }
 
         .meal-card h1 {
             font-family: 'Poppins', sans-serif;
-            /* Apply Poppins font */
             font-weight: 700px;
             font-size: 80px;
-            color: #18B877;
+            color: darkred;
             margin-top: 10px;
         }
 
         .meal-card .views {
-            color: gray;
+            color: black;
             font-size: 15px;
         }
 
@@ -319,8 +290,7 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         .meal-card button {
-            background-color: #16b978;
-            /* Adjusted button color */
+            background-color:darkred;
             color: white;
             border: none;
             border-radius: 5px;
@@ -330,16 +300,10 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         .meal-card:hover {
-            background-color: #18B877;
-            /* Change the background color on hover */
+            background-color: #f04e23;
         }
 
-        .meal-card:hover h3,
-        .meal-card:hover .views,
-        .meal-card:hover .meal-description {
-            color: white;
-            /* Change the text color to white on hover */
-        }
+
 
         .views {
             color: gray;
@@ -357,27 +321,23 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
         .testimonial-card p {
             margin-right: 20px;
             margin-left: 20px;
-            /* Adjust the margin-bottom value as needed */
         }
 
         .testimonial-card {
             color: black;
             flex: 0 0 calc(50% - 20px);
-            border: 1px solid #D6EDE3;
             padding: 10px;
             margin-bottom: 1em;
-            background-color: #E6F4E6;
+            background-color:rgb(255, 203, 189);
             border-radius: 15px;
             box-sizing: border-box;
-            /* Add this line to fix width calculation */
         }
 
         .get-started-button {
             display: inline-block;
             padding: 10px;
             background-color: rgba(255, 255, 255, 0.9);
-            /* Adjusted alpha value for transparency */
-            color: #16b978;
+            color:darkred;
             text-decoration: none;
             border-radius: 50px;
             margin-top: 1em;
@@ -388,12 +348,11 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
             padding-top: 18px;
             padding-bottom: 18px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1), 0 0 8px rgba(0, 0, 0, 0.1);
-            /* Added box shadow */
         }
 
         h3 {
             font-size: 17px;
-            color: #16b978;
+            color:darkred;
             margin-top: 1em;
         }
 
@@ -401,15 +360,12 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
             max-width: 1200px;
             margin: 0 auto;
         }
-
-        /* Hide Navbar on Scroll Down */
         .container.hide-navbar {
             margin-top: 0;
         }
 
         .hot-recipes-button {
             background-color: white;
-            /* Fire color */
             color: #ff6347;
             padding: 10px 20px;
             border: none;
@@ -418,9 +374,7 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
             cursor: pointer;
             display: flex;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            /* Added box shadow */
             margin-bottom: 20px;
-            /* Added margin to separate button from the image */
             margin-left: 520px;
         }
 
@@ -442,13 +396,13 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
         h2 {
             margin-top: 40px;
             font-size: 28px;
-            color: #16b978;
+            color:darkred;
             margin-bottom: 20px;
         }
 
         .most-viewed-section h2 {
             font-size: 24px;
-            color: #16b978;
+            color:darkred;
             margin-bottom: 10px;
         }
 
@@ -459,16 +413,16 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
 
         .about-container {
             margin-top: 90px;
-            margin: 0 auto; /* Center the container */
-            padding: 20px; /* Add padding for better spacing */
+            margin: 0 auto; 
+            padding: 20px; 
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            max-width: 1200px; /* Limit the maximum width */
-            box-sizing: border-box; /* Include padding in width */
-            display: flex; /* Align content horizontally */
-            justify-content: center; /* Center the content */
-            align-items: center; /* Center the content vertically */
+            max-width: 1200px;
+            box-sizing: border-box; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
         }
 
 
@@ -479,7 +433,7 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         .about-image img {
-            width: 700px; /* Set width for the square size */
+            width: 700px; 
             height: 400px; /* Set height to the same value as width to make it square */
             object-fit: cover; /* Ensure the image covers the space */
             border-radius: 10px; /* Optional: keep the rounded corners */
@@ -488,7 +442,7 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
         .about-text {
             flex: 1;
             margin-left: 20px;
-            text-align: left; /* Ensure the text is aligned left */
+            text-align: left;
         }
 
         .about-text h2 {
@@ -511,8 +465,8 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         .footer {
-            background-color: #E6F4E6;
-            padding: 24px; /* Adjust padding for top and bottom */
+            background-color:rgb(255, 203, 189);
+            padding: 24px; 
             display: flex;
             justify-content: space-evenly;
             flex-wrap: wrap;
@@ -539,7 +493,7 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
 
         .footer h3 {
             margin-bottom: 10px;
-            color: #18B877;
+            color:darkred;
             font-size: 25px;
             font-weight: 40px;
         }
@@ -547,11 +501,9 @@ $recentTestimonies = $fetchRecentTestimoniesStmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body>
-    <div class="logo-container">
-        <div class="logo">
-            <img src="logo.png" alt="Tastebud Logo">
-            <h1>Tastebud</h1>
-        </div>
+<div class="logo-container">
+        <img src="logo.jpg" alt="Logo" class="logo">
+        <h2 class="title">eSangkap</h2>
     </div>
     <div class="container">
         <div class="topnav">

@@ -243,7 +243,6 @@ function generateRecipePreview($pdo, $meal_id)
 
     .sidebar {
         background-color: #f04e23;
-        ;
         margin-top: 65px;
         height: 100%;
         width: 250px;
@@ -427,22 +426,24 @@ function generateRecipePreview($pdo, $meal_id)
 </head>
 
 <body>
-    <div class="logo-container">
+<div class="logo-container">
         <img src="logo.jpg" alt="Logo" class="logo">
-        <span class="brand-name">eSangkap</span>
+        <h2 class="title">eSangkap</h2>
     </div>
 
     <div class="sidebar">
-        <a class="nav-link" href="adminViewPost.php">
-            <i class="fa fa-fw fa-home"></i> Home
+    <a class="nav-link" href="adminViewPost.php">
+            <i class="fa fa-fw fa-home"></i>Home
         </a>
         <a class="nav-link" href="5admin.php">
-            <i class="fa-solid fa-utensils"></i> Manage Recipe
+            <i class="fa-solid fa-utensils"></i>Manage Recipe
         </a>
         <a class="nav-link" href="4logout.php">
-            <i class="fas fa-fw fa-sign-out"></i> Logout
+            <i class="fas fa-fw fa-sign-out"></i>Logout
+        </a>
         </a>
     </div>
+
 
     <div class="container">
         <div class="form-section">
