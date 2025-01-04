@@ -27,10 +27,15 @@ if (isset($_GET['meal_id'])) {
     $instructionsStmt->execute([$meal_id]);
     $instructions = $instructionsStmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Fetch ingredients
+    // Fetch alt_ingredients
     $ingredientsStmt = $pdo->prepare("SELECT * FROM ingredients WHERE meal_id = ?");
     $ingredientsStmt->execute([$meal_id]);
     $ingredients = $ingredientsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $altingredientsStmt = $pdo->prepare("SELECT alt_ingredients FROM ingredients WHERE meal_id = ?");
+    $altingredientsStmt->execute([$meal_id]);
+    $altingredients = $altingredientsStmt->fetchAll(PDO::FETCH_ASSOC);
+
 
     // Fetch categories
     $categoryStmt = $pdo->prepare("SELECT * FROM categories");
@@ -148,7 +153,7 @@ if (isset($_GET['meal_id'])) {
 
         .form-row div {
             width: 32%;
-            /* Ensures both fields (video and image) fit within the container */
+
         }
 
         .form-container input,
@@ -191,6 +196,7 @@ if (isset($_GET['meal_id'])) {
 </head>
 
 <body>
+
     <div class="logo-container">
         <img src="logo.jpg" alt="Logo">
         <h2 class="logo-title">eSangkap</h2>
@@ -247,7 +253,12 @@ if (isset($_GET['meal_id'])) {
             <textarea name="all_ingredients" rows="5"><?php foreach ($ingredients as $ingredient) {
                                                             echo htmlspecialchars($ingredient['ingredient_name']) . "\n";
                                                         } ?></textarea>
-
+            <label for="alt_ingredients">Alternative Ingredients:</label>
+            <textarea name="alt_ingredients" rows="5"><?php
+                                                        foreach ($altingredients as $alt_ingredient) {
+                                                            echo htmlspecialchars($alt_ingredient['alt_ingredients']) . "\n";
+                                                        }
+                                                        ?></textarea>
             <label for="all_steps">Instructions:</label>
             <textarea name="all_steps" rows="5"><?php foreach ($instructions as $instruction) {
                                                     echo htmlspecialchars($instruction['step_description']) . "\n";
@@ -261,6 +272,7 @@ if (isset($_GET['meal_id'])) {
             <button type="submit">Save Changes</button>
         </form>
     </div>
+
 </body>
 
 </html>
