@@ -159,15 +159,10 @@ function getTimeElapsedString($datetime)
 
         .logo {
             width: 60px;
-            /* Circular logo size */
             height: 60px;
-            /* Make the height same as width to make it circular */
             border-radius: 50%;
-            /* This makes the image circular */
             object-fit: cover;
-            /* Ensures the image is properly scaled inside the circle */
             margin-right: 10px;
-            /* 10px space between the logo and the text */
         }
 
         .title {
@@ -266,19 +261,7 @@ function getTimeElapsedString($datetime)
             object-fit: cover;
             border-radius: 10px;
         }
-
-
-        .button-primary {
-            background-color: #16b978;
-            color: #fff;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-
+    
         .clearfix::after {
             content: "";
             clear: both;
@@ -511,7 +494,7 @@ function getTimeElapsedString($datetime)
                     ?>
 
                     <div class="meal-header">
-                        <h2><?php echo $recipe['meal_name']; ?></h2>
+                        <h3><?php echo $recipe['meal_name']; ?></h3>
                         <?php if ($isFavorite): ?>
                             <button class="favorite-button added" disabled>
                                 <i class="fas fa-heart"></i> Added to Favorites

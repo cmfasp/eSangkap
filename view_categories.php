@@ -51,6 +51,9 @@ if ($result && mysqli_num_rows($result) > 0) {
             background-color: #fff;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             z-index: 1000;
+            text-align: left;
+            padding-bottom: 20px;
+            display: flex;
         }
 
         .logo {
@@ -65,33 +68,16 @@ if ($result && mysqli_num_rows($result) > 0) {
             margin-right: 10px;
         }
 
-        .logo-container {
-            text-align: left;
-            padding-bottom: 20px;
-            display: flex;
-            /* Align logo and text in a row */
-            align-items: center;
-            /* Vertically align the logo and text */
-        }
-
         .logo {
             width: 60px;
-            /* Circular logo size */
             height: 60px;
-            /* Make the height same as width to make it circular */
             border-radius: 50%;
-            /* This makes the image circular */
             object-fit: cover;
-            /* Ensures the image is properly scaled inside the circle */
             margin-right: 10px;
-            /* 10px space between the logo and the text */
         }
 
         .title {
             color: #f04e23;
-            font-size: 24px;
-            font-weight: bold;
-            text-align: left;
         }
 
         .sidebar a {
@@ -201,6 +187,7 @@ if ($result && mysqli_num_rows($result) > 0) {
         <img src="logo.jpg" alt="Logo" class="logo">
         <h2 class="title">eSangkap</h2>
     </div>
+
 
     <div class="sidebar">
         <a href="9customer.php"><i class="fa fa-fw fa-home"></i>Home</a>

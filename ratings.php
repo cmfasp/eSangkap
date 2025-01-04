@@ -29,12 +29,12 @@ if (isset($_GET['meal_id'])) {
         $fetchAllRatingsStmt = $pdo->prepare("SELECT * FROM ratings WHERE meal_id = ?");
         $fetchAllRatingsStmt->execute([$meal_id]);
         $allRatings = $fetchAllRatingsStmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
         // Handle rating submission
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             if (isset($_POST['rating_value'])) {
                 $rating_value = filter_input(INPUT_POST, 'rating_value', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => 5)));
-                $rating_comment = $_POST['rating_comment']; 
+                $rating_comment = $_POST['rating_comment'];
 
                 if ($rating_value !== false) {
                     $existingRatingStmt = $pdo->prepare("SELECT * FROM ratings WHERE meal_id = ? AND username = ?");
@@ -66,7 +66,6 @@ if (isset($_GET['meal_id'])) {
             $fetchAllRatingsStmt->execute([$meal_id]);
             $allRatings = $fetchAllRatingsStmt->fetchAll(PDO::FETCH_ASSOC);
         }
-        
     } catch (PDOException $e) {
         die("Error: " . $e->getMessage());
     }
@@ -107,7 +106,6 @@ if (isset($_GET['meal_id'])) {
 
         .logo-container {
             position: fixed;
-            top: 0;
             width: 100%;
             display: flex;
             justify-content: center;
@@ -176,34 +174,26 @@ if (isset($_GET['meal_id'])) {
             margin-right: 15px;
         }
 
+
         .container {
             margin-left: 250px;
             padding: 20px;
             background-color: #fff;
-        }
-
-        h1 {
-            margin-top: 100px;
-            color: #c53b18;
             text-align: left;
         }
 
-        .button-primary {
-            background-color: darkred;
-            color: white;       
-            cursor: pointer;
-            text-decoration: none;
-            width: 13%;
-            align-items: center;
-            border: none; 
-            border-radius: 30px;
-            padding-top: 15px;
-            padding-bottom: 15px;
-            font-family: 'Poppins', sans-serif;
-        }
 
-        .button-primary:hover {
-            background-color: #8b0000;
+        h3 {
+            margin-top: 100px;
+            color: #c53b18;
+            text-align: left;
+            font-size: 22px;
+        }
+        
+        h1 {
+            
+            font-size: 17px;
+            margin-right: 10px;
         }
 
         .clearfix::after {
@@ -211,7 +201,7 @@ if (isset($_GET['meal_id'])) {
             clear: both;
             display: table;
         }
-    
+
         h2 {
             text-align: center;
             margin-top: 5px;
@@ -238,80 +228,93 @@ if (isset($_GET['meal_id'])) {
             margin-bottom: 20px;
         }
 
-        .rating-section .rating-textarea {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 60%; /* Adjust width as needed */
-    margin: 0 auto; /* Center the content */
-}
-
-.rating-section .rating-textarea select,
-.rating-section .rating-textarea textarea,
-.rating-section .rating-textarea button {
-    width: 100%; /* Ensure they take up the same width */
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    margin-bottom: 15px;
-    font-size: 16px;
-    background-color: #fff;
-    font-family: 'Poppins', sans-serif;
-}
-
-.rating-section .rating-textarea select {
-    width: 100%;
-}
-
-.rating-section .rating-textarea textarea {
-    width: 97%;
-    height: 70px; 
-    background-color: #f3f3f3;
-    resize: none; /
-}
-
-.rating-section .rating-textarea button {
-    width: 40%; 
-    background-color: darkred;
-    color: white;
-    cursor: pointer;
-    text-decoration: none;
-    border: none;
-    border-radius: 30px;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    font-family: 'Poppins', sans-serif;
-}
-
-.rating-section .rating-textarea button:hover {
-    background-color: #8b0000;
-}
-
-.rating-textarea select,
-.rating-textarea textarea,
-.rating-textarea button {
-    max-width: 200x; 
-    width: 100%;
-}
-
-.rating-section {
-            text-align: center;
+        .rating-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+            flex-direction: column;
         }
 
         .rating-stars {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .rating-stars .star {
             font-size: 30px;
             color: #ccc;
             cursor: pointer;
+            margin-right: 5px;
         }
 
-        .rating-stars.selected {
+        .rating-stars .star.selected {
             color: yellow;
         }
+
+        .rating-stars .star:hover {
+            color: gold;
+        }
+
+        textarea {
+            width: 57%; /* Set the width to make it narrower */
+            padding: 10px;
+            border-radius: 15px;
+            border: 1px solid #ccc;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+        }
+
+        button {
+            width: calc(40% - 30px);
+            padding: 10px;
+            background-color: darkred;
+            color: white;
+            border-radius: 20px;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 20px;
+
+        }
+
+        button:hover {
+            background-color: #8b0000;
+        }
+        .ratings-container {
+            margin-left: 20px; /* Space from the left */
+        padding: 20px; /* Padding around the container */
+        width: 60%; /* Set the width to make it narrower */
+        margin-right: auto;
+        margin-left: auto; /* Center the container */
+    }
+
+    .rating-item {
+        background-color: #f4f4f4; /* Light background */
+        padding: 10px; 
+        border-radius: 15px; /* Rounded corners */
+        margin-bottom: 10px; /* Space between rating items */
+        position: relative; /* Allows absolute positioning inside */
+    }
+
+    .rating-item:last-child {
+        border-bottom: none; /* Remove the bottom border for the last item */
+    }
+    .delete-rating {
+        position: absolute; /* Positions the delete button */
+        top: 10px; /* Places it at the top */
+        right: 10px; /* Places it at the right */
+        color: gray; 
+        text-decoration: none;
+    }
 
     </style>
 </head>
 
 <body>
+
     <div class="logo-container">
         <img src="logo.jpg" alt="Logo" class="logo">
         <h2 class="title">eSangkap</h2>
@@ -328,63 +331,73 @@ if (isset($_GET['meal_id'])) {
 
     <div class="container">
         <form method="post" action="">
-            <h1>Hi <b class="meal-username"><?php echo $meal['username']; ?></b>, you can now rate this meal!</h1>
+            <h3>Hi <b class="meal-username"><?php echo $meal['username']; ?></b>, you can now rate this meal!</h3>
             <?php foreach ($images as $image): ?>
                 <img class="meal-image" src="<?php echo $image['image_link']; ?>" alt="Meal Image">
             <?php endforeach; ?>
+          
+<?php if (count($allRatings) > 0): ?>
+    <div class="ratings-container">
 
-            <h2>Ratings:</h2>
-            <?php if (count($allRatings) > 0): ?>
-                <ul>
-                    <?php foreach ($allRatings as $rating): ?>
-                        <li>
-                            <strong><?php echo $rating['username']; ?>:</strong>
-                            <?php echo $rating['rating_comment']; ?><br>
-                            <strong>Rating:</strong> <?php echo $rating['rating_value']; ?> Stars<br>
-                            <strong>Date Rated:</strong> <?php echo $rating['date_rated']; ?>
-                            <?php if ($rating['username'] == $_SESSION['username']): ?>
-                                <a href="?meal_id=<?php echo $meal_id; ?>&delete_rating_id=<?php echo $rating['rating_id']; ?>" class="delete-rating">
-                                    <i class="fas fa-trash-alt"></i> Delete
-                                </a>
-                            <?php endif; ?>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php else: ?>
-                <p>No ratings available for this meal.</p>
-            <?php endif; ?>
+            <?php foreach ($allRatings as $rating): ?>
+                <div class="rating-item">
+                    <strong><?php echo $rating['username']; ?>:</strong>
+                    <?php echo $rating['rating_comment']; ?><br>
+                    <?php if ($rating['username'] == $_SESSION['username']): ?>
+                        <a href="?meal_id=<?php echo $meal_id; ?>&delete_rating_id=<?php echo $rating['rating_id']; ?>" class="delete-rating">
+                            <i class="fas fa-trash-alt"></i> 
+                        </a>
+                    <?php endif; ?>
+                    <strong>Rating:</strong>
+                    <?php
+                    for ($i = 1; $i <= 5; $i++) {
+                        if ($i <= $rating['rating_value']) {
+                            echo "⭐";
+                        } else {
+                            echo "☆";
+                        }
+                    }
+                    ?><br>
+                    <strong>Date:</strong> <?php echo $rating['date_rated']; ?>
+                    </div>
+            <?php endforeach; ?>
+    </div>
+<?php endif; ?>
+
 
             <div class="rating-section">
-                <h3>Rate this Meal:</h3>
                 <div class="rating-stars" id="rating-stars">
+                <h1>Rate this Meal</h1> 
                     <span class="star" data-value="1">&#9733;</span>
                     <span class="star" data-value="2">&#9733;</span>
                     <span class="star" data-value="3">&#9733;</span>
                     <span class="star" data-value="4">&#9733;</span>
                     <span class="star" data-value="5">&#9733;</span>
                 </div>
-                <textarea name="rating_comment" placeholder="Write a comment..." rows="4" cols="50" required></textarea>
+                <textarea name="rating_comment" placeholder="Write a comment..." rows="4" required></textarea>
                 <input type="hidden" name="rating_value" id="rating_value">
-                <button class="button-primary" type="submit" name="submit">Submit</button>
+                <button type="submit" name="submit">Submit</button>
             </div>
-        </form>
-    </div>
 
-    <script>
-        document.querySelectorAll('.star').forEach(star => {
-            star.addEventListener('click', function() {
-                const rating = this.getAttribute('data-value');
-                document.getElementById('rating_value').value = rating;
 
+            <script>
+                // Select all star elements and add click event listeners
                 document.querySelectorAll('.star').forEach(star => {
-                    if (star.getAttribute('data-value') <= rating) {
-                        star.classList.add('selected');
-                    } else {
-                        star.classList.remove('selected');
-                    }
+                    star.addEventListener('click', function() {
+                        const rating = this.getAttribute('data-value'); // Get the value of the clicked star
+                        document.getElementById('rating_value').value = rating; // Set the hidden input field to the selected rating value
+
+                        // Loop through each star and add/remove the 'selected' class
+                        document.querySelectorAll('.star').forEach(star => {
+                            if (star.getAttribute('data-value') <= rating) {
+                                star.classList.add('selected'); // Make stars up to the clicked one yellow
+                            } else {
+                                star.classList.remove('selected'); // Reset the remaining stars to default color
+                            }
+                        });
+                    });
                 });
-            });
-        });
-    </script>
+            </script>
 </body>
+
 </html>

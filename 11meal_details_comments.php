@@ -40,6 +40,34 @@ if (isset($_GET['meal_id'])) {
     $stmt = $pdo->prepare("SELECT * FROM meals WHERE meal_id = ?");
     $stmt->execute([$meal_id]);
     $meal = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    //Alternative Ingridients
+    $altIngredientsStmt = $pdo->prepare("
+    SELECT alt_ingredients 
+    FROM ingredients 
+    WHERE meal_id = ? 
+      AND alt_ingredients IS NOT NULL
+");
+$altIngredientsStmt->execute([$meal_id]);
+$alternative_ingredients = $altIngredientsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+$filtered_ingredients = array_filter($alternative_ingredients, function ($item) {
+    return !empty($item['alt_ingredients']) && $item['alt_ingredients'] !== '0';
+});
+
+
+// if (!empty($filtered_ingredients)) {
+//     foreach ($filtered_ingredients as $ingredient) {
+//         echo htmlspecialchars($ingredient['alt_ingredients']) . '<br>';
+//     }
+    
+// } else {
+//     echo "No valid alternative ingredients found.";
+// }
+//commented out just in case needed, since it kinda interferring with the alt_ingridient
+    
+    
 } else {
     header("Location: 9customer.php");
     exit();
@@ -92,8 +120,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             display: flex;
             flex-wrap: wrap;
         }
+        h1 {
+            margin-top: 60px;
+        }
+        h3 {
+            margin-top: 20px;
+            margin-left: 60px;
+        }
+
         .logo-container {
             position: fixed;
+            top: 0;
             width: 100%;
             display: flex;
             justify-content: center;
@@ -107,19 +144,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             display: flex;
             align-items: center;
         }
-        h2{
-            margin-top: 40px;
-            color: #f04e23;
-            align-items: center;
-            justify-content: center;
-        }
-
-        h1,
-        h3 {
-            font-weight: bold;
-            margin-top: 20px;
-            margin-left: 60px;
-        }
 
         .logo img {
             height: 50px;
@@ -128,12 +152,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             margin-right: 10px;
         }
 
+        .logo-container {
+            text-align: left;
+            padding-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+
         .logo {
             width: 60px;
-            height: 55px;
+            height: 60px;
             border-radius: 50%;
             object-fit: cover;
             margin-right: 10px;
+        }
+
+        .title {
+            color: #f04e23;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: left;
         }
 
         .sidebar {
@@ -161,8 +200,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             align-items: center;
         }
 
-        .sidebar a.active {
-            background-color:#ffcccb;
+        .sidebar a:hover {
+            background-color: white;
             color: darkred;
         }
 
@@ -409,11 +448,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
         .meal-header .watch-video {
             margin-left: 20px;
         }
+        .button {
+            margin-left: 30px;
+            border: 2px #f04e23 ;
+            padding: 8px 30px;
+            font-size: 17px;
+            font-family: 'Poppins', sans-serif;
+            background-color:white;
+            color: black;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+        .button:hover {
+            border: 2px #f04e23 ;
+            background-color:white;
+            color:lightgreen;
+        }
+        .row {
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+        .text {
+            margin-right: 10px;
+        }
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
     </style>
 </head>
 
 <body>
-    <div class="logo-container">
+<div class="logo-container">
         <img src="logo.jpg" alt="Logo" class="logo">
         <h2 class="title">eSangkap</h2>
     </div>
@@ -426,9 +494,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
         <a href="about_us.php"><i class="fa-solid fa-info-circle"></i>About Us</a>
         <a href="4logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
     </div>
-
     <div class="container">
-        <h2><p><?php echo $meal['username']; ?></p><h2>
+        <h1><p><?php echo $meal['username']; ?></p><h1>
                 <?php foreach ($images as $image): ?>
                     <img src="<?php echo $image['image_link']; ?>" alt="Meal Image">
                 <?php endforeach; ?><br>
@@ -440,14 +507,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
                 </div>
                 <h3>Description: </h3><p><?php echo $meal['description']; ?></p>
                 <p class="views">Views: <?php echo $meal['views']; ?></p>
-        <h3>Ingredients</h3>
-        <div class="list-box">
-            <ol class="rounded-list">
-                <?php foreach ($ingredients as $ingredient) { ?>
-                    <li><?php echo $ingredient['ingredient_name']; ?></li>
+                
+                <div class="buttons">
+    <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients</button>
+</div>
+<div class="list-box">
+    <ol class="rounded-list">
+        <?php foreach ($ingredients as $ingredient) { ?>
+            <li>
+                <?php echo $ingredient['ingredient_name']; ?>
+                <?php if (!empty($ingredient['alt_ingredients'])) { ?>
+                    <br><span class="alt-ingredient" style="font-size: 0.9rem; color: #888; display: none;">Alternative: <?php echo $ingredient['alt_ingredients']; ?></span>
                 <?php } ?>
-            </ol>
-        </div>
+            </li>
+        <?php } ?>
+    </ol>
+</div>
+
+<script>
+    document.getElementById("toggle-alt-ingredients").addEventListener("click", function() {
+        // Get all alternative ingredients elements
+        const altIngredients = document.querySelectorAll(".alt-ingredient");
+        
+        // Toggle visibility for each alternative ingredient
+        altIngredients.forEach(ingredient => {
+            if (ingredient.style.display === "none" || ingredient.style.display === "") {
+                ingredient.style.display = "inline"; // Show alternative ingredient
+            } else {
+                ingredient.style.display = "none"; // Hide alternative ingredient
+            }
+        });
+
+        // Change button text based on the current state
+        const button = document.getElementById("toggle-alt-ingredients");
+        if (button.textContent === "Show Alternative Ingredients") {
+            button.textContent = "Hide Alternative Ingredients"; // Change button text when showing
+        } else {
+            button.textContent = "Show Alternative Ingredients"; // Change button text when hiding
+        }
+    });
+</script>
 
         <!-- Instructions -->
         <h3>Instructions</h3>
@@ -458,6 +557,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
                 <?php } ?>
             </ol>
         </div>
+        <script>
+    document.getElementById('toggleButton').onclick = function() {
+        var mainIngredients = document.getElementById('mainIngredients');
+        var altIngredients = document.getElementById('alternativeIngredients');
+
+        if (mainIngredients.style.display !== 'none') {
+            mainIngredients.style.display = 'none';
+            altIngredients.style.display = 'block';
+            this.textContent = 'Ingredients ▼';
+        } else {
+            mainIngredients.style.display = 'block';
+            altIngredients.style.display = 'none';
+            this.textContent = 'Alternative Ingredients ▼';
+        }
+    }
+</script>
 
                 <button class="button-success" onclick="window.location.href='ratings.php?meal_id=<?php echo $meal_id; ?>'">
                     <i class="fa-solid fa-star" style="color: #FDCC0D;"></i> Rate this Meal

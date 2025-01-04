@@ -149,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
         }
 
         .container {
-            margin: 0 auto;
+            margin: 100px auto;
             padding: 20px;
             max-width: 900px;
             background-color: #fff;
@@ -188,14 +188,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
         }
 
         img {
-            width: 100%;
-            height: 400px;
-            margin-bottom: 10px;
-            border-radius: 10px;
+            width: 100%; 
+            height: 400px; 
+            object-fit: cover; 
+            border-radius: 15px; 
+            margin-bottom: 20px;
         }
 
         h2 {
             color: #f04e23;
+            margin: 15px 0;
         }
 
         h3 {
@@ -207,6 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
             color: #333;
             margin: 10px 0;
         }
+        
 
         .list-box ol.rounded-list {
             counter-reset: li;
@@ -218,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
             background: #f3f3f3;
             border-radius: 5px;
             margin-top: 12px;
-            list-style: none;
+            word-wrap: break-word; /* Prevent text overflow for long ingredients or instructions */
         }
 
         .list-box ol.rounded-list li:before {
@@ -274,6 +277,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
         .watch-video i {
             margin-right: 8px;
         }
+        .views {
+            
+            font-size: 16px;
+            background-color: #f04e23;
+            color: white;
+            border-radius: 20px;
+            width: 10%;
+            padding: 15px;
+            margin-left: 800px;
+            display: flex;
+        }
+        .row {
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+        }
+        .text {
+            margin-right: 10px;
+        }
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
     </style>
 </head>
 
@@ -304,7 +331,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
                 }
             </script>
         </div>
-        <img src="<?php echo $images[0]['image_link']; ?>" alt="Meal Image">
+        <div class ="image-wrapper"> 
+        <img src="<?php echo $images[0]['image_link']; ?>" alt="Meal Image"></div>
         <div class="meal-header">
             <h1><?php echo $meal['meal_name']; ?></h1>
             <a class="watch-video" href="<?php echo $meal['video_link']; ?>" target="_blank">
@@ -313,26 +341,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
         </div>
         <h3>Description:</h3>
         <p><?php echo $meal['description']; ?></p>
+        <p class="views">Views: <?php echo $meal['views']; ?></p>
 
-        <!-- Ingredients -->
-        <h3>Ingredients</h3>
-        <div class="list-box">
-            <ol class="rounded-list">
-                <?php foreach ($ingredients as $ingredient) { ?>
-                    <li><?php echo $ingredient['ingredient_name']; ?></li>
+        <div class="buttons">
+    <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients</button>
+</div>
+<div class="list-box">
+    <ol class="rounded-list">
+        <?php foreach ($ingredients as $ingredient) { ?>
+            <li>
+                <?php echo $ingredient['ingredient_name']; ?>
+                <?php if (!empty($ingredient['alt_ingredients'])) { ?>
+                    <br><span class="alt-ingredient" style="font-size: 0.9rem; color: #888; display: none;">Alternative: <?php echo $ingredient['alt_ingredients']; ?></span>
                 <?php } ?>
-            </ol>
-        </div>
+            </li>
+        <?php } ?>
+    </ol>
+</div>
 
-        <!-- Instructions -->
-        <h3>Instructions</h3>
-        <div class="list-box">
-            <ol class="rounded-list">
-                <?php foreach ($instructions as $instruction) { ?>
-                    <li><?php echo $instruction['step_description']; ?></li>
-                <?php } ?>
-            </ol>
-        </div>
+<script>
+    document.getElementById("toggle-alt-ingredients").addEventListener("click", function() {
+        // Get all alternative ingredients elements
+        const altIngredients = document.querySelectorAll(".alt-ingredient");
+        
+        // Toggle visibility for each alternative ingredient
+        altIngredients.forEach(ingredient => {
+            if (ingredient.style.display === "none" || ingredient.style.display === "") {
+                ingredient.style.display = "inline"; // Show alternative ingredient
+            } else {
+                ingredient.style.display = "none"; // Hide alternative ingredient
+            }
+        });
+
+        // Change button text based on the current state
+        const button = document.getElementById("toggle-alt-ingredients");
+        if (button.textContent === "Show Alternative Ingredients") {
+            button.textContent = "Hide Alternative Ingredients"; // Change button text when showing
+        } else {
+            button.textContent = "Show Alternative Ingredients"; // Change button text when hiding
+        }
+    });
+</script>
+<!-- Instructions Section -->
+<h3>Instructions</h3>
+<div class="list-box">
+    <ol class="rounded-list">
+        <?php foreach ($instructions as $instruction) { ?>
+            <li><?php echo htmlspecialchars($instruction['step_description']); ?></li>
+        <?php } ?>
+    </ol>
+</div>
     </div>
 </body>
 
