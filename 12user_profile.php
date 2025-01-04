@@ -12,7 +12,7 @@ try {
 
 if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
-
+    $loggedInUsername = $_SESSION['username'];
     $stmt = $pdo->prepare("SELECT * FROM meals WHERE username = ? ORDER BY date_created DESC");
     $stmt->execute([$username]);
     $userRecipes = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -50,7 +50,7 @@ function getTimeElapsedString($datetime)
     } elseif ($diff->d < 7) {
         return $diff->d . ' days ago';
     } else {
-        return $ago->format('F j, Y'); 
+        return $ago->format('F j, Y');
     }
 }
 ?>
@@ -183,7 +183,7 @@ function getTimeElapsedString($datetime)
             padding: 15px;
             margin-bottom: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            
+
         }
 
         .recipe-box img {
@@ -305,11 +305,17 @@ function getTimeElapsedString($datetime)
             font-size: 14px;
         }
 
-        .favorite-button:hover {
+
+        .favorite-button.added {
             background-color: darkred;
             color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            padding: 8px 10px;
+            border-radius: 25px;
+            box-shadow: none;
+            border: none;
         }
-
 
         .header-image {
             position: relative;
@@ -349,7 +355,7 @@ function getTimeElapsedString($datetime)
 
 <body>
 
-<div class="logo-container">
+    <div class="logo-container">
         <img src="logo.jpg" alt="Logo" class="logo">
         <h2 class="title">eSangkap</h2>
     </div>
@@ -391,11 +397,23 @@ function getTimeElapsedString($datetime)
                                 echo '<img src="' . htmlspecialchars($firstImage['image_link']) . '" alt="Recipe Image">';
                             }
                             ?>
+                            <?php
+                            // Check if the recipe is a favorite for the user
+                            $favStmt = $pdo->prepare("SELECT * FROM favorites WHERE meal_id = ? AND username = ?");
+                            $favStmt->execute([$meal_id, $loggedInUsername]);
+                            $isFavorite = $favStmt->rowCount() > 0;
+                            ?>
                             <div class="recipe-details">
                                 <h2><?php echo htmlspecialchars($recipe['meal_name']); ?></h2>
-                                <a href="add_to_favorites.php?meal_id=<?php echo $meal_id; ?>" class="favorite-button">
-                                    <i class="fas fa-heart"></i> Favorite
-                                </a>
+                                <?php if ($isFavorite): ?>
+                                    <button class="favorite-button added" disabled>
+                                        <i class="fas fa-heart"></i> Added to Favorites
+                                    </button>
+                                <?php else: ?>
+                                    <a href="add_to_favorites.php?meal_id=<?php echo $meal_id; ?>" class="favorite-button">
+                                        <i class="fas fa-heart"></i> Favorite
+                                    </a>
+                                <?php endif; ?>
                                 <p class="username"><?php echo htmlspecialchars($recipe['username']); ?></p>
                                 <p><b>Description:</b> <?php echo htmlspecialchars(strlen($recipe['description']) > 100 ? substr($recipe['description'], 0, 100) . '...' : $recipe['description']); ?></p>
                                 <p>Views: <?php echo htmlspecialchars($recipe['views']); ?></p>

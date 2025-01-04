@@ -454,38 +454,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             font-size: 24px;
         }
 
- 
+
 
         .button {
             margin-left: 30px;
-            border: 2px #f04e23 ;
+            border: 2px #f04e23;
             padding: 8px 30px;
             font-size: 17px;
             font-family: 'Poppins', sans-serif;
-            background-color:white;
+            background-color: white;
             color: black;
             cursor: pointer;
             border-radius: 20px;
         }
+
         .button:hover {
-            border: 2px #f04e23 ;
-            background-color:white;
-            color:lightgreen;
+            border: 2px #f04e23;
+            background-color: white;
+            color: lightgreen;
         }
+
         .row {
             white-space: nowrap;
             display: flex;
             align-items: center;
         }
+
         .text {
             margin-right: 10px;
         }
+
         .clearfix::after {
             content: "";
             display: table;
             clear: both;
         }
-
     </style>
 </head>
 
@@ -500,7 +503,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
         <a href="favoritescreen.php"><i class="fa-solid fas fa-heart"></i>Favorites</a>
         <a href="view_categories.php"><i class="fa-solid fa-list"></i>Categories</a>
         <a href="12user_profile.php"><i class="fas fa-user"></i>Profile</a>
-      
+
         <a href="4logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
     </div>
 
@@ -509,8 +512,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             <p><?php echo $meal['username']; ?></p>
             <h2>
                 <?php foreach ($images as $image): ?>
-                    <img src="<?php echo $image['image_link']; ?>" alt="Meal Image">
-                <?php endforeach; ?><br>
+                    <img src="<?php echo htmlspecialchars($image['image_link']); ?>">
+                <?php endforeach; ?>
+
                 <div class="meal-header">
                     <div>
                         <h1><?php echo $meal['meal_name']; ?></h1>
@@ -530,44 +534,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
                 <p><?php echo $meal['description']; ?></p>
                 <p class="views">Views: <?php echo $meal['views']; ?></p>
                 <div class="buttons">
-    <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients &#9660;</button>
-</div>
-<div class="list-box">
-    <ol class="rounded-list">
-        <?php foreach ($ingredients as $ingredient) { ?>
-            <li>
-                <?php echo $ingredient['ingredient_name']; ?>
-                <?php if (!empty($ingredient['alt_ingredients'])) { ?>
-                    <br><span class="alt-ingredient" style="font-size: 0.9rem; color: #888; display: none;">Alternative: <?php echo $ingredient['alt_ingredients']; ?></span>
-                <?php } ?>
-            </li>
-        <?php } ?>
-    </ol>
-</div>
+                    <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients &#9660;</button>
+                </div>
+                <div class="list-box">
+                    <ol class="rounded-list">
+                        <?php foreach ($ingredients as $ingredient) { ?>
+                            <li>
+                                <?php echo $ingredient['ingredient_name']; ?>
+                                <?php if (!empty($ingredient['alt_ingredients'])) { ?>
+                                    <br><span class="alt-ingredient" style="font-size: 0.9rem; color: #888; display: none;">Alternative: <?php echo $ingredient['alt_ingredients']; ?></span>
+                                <?php } ?>
+                            </li>
+                        <?php } ?>
+                    </ol>
+                </div>
 
-<script>
-    document.getElementById("toggle-alt-ingredients").addEventListener("click", function() {
-        // Get all alternative ingredients elements
-        const altIngredients = document.querySelectorAll(".alt-ingredient");
-        
-        // Toggle visibility for each alternative ingredient
-        altIngredients.forEach(ingredient => {
-            if (ingredient.style.display === "none" || ingredient.style.display === "") {
-                ingredient.style.display = "inline"; // Show alternative ingredient
-            } else {
-                ingredient.style.display = "none"; // Hide alternative ingredient
-            }
-        });
+                <script>
+                    document.getElementById("toggle-alt-ingredients").addEventListener("click", function() {
+                        // Get all alternative ingredients elements
+                        const altIngredients = document.querySelectorAll(".alt-ingredient");
 
-        // Change button text based on the current state
-        const button = document.getElementById("toggle-alt-ingredients");
-        if (button.textContent.includes("Show")) {
-            button.innerHTML = "Hide Alternative Ingredients &#9650;"; // Up arrow when hidden
-        } else {
-            button.innerHTML = "Show Alternative Ingredients &#9660;"; // Down arrow when shown
-        }
-    });
-</script>
+                        // Toggle visibility for each alternative ingredient
+                        altIngredients.forEach(ingredient => {
+                            if (ingredient.style.display === "none" || ingredient.style.display === "") {
+                                ingredient.style.display = "inline"; // Show alternative ingredient
+                            } else {
+                                ingredient.style.display = "none"; // Hide alternative ingredient
+                            }
+                        });
+
+                        // Change button text based on the current state
+                        const button = document.getElementById("toggle-alt-ingredients");
+                        if (button.textContent.includes("Show")) {
+                            button.innerHTML = "Hide Alternative Ingredients &#9650;"; // Up arrow when hidden
+                        } else {
+                            button.innerHTML = "Show Alternative Ingredients &#9660;"; // Down arrow when shown
+                        }
+                    });
+                </script>
 
 
 

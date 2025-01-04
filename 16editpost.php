@@ -223,12 +223,13 @@ if (isset($_GET['meal_id'])) {
             <label for="category">Category:</label>
             <select name="meal_category" required>
                 <?php foreach ($categories as $category) { ?>
-                    <option value="<?php echo htmlspecialchars($category['category_name']); ?>"
-                        <?php echo ($category['category_name'] == $meal['category_id']) ? 'selected' : ''; ?>>
+                    <option value="<?php echo htmlspecialchars($category['category_id']); ?>"
+                        <?php echo ($category['category_id'] == $meal['category_id']) ? 'selected' : ''; ?>>
                         <?php echo htmlspecialchars($category['category_name']); ?>
                     </option>
                 <?php } ?>
             </select>
+
 
             <div class="form-row">
                 <div>
