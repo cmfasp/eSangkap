@@ -546,49 +546,59 @@ function generateRecipePreview($pdo, $meal_id)
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="instructions">Instructions:</label>
-                        <textarea name="instructions" id="instructions" rows="5" required></textarea>
+                        <label for="ingredients">Ingredients:</label>
+                        <textarea name="ingredients" id="ingredients" rows="5" placeholder="Add the list of ingredients here" required></textarea>
+
+
                     </div>
                     <div class="form-group">
-                        <label for="ingredients">Ingredients:</label>
-                        <textarea name="ingredients" id="ingredients" rows="5" required></textarea>
+                        <label for="ingredients">Alternative Ingredients:</label>
+                        <textarea name="alt_ingredients" id="alt_ingredients" rows="5" placeholder="Add alternative ingredients here"></textarea>
+
                     </div>
 
                 </div>
-                <div class="form-group">
-                    <label for="instructions">Nutritional Info:</label>
-                    <textarea name="nutriInfo" id="nutriInfo" rows="5" required></textarea>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nutriInfo">Nutritional Information:</label>
+                        <textarea name="nutriInfo" id="nutriInfo" rows="5" placeholder="Add nutritional information here" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="instructions">Instructions:</label>
+                        <textarea name="instructions" id="instructions" rows="5" placeholder="Add preparation instructions here" required></textarea>
+                    </div>
                 </div>
 
-                <label for="ingredients">Alternative Ingredients:</label>
-                <textarea name="alt_ingredients" id="alt_ingredients" rows="5" placeholder="Add alternative ingredients here"></textarea>
-        </div>
-        <div class="form-buttons">
-            <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
-            <button id="add-button" type="submit">Add Recipe</button>
-            <button id="edit-button" type="button" style="display: none;">Edit</button>
-        </div>
-        </form>
-    </div>
 
-    <div id="popup" style="display: none;">
-        <p id="popup-message"></p>
-    </div>
-    <div id="preview-section" style="display: none;">
-        <div id="readonly-section">
-            <p>Meal Name: <span class="readonly-input meal-name"></span></p>
-            <p>Video Link: <span class="readonly-input short-description"></span></p>
-            <p>Image: <span class="readonly-input video-link"></span></p>
-            <img id="recipe-image" src="" alt="Recipe Image" style="max-width: 100%; display: none;">
-            <h3>Short Description</h3>
-            <p class="readonly-input instructions"></p>
-            <h3>Instruction</h3>
-            <p class="readonly-input ingredients"></p>
+
+
+                <div class="form-buttons">
+                    <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
+                    <button id="add-button" type="submit">Add Recipe</button>
+                    <button id="edit-button" type="button" style="display: none;">Edit</button>
+                </div>
+            </form>
         </div>
-        <div class="form-buttons">
-            <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
-            <button id="add-button" type="submit">Add</button>
-            <button id="edit-button" type="button" style="display: none;" onclick="toggleEdit()">Edit</button>
+
+        <div id="popup" style="display: none;">
+            <p id="popup-message"></p>
         </div>
-    </div>
+        <div id="preview-section" style="display: none;">
+            <div id="readonly-section">
+                <p>Meal Name: <span class="readonly-input meal-name"></span></p>
+                <p>Video Link: <span class="readonly-input short-description"></span></p>
+                <p>Image: <span class="readonly-input video-link"></span></p>
+                <img id="recipe-image" src="" alt="Recipe Image" style="max-width: 100%; display: none;">
+                <h3>Short Description</h3>
+                <p class="readonly-input instructions"></p>
+                <h3>Instruction</h3>
+                <p class="readonly-input ingredients"></p>
+            </div>
+            <div class="form-buttons">
+                <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
+                <button id="add-button" type="submit">Add</button>
+                <button id="edit-button" type="button" style="display: none;" onclick="toggleEdit()">Edit</button>
+            </div>
+        </div>
 </body>

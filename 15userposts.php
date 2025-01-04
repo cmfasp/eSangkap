@@ -181,6 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
             border: none;
             cursor: pointer;
             font-family: 'Poppins', sans-serif;
+            /* Set the font to Poppins */
             font-size: 1rem;
             color: black;
             padding: 10px 20px;
@@ -189,6 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
             display: flex;
             align-items: center;
             text-decoration: none;
+            /* Remove underline */
         }
 
         img {
@@ -250,26 +252,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
             cursor: pointer;
             text-decoration: none;
             font-size: 14px;
-
-            margin-top: 5px;
-        }
-
-        .meal-header {
-            display: flex;
-            justify-content: space-between;
-            /* This will allow space between meal name and video button */
-            align-items: center;
-            /* Align items vertically centered */
-            margin-top: 10px;
-        }
-
-        .meal-header h1 {
-            font-size: 24px;
-            margin: 0;
-        }
-
-        .meal-header .watch-video {
-            margin-left: 20px;
         }
 
         .watch-video:hover {
@@ -308,7 +290,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
         <a href="favoritescreen.php"><i class="fas fa-heart"></i> Favorites</a>
         <a href="view_categories.php"><i class="fas fa-list"></i> Categories</a>
         <a href="12user_profile.php" class="active"><i class="fas fa-user"></i> Profile</a>
-        <a href="about_us.php"><i class="fas fa-info-circle"></i> About Us</a>
         <a href="4logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
     <div class="container">
@@ -343,7 +324,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
                 </div>
         <h3>Description:</h3>
         <p><?php echo $meal['description']; ?></p>
-
         <div class="buttons">
     <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients &#9660;</button>
 </div>
@@ -354,21 +334,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
                 <?php echo $ingredient['ingredient_name']; ?>
                 <?php if (!empty($ingredient['alt_ingredients'])) { ?>
                     <br><span class="alt-ingredient" style="font-size: 0.9rem; color: #888; display: none;">Alternative: <?php echo $ingredient['alt_ingredients']; ?></span>
-
-
-        <!-- Ingredients -->
-
-        <h3>Ingredients</h3>
-        <div class="list-box">
-            <ol class="rounded-list">
-                <?php foreach ($ingredients as $ingredient) { ?>
-                    <li>
-                        <?php echo $ingredient['ingredient_name']; ?>
-                        <?php if (!empty($ingredient['alt_ingredients'])) { ?>
-                            <br><span style="font-size: 0.9rem; color: #888;">Alternative: <?php echo $ingredient['alt_ingredients']; ?></span>
-                        <?php } ?>
-                    </li>
-                        
                 <?php } ?>
             </li>
         <?php } ?>
@@ -399,22 +364,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
     });
 </script>
 
-
-
-
-        <div class="buttons">
-            <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients</button>
-        </div>
-
-        <script>
-            document.getElementById("toggle-alt-ingredients").addEventListener("click", function() {
-                // Toggle visibility of alternative ingredients
-                const ingredientsList = document.querySelectorAll(".rounded-list li span");
-                ingredientsList.forEach(ingredient => {
-                    ingredient.style.display = ingredient.style.display === "none" ? "inline" : "none";
-                });
-            });
-        </script>
 
 
         <!-- Instructions -->

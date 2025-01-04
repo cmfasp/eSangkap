@@ -182,19 +182,6 @@ if (isset($_GET['meal_id'])) {
             text-align: left;
         }
 
-        .button-primary {
-            background-color: darkred;
-            color: white;
-            cursor: pointer;
-            text-decoration: none;
-            width: 13%;
-            align-items: center;
-            border: none;
-            border-radius: 30px;
-            padding-top: 15px;
-            padding-bottom: 15px;
-            font-family: 'Poppins', sans-serif;
-        }
 
         h3 {
             margin-top: 100px;
@@ -241,75 +228,12 @@ if (isset($_GET['meal_id'])) {
             margin-bottom: 20px;
         }
 
-
         .rating-section {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-top: 20px;
             flex-direction: column;
-
-        .rating-section .rating-textarea {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 60%;
-            /* Adjust width as needed */
-            margin: 0 auto;
-            /* Center the content */
-        }
-
-        .rating-section .rating-textarea select,
-        .rating-section .rating-textarea textarea,
-        .rating-section .rating-textarea button {
-            width: 100%;
-            /* Ensure they take up the same width */
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            margin-bottom: 15px;
-            font-size: 16px;
-            background-color: #fff;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .rating-section .rating-textarea select {
-            width: 100%;
-        }
-
-        .rating-section .rating-textarea textarea {
-            width: 97%;
-            height: 70px;
-            background-color: #f3f3f3;
-            resize: none;/
-        }
-
-        .rating-section .rating-textarea button {
-            width: 40%;
-            background-color: darkred;
-            color: white;
-            cursor: pointer;
-            text-decoration: none;
-            border: none;
-            border-radius: 30px;
-            padding-top: 15px;
-            padding-bottom: 15px;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .rating-section .rating-textarea button:hover {
-            background-color: #8b0000;
-        }
-
-        .rating-textarea select,
-        .rating-textarea textarea,
-        .rating-textarea button {
-            max-width: 200x;
-            width: 100%;
-        }
-
-        .rating-section {
-            text-align: center;
         }
 
         .rating-stars {
@@ -327,6 +251,7 @@ if (isset($_GET['meal_id'])) {
         .rating-stars .star.selected {
             color: yellow;
         }
+
         .rating-stars .star:hover {
             color: gold;
         }
@@ -385,88 +310,6 @@ if (isset($_GET['meal_id'])) {
         text-decoration: none;
     }
 
-        .rating-stars .star {
-            font-size: 30px;
-            color: #ccc;
-            cursor: pointer;
-            margin: 0 5px;
-            transition: color 0.2s ease-in-out;
-        }
-
-        .rating-stars .star.selected {
-            color: #ffcc00;
-            /* Highlight selected stars */
-        }
-
-        .ratings-container {
-            display: flex;
-            width: 60%;
-            flex-direction: column;
-            gap: 20px;
-            margin: 20px auto;
-            align-self: center;
-        }
-
-        .rating-card {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .rating-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .rating-username {
-            font-size: 16px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .rating-stars i {
-            color: #ddd;
-            margin-right: 5px;
-            font-size: 18px;
-        }
-
-        .rating-stars i.filled {
-            color: #ffcc00;
-        }
-
-        .rating-comment {
-            font-size: 20px;
-            font-weight: bolder;
-            color: #666;
-            margin: 10px 0;
-        }
-
-        .rating-date {
-            font-size: 12px;
-            color: #999;
-        }
-
-        .delete-rating {
-            font-size: 18px;
-            color: darkred;
-            text-decoration: none;
-            margin-top: 10px;
-            display: inline-block;
-        }
-
-        .delete-rating:hover {
-            color: #8b0000;
-        }
-
-        .no-ratings {
-            font-size: 14px;
-            color: #aaa;
-            text-align: center;
-        }
     </style>
 </head>
 
@@ -488,11 +331,7 @@ if (isset($_GET['meal_id'])) {
 
     <div class="container">
         <form method="post" action="">
-
             <h3>Hi <b class="meal-username"><?php echo $meal['username']; ?></b>, you can now rate this meal!</h3>
-
-            <h1>Hi <b class="meal-username"><?php echo $_SESSION['username']; ?></b>, you can now rate this meal!</h1>
-
             <?php foreach ($images as $image): ?>
                 <img class="meal-image" src="<?php echo $image['image_link']; ?>" alt="Meal Image">
             <?php endforeach; ?>
@@ -525,36 +364,6 @@ if (isset($_GET['meal_id'])) {
     </div>
 <?php endif; ?>
 
-<<<<<<< HEAD
-=======
-            <h2>Ratings:</h2>
-            <div class="ratings-container">
-                <?php if (count($allRatings) > 0): ?>
-                    <?php foreach ($allRatings as $rating): ?>
-                        <div class="rating-card">
-                            <div class="rating-header">
-                                <strong class="rating-username"><?php echo $rating['username']; ?></strong>
-                                <span class="rating-stars">
-                                    <?php for ($i = 1; $i <= 5; $i++): ?>
-                                        <i class="fa fa-star <?php echo $i <= $rating['rating_value'] ? 'filled' : ''; ?>"></i>
-                                    <?php endfor; ?>
-                                </span>
-                            </div>
-                            <p class="rating-comment"><?php echo $rating['rating_comment']; ?></p>
-                            <p class="rating-date"><i class="fa fa-calendar"></i> <?php echo $rating['date_rated']; ?></p>
-                            <?php if ($rating['username'] == $_SESSION['username']): ?>
-                                <a href="?meal_id=<?php echo $meal_id; ?>&delete_rating_id=<?php echo $rating['rating_id']; ?>" class="delete-rating">
-                                    <i class="fas fa-trash-alt"></i> Delete
-                                </a>
-                            <?php endif; ?>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p class="no-ratings">No ratings available for this meal.</p>
-                <?php endif; ?>
-            </div>
-
->>>>>>> 0fbdf534f6667d3363bbf15eb3286a139af4170f
 
             <div class="rating-section">
                 <div class="rating-stars" id="rating-stars">
@@ -565,15 +374,9 @@ if (isset($_GET['meal_id'])) {
                     <span class="star" data-value="4">&#9733;</span>
                     <span class="star" data-value="5">&#9733;</span>
                 </div>
-<<<<<<< HEAD
                 <textarea name="rating_comment" placeholder="Write a comment..." rows="4" required></textarea>
                 <input type="hidden" name="rating_value" id="rating_value">
                 <button type="submit" name="submit">Submit</button>
-=======
-                <textarea name="rating_comment" placeholder="Write a comment..." rows="4" cols="50" required></textarea>
-                <input type="hidden" name="rating_value" id="rating_value"><br>
-                <button class="button-primary" type="submit" name="submit">Submit</button>
->>>>>>> 0fbdf534f6667d3363bbf15eb3286a139af4170f
             </div>
 
 
@@ -596,4 +399,5 @@ if (isset($_GET['meal_id'])) {
                 });
             </script>
 </body>
+
 </html>
