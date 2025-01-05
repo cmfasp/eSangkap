@@ -454,38 +454,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             font-size: 24px;
         }
 
- 
+
 
         .button {
             margin-left: 30px;
-            border: 2px #f04e23 ;
+            border: 2px #f04e23;
             padding: 8px 30px;
             font-size: 17px;
             font-family: 'Poppins', sans-serif;
-            background-color:white;
+            background-color: white;
             color: black;
             cursor: pointer;
             border-radius: 20px;
         }
+
         .button:hover {
-            border: 2px #f04e23 ;
-            background-color:white;
-            color:lightgreen;
+            border: 2px #f04e23;
+            background-color: white;
+            color: lightgreen;
         }
+
         .row {
             white-space: nowrap;
             display: flex;
             align-items: center;
         }
+
         .text {
             margin-right: 10px;
         }
+
         .clearfix::after {
             content: "";
             display: table;
             clear: both;
         }
-
     </style>
 </head>
 
@@ -496,7 +499,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
     </div>
 
     <div class="sidebar">
-    <a class="nav-link" href="adminViewPost.php">
+        <a class="nav-link" href="adminViewPost.php">
             <i class="fa fa-fw fa-home"></i>Home
         </a>
         <a class="nav-link" href="5admin.php">
@@ -530,47 +533,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
                 <p><?php echo $meal['description']; ?></p>
                 <p class="views">Views: <?php echo $meal['views']; ?></p>
                 <div class="buttons">
-    <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients &#9660;</button>
-</div>
-<div class="list-box">
-    <ol class="rounded-list">
-        <?php foreach ($ingredients as $ingredient) { ?>
-            <li>
-                <?php echo $ingredient['ingredient_name']; ?>
-                <?php if (!empty($ingredient['alt_ingredients'])) { ?>
-                    <br><span class="alt-ingredient" style="font-size: 0.9rem; color: #888; display: none;">Alternative: <?php echo $ingredient['alt_ingredients']; ?></span>
-                <?php } ?>
-            </li>
-        <?php } ?>
-    </ol>
-</div>
+                    <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients &#9660;</button>
+                </div>
+                <div class="list-box">
+                    <ol class="rounded-list">
+                        <?php foreach ($ingredients as $ingredient) { ?>
+                            <li>
+                                <?php echo $ingredient['ingredient_name']; ?>
+                                <?php if (!empty($ingredient['alt_ingredients'])) { ?>
+                                    <br><span class="alt-ingredient" style="font-size: 0.9rem; color: #888; display: none;">Alternative: <?php echo $ingredient['alt_ingredients']; ?></span>
+                                <?php } ?>
+                            </li>
+                        <?php } ?>
+                    </ol>
+                </div>
 
-<script>
-    document.getElementById("toggle-alt-ingredients").addEventListener("click", function() {
-        // Get all alternative ingredients elements
-        const altIngredients = document.querySelectorAll(".alt-ingredient");
-        
-        // Toggle visibility for each alternative ingredient
-        altIngredients.forEach(ingredient => {
-            if (ingredient.style.display === "none" || ingredient.style.display === "") {
-                ingredient.style.display = "inline"; // Show alternative ingredient
-            } else {
-                ingredient.style.display = "none"; // Hide alternative ingredient
-            }
-        });
+                <script>
+                    document.getElementById("toggle-alt-ingredients").addEventListener("click", function() {
+                        // Get all alternative ingredients elements
+                        const altIngredients = document.querySelectorAll(".alt-ingredient");
 
-        // Change button text based on the current state
-        const button = document.getElementById("toggle-alt-ingredients");
-        if (button.textContent.includes("Show")) {
-            button.innerHTML = "Hide Alternative Ingredients &#9650;"; // Up arrow when hidden
-        } else {
-            button.innerHTML = "Show Alternative Ingredients &#9660;"; // Down arrow when shown
-        }
-    });
-</script>
+                        // Toggle visibility for each alternative ingredient
+                        altIngredients.forEach(ingredient => {
+                            if (ingredient.style.display === "none" || ingredient.style.display === "") {
+                                ingredient.style.display = "inline"; // Show alternative ingredient
+                            } else {
+                                ingredient.style.display = "none"; // Hide alternative ingredient
+                            }
+                        });
 
+                        // Change button text based on the current state
+                        const button = document.getElementById("toggle-alt-ingredients");
+                        if (button.textContent.includes("Show")) {
+                            button.innerHTML = "Hide Alternative Ingredients &#9650;"; // Up arrow when hidden
+                        } else {
+                            button.innerHTML = "Show Alternative Ingredients &#9660;"; // Down arrow when shown
+                        }
+                    });
+                </script>
 
+                <h3>Where to Buy</h3>
+                <div class="list-box">
+                    <ol class="rounded-list">
+                        <li><?php echo $meal['where_buy']; ?></li>
 
+                    </ol>
+                </div>
+                <hr>
                 <!-- Instructions -->
                 <h3>Instructions</h3>
                 <div class="list-box">
