@@ -365,6 +365,7 @@ function getTimeElapsedString($datetime)
         <a href="favoritescreen.php"><i class="fa-solid fas fa-heart"></i>Favorites</a>
         <a href="view_categories.php"><i class="fa-solid fa-list"></i>Categories</a>
         <a href="12user_profile.php" class="active"><i class="fas fa-user"></i>Profile</a>
+        <a href="testimony.php"><i class="fas fa-user-friends"></i> Forum</a>
         <a href="4logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
     </div>
 

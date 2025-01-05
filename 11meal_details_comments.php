@@ -116,13 +116,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-wrap: wrap;
         }
 
         .logo-container {
@@ -135,27 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             background-color: #fff;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             z-index: 1000;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo img {
-            height: 50px;
-            padding: 20px;
-            width: auto;
-            margin-right: 10px;
-        }
-
-        .logo-container {
-            text-align: left;
-            padding-bottom: 20px;
-            display: flex;
-            /* Align logo and text in a row */
-            align-items: center;
-            /* Vertically align the logo and text */
+            padding: 10px;
         }
 
         .logo {
@@ -172,8 +151,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             font-weight: bold;
             text-align: left;
         }
-
- 
 
         h1,
         h3 {
@@ -557,17 +534,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
 </head>
 
 <body>
-    <div class="logo-container">
-        <img src="logo.jpg" alt="Logo" class="logo">
-        <h2 class="title">eSangkap</h2>
-    </div>
+<div class="logo-container">
+            <img src="logo.jpg" alt="Logo" class="logo">
+            <h2 class="title">eSangkap</h2>
+        </div>
 
     <div class="sidebar">
         <a href="9customer.php" class="active"><i class="fa fa-fw fa-home"></i>Home</a><?php echo (basename($_SERVER['PHP_SELF']) == '9customer.php') ? 'class="active"' : ''; ?>
         <a href="favoritescreen.php"><i class="fa-solid fas fa-heart"></i>Favorites</a>
         <a href="view_categories.php"><i class="fa-solid fa-list"></i>Categories</a>
         <a href="12user_profile.php"><i class="fas fa-user"></i>Profile</a>
-
+        <a href="testimony.php"><i class="fas fa-user-friends"></i> Forum</a>
         <a href="4logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
     </div>
 

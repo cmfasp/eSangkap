@@ -118,27 +118,11 @@ if (isset($_GET['meal_id'])) {
             background-color: #fff;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             z-index: 1000;
+            padding: 10px;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-        }
 
-        .logo img {
-            height: 50px;
-            padding: 20px;
-            width: auto;
-            margin-right: 10px;
-        }
-
-        .logo-container {
-            text-align: left;
-            padding-bottom: 20px;
-            display: flex;
-            align-items: center;
-          
-        }
+      
 
         .logo {
             width: 60px;
@@ -237,15 +221,16 @@ if (isset($_GET['meal_id'])) {
 
 <body>
 <div class="logo-container">
-        <img src="logo.jpg" alt="Logo" class="logo">
-        <h2 class="title">eSangkap</h2>
-    </div>
+            <img src="logo.jpg" alt="Logo" class="logo">
+            <h2 class="title">eSangkap</h2>
+        </div>
 
     <div class="sidebar">
         <a href="9customer.php"><i class="fa fa-fw fa-home"></i>Home</a>
         <a href="favoritescreen.php"class="active"><i class="fa-solid fas fa-heart"></i>Favorites</a>
         <a href="view_categories.php"><i class="fa-solid fa-list"></i>Categories</a>
         <a href="12user_profile.php"><i class="fas fa-user"></i>Profile</a>
+        <a href="testimony.php"><i class="fas fa-user-friends"></i> Forum</a>
         
         <a href="4logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
     </div>

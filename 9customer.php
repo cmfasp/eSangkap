@@ -108,22 +108,6 @@ function getTimeElapsedString($datetime)
             margin: 0;
             padding: 0;
         }
-
-        .sidebar {
-            background-color: #f04e23;
-            ;
-            margin-top: 65px;
-            height: 100%;
-            width: 250px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            overflow-x: hidden;
-            padding-top: 30px;
-            display: flex;
-            flex-direction: column;
-        }
-
         .logo-container {
             position: fixed;
             top: 0;
@@ -134,28 +118,11 @@ function getTimeElapsedString($datetime)
             background-color: #fff;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             z-index: 1000;
+            padding: 10px;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-        }
 
-        .logo img {
-            height: 50px;
-            padding: 20px;
-            width: auto;
-            margin-right: 10px;
-        }
-
-        .logo-container {
-            text-align: left;
-            padding-bottom: 20px;
-            display: flex;
-            /* Align logo and text in a row */
-            align-items: center;
-            /* Vertically align the logo and text */
-        }
+      
 
         .logo {
             width: 60px;
@@ -172,6 +139,22 @@ function getTimeElapsedString($datetime)
             text-align: left;
         }
 
+        .sidebar {
+            background-color: #f04e23;
+            ;
+            margin-top: 65px;
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            padding-top: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+      
         .sidebar a {
             display: block;
             color: white;
@@ -397,13 +380,11 @@ function getTimeElapsedString($datetime)
 </style>
 </head>
 <body>
-
-    <div class="sidebar">
         <div class="logo-container">
             <img src="logo.jpg" alt="Logo" class="logo">
             <h2 class="title">eSangkap</h2>
         </div>
-
+        <div class="sidebar">
         <?php if (isset($_SESSION['username'])) : ?>
             <a href="9customer.php" <?php echo (basename($_SERVER['PHP_SELF']) == '9customer.php') ? 'class="active"' : ''; ?>>
                 <i class="fa fa-fw fa-home"></i>Home
@@ -417,6 +398,7 @@ function getTimeElapsedString($datetime)
             <a href="12user_profile.php">
                 <i class="fas fa-fw fa-user"></i>Profile
             </a>
+            <a href="testimony.php"><i class="fas fa-user-friends"></i> Forum</a>
             <a href="4logout.php"><i class="fas fa-fw fa-sign-out"></i>Logout
             </a>
         <?php else : ?>
