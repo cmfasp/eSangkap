@@ -508,7 +508,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
     gap: 8px; 
     white-space: nowrap;
     max-width: 100%; 
-
+}
 .info-row {
     display: flex;
     flex-wrap: wrap;
