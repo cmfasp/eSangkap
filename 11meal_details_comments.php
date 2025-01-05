@@ -158,7 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             margin-top: 20px;
             margin-left: 60px;
         }
-   
+
         .sidebar {
             background-color: #f04e23;
             margin-top: 65px;
@@ -212,7 +212,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
 
         .views {
 
-       font-size: 16px;
+            font-size: 16px;
             background-color: #f04e23;
             color: white;
             border-radius: 20px;
@@ -534,10 +534,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
 </head>
 
 <body>
-<div class="logo-container">
-            <img src="logo.jpg" alt="Logo" class="logo">
-            <h2 class="title">eSangkap</h2>
-        </div>
+    <div class="logo-container">
+        <img src="logo.jpg" alt="Logo" class="logo">
+        <h2 class="title">eSangkap</h2>
+    </div>
 
     <div class="sidebar">
         <a href="9customer.php" class="active"><i class="fa fa-fw fa-home"></i>Home</a><?php echo (basename($_SERVER['PHP_SELF']) == '9customer.php') ? 'class="active"' : ''; ?>
@@ -572,7 +572,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
                 </div>
                 <h3>Description: </h3>
                 <p><?php echo $meal['description']; ?></p>
-                <p class="views" >
+                <p class="views">
                     <i class="fas fa-eye"></i> Views: <?php echo $meal['views']; ?>
                 </p>
                 <div class="buttons">
@@ -608,7 +608,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
                         // Change button text based on the current state
                         const button = document.getElementById("toggle-alt-ingredients");
                         if (button.textContent.includes("Show")) {
-                            button.innerHTML = "Hide Alternative Ingredients &#9650;"; 
+                            button.innerHTML = "Hide Alternative Ingredients &#9650;";
                         } else {
                             button.innerHTML = "Show Alternative Ingredients &#9660;";
                         }
@@ -617,7 +617,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
 
 
 
-       
+
                 <h3>Instructions</h3>
                 <div class="list-box">
                     <ol class="rounded-list">

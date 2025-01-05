@@ -3,10 +3,9 @@ session_start();
 date_default_timezone_set('Asia/Manila');
 require('0conn.php');  
 
-// Check if the user is logged in
 if (!isset($_SESSION['username'])) {
     echo "Please log in to view your favorite meals.";
-    exit;  // Stops the rest of the page from loading if the user is not logged in
+    exit;  
 }
 
 $username = $_SESSION['username'];  
@@ -63,18 +62,17 @@ function getTimeElapsedString($datetime)
 
 if (isset($_GET['meal_id'])) {
     $meal_id = $_GET['meal_id'];
-
-    // Increment view count for the specific meal
+    //view count
     $update_sql = "UPDATE meals SET views = views + 1 WHERE meal_id = ?";
     $update_stmt = mysqli_prepare($conn, $update_sql);
 
     if ($update_stmt === false) {
         die("Error preparing query: " . mysqli_error($conn));
     }
-
+    // dynamic queries para sa handling ng paramaters
     mysqli_stmt_bind_param($update_stmt, 'i', $meal_id);
     mysqli_stmt_execute($update_stmt);
-
+// closing statement safely
     mysqli_stmt_close($update_stmt);
 }
 ?>
@@ -242,7 +240,7 @@ if (isset($_GET['meal_id'])) {
         <?php foreach ($favorites as $meal): ?>
             <div class="recipe-box">
                 <div style="position: relative;">
-                    <!-- Delete button (Trash icon) -->
+                    <!-- Delete batton -->
                     <a href="delete_favorites.php?meal_id=<?php echo $meal['meal_id']; ?>"
                        onclick="return confirm('Are you sure you want to remove this meal from your favorites?');"
                        style="position: absolute; top: 10px; right: 10px; color: white; font-size: 20px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">

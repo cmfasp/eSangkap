@@ -14,8 +14,9 @@ $username = $_SESSION['username'];
 if (isset($_GET['meal_id'])) {
     $meal_id = $_GET['meal_id'];
 
-  // checkingg if meal is exists
+  // checkingg pag exist user
     $checkStmt = $conn->prepare("SELECT * FROM favorites WHERE username = ? AND meal_id = ?");
+    //si specifiers means the parameter has string and integers
     $checkStmt->bind_param("si", $username, $meal_id);
     if (!$checkStmt->execute()) {
         die("Query Error: " . $checkStmt->error);
