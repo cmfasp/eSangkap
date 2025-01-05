@@ -169,6 +169,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
             margin-bottom: 20px;
         }
 
+
+        img {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+
+        h2 {
+            color: #f04e23;
+        }
+
+        h3 {
+            color: black;
+        }
+
+        p {
+            font-size: 16px;
+            color: #333;
+            margin: 10px 0;
+        }
+
         .buttons {
             display: flex;
             justify-content: flex-end;
@@ -193,26 +215,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
             /* Remove underline */
         }
 
-        img {
-            width: 100%;
-            height: 400px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-        }
-
-        h2 {
-            color: #f04e23;
-        }
-
-        h3 {
-            color: black;
-        }
-
-        p {
-            font-size: 16px;
-            color: #333;
-            margin: 10px 0;
-        }
 
         .list-box ol.rounded-list {
             counter-reset: li;
@@ -243,6 +245,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
             border-radius: 50%;
             color: white;
         }
+
         .watch-video {
             display: inline-block;
             padding: 10px 16px;
@@ -274,9 +277,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
             color: #f04e23;
         }
 
+        .views {
+            font-size: 14px;
+            background-color: #f04e23;
+            color: white;
+            border-radius: 20px;
+            max-width: fit-content;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 720px;
+        }
 
-      
-   
+        #toggle-alt-ingredients {
+            font-family: 'Poppins', sans-serif;
+            border: none;
+            display: inline-block;
+            padding: 10px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 20px;
+            text-align: left;
+            width: auto;
+            background-color: white;
+        }
+
+        #toggle-alt-ingredients.green-text {
+            color: green;
+        }
     </style>
 </head>
 
@@ -308,61 +339,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
         </div>
         <img src="<?php echo $images[0]['image_link']; ?>" alt="Meal Image">
         <div class="meal-header">
-                    <div>
-                        <h1><?php echo $meal['meal_name']; ?></h1>
+            <div>
+                <h1><?php echo $meal['meal_name']; ?></h1>
 
-                    </div>
-                    <div>
-                        <a class="watch-video" href="shoppingList.php?meal_id=<?php echo $meal_id; ?>" target="_blank">
-                            <i class="fas fa-shopping-cart"></i> Where to Buy Ingredients
-                        </a>
-                        <a class="watch-video" href="<?php echo $meal['video_link']; ?>" target="_blank">
-                            <i class="fas fa-play-circle"></i> Watch Video
-                        </a>
-                    </div>
+            </div>
+            <div>
+                <a class="watch-video" href="shoppingList.php?meal_id=<?php echo $meal_id; ?>" target="_blank">
+                    <i class="fas fa-shopping-cart"></i> Where to Buy Ingredients
+                </a>
+                <a class="watch-video" href="<?php echo $meal['video_link']; ?>" target="_blank">
+                    <i class="fas fa-play-circle"></i> Watch Video
+                </a>
+            </div>
 
-                </div>
+        </div>
         <h3>Description:</h3>
         <p><?php echo $meal['description']; ?></p>
-        <div class="buttons">
-    <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients &#9660;</button>
-</div>
-<div class="list-box">
-    <ol class="rounded-list">
-        <?php foreach ($ingredients as $ingredient) { ?>
-            <li>
-                <?php echo $ingredient['ingredient_name']; ?>
-                <?php if (!empty($ingredient['alt_ingredients'])) { ?>
-                    <br><span class="alt-ingredient" style="font-size: 0.9rem; color: #888; display: none;">Alternative: <?php echo $ingredient['alt_ingredients']; ?></span>
+        <p class="views">
+            <i class="fas fa-eye"></i> Views: <?php echo $meal['views']; ?>
+        </p>
+        <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients &#9660;</button>
+
+        <div class="list-box">
+            <ol class="rounded-list">
+                <?php foreach ($ingredients as $ingredient) { ?>
+                    <li>
+                        <?php echo $ingredient['ingredient_name']; ?>
+                        <?php if (!empty($ingredient['alt_ingredients'])) { ?>
+                            <br><span class="alt-ingredient" style="font-size: 0.9rem; color: #888; display: none;">Alternative: <?php echo $ingredient['alt_ingredients']; ?></span>
+                        <?php } ?>
+                    </li>
                 <?php } ?>
-            </li>
-        <?php } ?>
-    </ol>
-</div>
+            </ol>
+        </div>
 
-<script>
-    document.getElementById("toggle-alt-ingredients").addEventListener("click", function() {
-        // Get all alternative ingredients elements
-        const altIngredients = document.querySelectorAll(".alt-ingredient");
-        
-        // Toggle visibility for each alternative ingredient
-        altIngredients.forEach(ingredient => {
-            if (ingredient.style.display === "none" || ingredient.style.display === "") {
-                ingredient.style.display = "inline"; // Show alternative ingredient
-            } else {
-                ingredient.style.display = "none"; // Hide alternative ingredient
-            }
-        });
+        <script>
+            document.getElementById("toggle-alt-ingredients").addEventListener("click", function() {
+                // Get all alternative ingredients elements
+                const altIngredients = document.querySelectorAll(".alt-ingredient");
 
-        // Change button text based on the current state
-        const button = document.getElementById("toggle-alt-ingredients");
-        if (button.textContent.includes("Show")) {
-            button.innerHTML = "Hide Alternative Ingredients &#9650;"; // Up arrow when hidden
-        } else {
-            button.innerHTML = "Show Alternative Ingredients &#9660;"; // Down arrow when shown
-        }
-    });
-</script>
+                // Toggle visibility for each alternative ingredient
+                altIngredients.forEach(ingredient => {
+                    if (ingredient.style.display === "none" || ingredient.style.display === "") {
+                        ingredient.style.display = "inline";
+                    } else {
+                        ingredient.style.display = "none";
+                    }
+                });
+
+                // Change button text based on the current state
+                const button = document.getElementById("toggle-alt-ingredients");
+                if (button.textContent.includes("Show")) {
+                    button.innerHTML = "Hide Alternative Ingredients &#9650;"; // Up arrow when hidden
+                } else {
+                    button.innerHTML = "Show Alternative Ingredients &#9660;"; // Down arrow when shown
+                }
+            });
+        </script>
 
 
 

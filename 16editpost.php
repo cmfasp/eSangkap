@@ -207,7 +207,6 @@ if (isset($_GET['meal_id'])) {
         <a href="favoritesreen.php"><i class="fas fa-heart"></i> Favorites</a>
         <a href="view_categories.php"><i class="fas fa-list"></i> Categories</a>
         <a href="12user_profile.php" class="active"><i class="fas fa-user"></i> Profile</a>
-        <a href="about_us.php"><i class="fas fa-info-circle"></i> About Us</a>
         <a href="4logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 

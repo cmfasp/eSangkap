@@ -96,7 +96,6 @@ if (isset($_GET['meal_id'])) {
 
         .sidebar {
             background-color: #f04e23;
-            ;
             margin-top: 65px;
             height: 100%;
             width: 250px;

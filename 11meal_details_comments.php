@@ -127,6 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
 
         .logo-container {
             position: fixed;
+            top: 0;
             width: 100%;
             display: flex;
             justify-content: center;
@@ -141,20 +142,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             align-items: center;
         }
 
-        h2 {
-            margin-top: 40px;
-            color: #f04e23;
-            align-items: center;
-            justify-content: center;
-        }
-
-        h1,
-        h3 {
-            font-weight: bold;
-            margin-top: 20px;
-            margin-left: 60px;
-        }
-
         .logo img {
             height: 50px;
             padding: 20px;
@@ -162,14 +149,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             margin-right: 10px;
         }
 
+        .logo-container {
+            text-align: left;
+            padding-bottom: 20px;
+            display: flex;
+            /* Align logo and text in a row */
+            align-items: center;
+            /* Vertically align the logo and text */
+        }
+
         .logo {
             width: 60px;
-            height: 55px;
+            height: 60px;
             border-radius: 50%;
             object-fit: cover;
             margin-right: 10px;
         }
 
+        .title {
+            color: #f04e23;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+ 
+
+        h1,
+        h3 {
+            font-weight: bold;
+            margin-top: 20px;
+            margin-left: 60px;
+        }
+   
         .sidebar {
             background-color: #f04e23;
             margin-top: 65px;
@@ -213,17 +225,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             background-color: #fff;
             width: 60%;
             margin-right: 900px;
-            
+
             justify-content: center;
             margin: 40px auto;
             padding: 20px;
             border-radius: 10px;
         }
 
-/* 
+
         .views {
 
-            font-size: 16px;
+       font-size: 16px;
             background-color: #f04e23;
             color: white;
             border-radius: 20px;
@@ -231,7 +243,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             padding: 15px;
             margin-left: 875px;
             display: flex;
-        } */
+            align-items: center;
+            justify-content: center;
+        }
+
 
         button {
             background-color: darkred;
@@ -491,60 +506,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             display: table;
             clear: both;
         }
+
         .username {
-    font-weight: bold;
-    color:rgb(228, 33, 33); 
-    font-size: 1.1em;
-}
-.views {
-    font-size: 14px;
-    background-color: #f04e23;
-    color: white;
-    border-radius: 20px;
-    padding: 8px 15px;
-    margin-left: 460px;
-    display: flex;
-    align-items: center; 
-    gap: 8px; 
-    white-space: nowrap;
-    max-width: 100%; 
+            font-weight: bold;
+            color: rgb(228, 33, 33);
+            font-size: 1.1em;
+        }
 
-.info-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px; 
-    margin-top: 10px;
-}
+        .views {
+            display: flex;
+            font-size: 14px;
+            background-color: #f04e23;
+            color: white;
+            border-radius: 20px;
+            padding: 8px 15px;
+            gap: 8px;
+            white-space: nowrap;
+            max-width: 100%;
+        }
 
-@media (max-width: 768px) {
-    .views {
-        font-size: 12px; 
-        padding: 6px 10px; 
-    }
 
-    .info-row {
-        justify-content: center; 
-    }
-}
+        @media (max-width: 768px) {
+            .views {
+                font-size: 12px;
+                padding: 6px 10px;
+            }
 
-@media (max-width: 480px) {
-    .views {
-        font-size: 10px;
-        padding: 5px 8px;
-    }
+            .info-row {
+                justify-content: center;
+            }
+        }
 
-    .info-row {
-        flex-direction: column; 
-        gap: 5px; 
-        text-align: center; 
-    }
-}
+        @media (max-width: 480px) {
+            .views {
+                font-size: 10px;
+                padding: 5px 8px;
+            }
 
-.invisible-margin {
-    visibility: hidden; 
-}
+            .info-row {
+                flex-direction: column;
+                gap: 5px;
+                text-align: center;
+            }
+        }
 
+        .invisible-margin {
+            visibility: hidden;
+        }
     </style>
 </head>
 
@@ -564,10 +572,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
     </div>
 
     <div class="container">
-        <h2>
-      <p class="invisible-margin">This is a margin.</p>
-
-            <!-- <p><?php echo $meal['username']; ?></p> -->
+        <h2><?php echo $meal['username']; ?></p>
             <h2>
                 <?php foreach ($images as $image): ?>
                     <img src="<?php echo htmlspecialchars($image['image_link']); ?>">
@@ -590,11 +595,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
                 </div>
                 <h3>Description: </h3>
                 <p><?php echo $meal['description']; ?></p>
-                <div class="info-row">
-    <p>Added by: <span class="username"><?php echo htmlspecialchars($meal['username']); ?></span></p>
-    <p class="views"><i class="fas fa-eye"></i> Views: <?php echo $meal['views']; ?></p>
-</div>
-  <?php echo $meal['views']; ?></p> -->
+                <p class="views" >
+                    <i class="fas fa-eye"></i> Views: <?php echo $meal['views']; ?>
+                </p>
                 <div class="buttons">
                     <button class="button" id="toggle-alt-ingredients">Show Alternative Ingredients &#9660;</button>
                 </div>
@@ -628,16 +631,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
                         // Change button text based on the current state
                         const button = document.getElementById("toggle-alt-ingredients");
                         if (button.textContent.includes("Show")) {
-                            button.innerHTML = "Hide Alternative Ingredients &#9650;"; // Up arrow when hidden
+                            button.innerHTML = "Hide Alternative Ingredients &#9650;"; 
                         } else {
-                            button.innerHTML = "Show Alternative Ingredients &#9660;"; // Down arrow when shown
+                            button.innerHTML = "Show Alternative Ingredients &#9660;";
                         }
                     });
                 </script>
 
 
 
-                <!-- Instructions -->
+       
                 <h3>Instructions</h3>
                 <div class="list-box">
                     <ol class="rounded-list">
@@ -710,4 +713,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
                 </script>
     </div>
 </body>
+
 </html>

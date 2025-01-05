@@ -589,10 +589,20 @@ function generateRecipePreview($pdo, $meal_id)
             <p>Video Link: <span class="readonly-input short-description"></span></p>
             <p>Image: <span class="readonly-input video-link"></span></p>
             <img id="recipe-image" src="" alt="Recipe Image" style="max-width: 100%; display: none;">
-            <h3>Short Description</h3>
-            <p class="readonly-input instructions"></p>
-            <h3>Instruction</h3>
-            <p class="readonly-input ingredients"></p>
+            <h3>Where to buy the ingredients</h3>
+            <p class="readonly-input whereBuy"></p>
+            <h3>Category</h3>
+        <p class="readonly-input category"></p>
+        <h3>Short Description</h3>
+        <p class="readonly-input description"></p>
+        <h3>Ingredients</h3>
+        <p class="readonly-input ingredients"></p>
+        <h3>Alternative Ingredients</h3>
+        <p class="readonly-input alt_ingredients"></p>
+        <h3>Nutritonal Information</h3>
+        <p class="readonly-input nutriInfo"></p>
+        <h3>Instruction</h3>
+        <p class="readonly-input instructions"></p>
         </div>
         <div class="form-buttons">
             <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
