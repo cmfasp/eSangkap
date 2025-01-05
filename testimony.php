@@ -168,7 +168,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 <div class="sidebar">
     <a href="9customer.php"><i class="fa fa-fw fa-home"></i> Home</a>
-    <a href="favoritesreen.php"><i class="fas fa-heart"></i> Favorites</a>
+    <a href="favoritescreen.php"><i class="fas fa-heart"></i> Favorites</a>
     <a href="view_categories.php"><i class="fas fa-list"></i> Categories</a>
     <a href="12user_profile.php" class="active"><i class="fas fa-user"></i> Profile</a>
     <a href="about_us.php"><i class="fas fa-info-circle"></i> About Us</a>
