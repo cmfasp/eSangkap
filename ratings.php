@@ -189,9 +189,9 @@ if (isset($_GET['meal_id'])) {
             text-align: left;
             font-size: 22px;
         }
-        
+
         h1 {
-            
+
             font-size: 17px;
             margin-right: 10px;
         }
@@ -257,7 +257,8 @@ if (isset($_GET['meal_id'])) {
         }
 
         textarea {
-            width: 57%; /* Set the width to make it narrower */
+            width: 57%;
+            /* Set the width to make it narrower */
             padding: 10px;
             border-radius: 15px;
             border: 1px solid #ccc;
@@ -283,33 +284,46 @@ if (isset($_GET['meal_id'])) {
         button:hover {
             background-color: #8b0000;
         }
+
         .ratings-container {
-            margin-left: 20px; /* Space from the left */
-        padding: 20px; /* Padding around the container */
-        width: 60%; /* Set the width to make it narrower */
-        margin-right: auto;
-        margin-left: auto; /* Center the container */
-    }
+            margin-left: 20px;
+            /* Space from the left */
+            padding: 20px;
+            /* Padding around the container */
+            width: 60%;
+            /* Set the width to make it narrower */
+            margin-right: auto;
+            margin-left: auto;
+            /* Center the container */
+        }
 
-    .rating-item {
-        background-color: #f4f4f4; /* Light background */
-        padding: 10px; 
-        border-radius: 15px; /* Rounded corners */
-        margin-bottom: 10px; /* Space between rating items */
-        position: relative; /* Allows absolute positioning inside */
-    }
+        .rating-item {
+            background-color: #f4f4f4;
+            /* Light background */
+            padding: 10px;
+            border-radius: 15px;
+            /* Rounded corners */
+            margin-bottom: 10px;
+            /* Space between rating items */
+            position: relative;
+            /* Allows absolute positioning inside */
+        }
 
-    .rating-item:last-child {
-        border-bottom: none; /* Remove the bottom border for the last item */
-    }
-    .delete-rating {
-        position: absolute; /* Positions the delete button */
-        top: 10px; /* Places it at the top */
-        right: 10px; /* Places it at the right */
-        color: gray; 
-        text-decoration: none;
-    }
+        .rating-item:last-child {
+            border-bottom: none;
+            /* Remove the bottom border for the last item */
+        }
 
+        .delete-rating {
+            position: absolute;
+            /* Positions the delete button */
+            top: 10px;
+            /* Places it at the top */
+            right: 10px;
+            /* Places it at the right */
+            color: gray;
+            text-decoration: none;
+        }
     </style>
 </head>
 
@@ -331,43 +345,43 @@ if (isset($_GET['meal_id'])) {
 
     <div class="container">
         <form method="post" action="">
-            <h3>Hi <b class="meal-username"><?php echo $meal['username']; ?></b>, you can now rate this meal!</h3>
+            <h3>Hi <b class="meal-username"><?php echo $_SESSION['username']; ?></b>, you can now rate this meal!</h3>
             <?php foreach ($images as $image): ?>
                 <img class="meal-image" src="<?php echo $image['image_link']; ?>" alt="Meal Image">
             <?php endforeach; ?>
-          
-<?php if (count($allRatings) > 0): ?>
-    <div class="ratings-container">
 
-            <?php foreach ($allRatings as $rating): ?>
-                <div class="rating-item">
-                    <strong><?php echo $rating['username']; ?>:</strong>
-                    <?php echo $rating['rating_comment']; ?><br>
-                    <?php if ($rating['username'] == $_SESSION['username']): ?>
-                        <a href="?meal_id=<?php echo $meal_id; ?>&delete_rating_id=<?php echo $rating['rating_id']; ?>" class="delete-rating">
-                            <i class="fas fa-trash-alt"></i> 
-                        </a>
-                    <?php endif; ?>
-                    <strong>Rating:</strong>
-                    <?php
-                    for ($i = 1; $i <= 5; $i++) {
-                        if ($i <= $rating['rating_value']) {
-                            echo "⭐";
-                        } else {
-                            echo "☆";
-                        }
-                    }
-                    ?><br>
-                    <strong>Date:</strong> <?php echo $rating['date_rated']; ?>
-                    </div>
-            <?php endforeach; ?>
-    </div>
-<?php endif; ?>
+            <?php if (count($allRatings) > 0): ?>
+                <div class="ratings-container">
+
+                    <?php foreach ($allRatings as $rating): ?>
+                        <div class="rating-item">
+                            <strong><?php echo $rating['username']; ?>:</strong>
+                            <?php echo $rating['rating_comment']; ?><br>
+                            <?php if ($rating['username'] == $_SESSION['username']): ?>
+                                <a href="?meal_id=<?php echo $meal_id; ?>&delete_rating_id=<?php echo $rating['rating_id']; ?>" class="delete-rating">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            <?php endif; ?>
+                            <strong>Rating:</strong>
+                            <?php
+                            for ($i = 1; $i <= 5; $i++) {
+                                if ($i <= $rating['rating_value']) {
+                                    echo "⭐";
+                                } else {
+                                    echo "☆";
+                                }
+                            }
+                            ?><br>
+                            <strong>Date:</strong> <?php echo $rating['date_rated']; ?>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
 
 
             <div class="rating-section">
                 <div class="rating-stars" id="rating-stars">
-                <h1>Rate this Meal</h1> 
+                    <h1>Rate this Meal</h1>
                     <span class="star" data-value="1">&#9733;</span>
                     <span class="star" data-value="2">&#9733;</span>
                     <span class="star" data-value="3">&#9733;</span>
