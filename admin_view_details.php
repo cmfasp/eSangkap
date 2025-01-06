@@ -579,8 +579,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
 
                     </ol>
                 </div>
-                <hr>
-                <!-- Instructions -->
+                
                 <h3>Instructions</h3>
                 <div class="list-box">
                     <ol class="rounded-list">

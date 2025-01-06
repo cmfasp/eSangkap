@@ -2,6 +2,7 @@
 session_start();
 require("0conn.php");
 
+
 if (isset($_GET['meal_id'])) {
     $meal_id = $_GET['meal_id'];
 
@@ -501,6 +502,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
             white-space: nowrap;
             max-width: 100%;
         }
+        .username {
+            font-weight: bold;
+            margin-top: 70px; 
+            margin-left: 60px;
+            font-size: 23px;
+        }
 
 
         @media (max-width: 768px) {
@@ -549,7 +556,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
     </div>
 
     <div class="container">
-        <h2><?php echo $meal['username']; ?></p>
+    <h2 class="username"> <?php echo $meal['username']; ?></p>
             <h2>
                 <?php foreach ($images as $image): ?>
                     <img src="<?php echo htmlspecialchars($image['image_link']); ?>">
