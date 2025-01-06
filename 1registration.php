@@ -18,11 +18,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST["password"];
     $confirm_password = $_POST["confirm_password"];
 
+    // Check if the password and confirm password match
     if ($password != $confirm_password) {
         $errors[] = "Password and Confirm Password do not match.";
     }
+    // Check if the password is at least 8 characters long
     if (strlen($password) < 8) {
         $errors[] = "Password must be at least 8 characters long.";
+    }
+
+    // Check for existing username and email
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = ? OR email = ?");
+    $stmt->execute([$username, $email]);
+    $existingUser = $stmt->fetchColumn();
+
+    if ($existingUser > 0) {
+        $errors[] = "Username or Email already exists. Please choose another.";
     }
 
     if (empty($errors)) {
