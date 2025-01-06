@@ -3,10 +3,18 @@ session_start();
 date_default_timezone_set('Asia/Manila');
 require("0conn.php");
 
-
+// Check if the user is logged in.
+// Kapag hindi pa naka-login ang user at gusto niyang i-access yung homepage, ito yung gagamitin. 
+// Mareredirect siya sa login page at magsho-show ng error na "You must log in first."
+if (!isset($_SESSION["username"])) {
+    $_SESSION['error_message'] = "You must log in first.";
+    header("Location: 3login.php");
+    exit();  // Tumigil agad ang proseso para hindi magpatuloy
+}
 
 $loggedInUsername = isset($_SESSION["username"]) ? $_SESSION["username"] : "";
 
+// Database connection
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -14,29 +22,34 @@ try {
     die("Error: " . $e->getMessage());
 }
 
+// Sorting functionality
 if (isset($_GET['sort'])) {
     $sortOption = $_GET['sort'];
 
+    // Dito natin pinipili if paano i-sort ang recipes (Most Viewed, Most Rated, o Latest)
     switch ($sortOption) {
         case 'most_viewed':
-            $orderBy = 'ORDER BY views DESC, m.date_created DESC';
+            $orderBy = 'ORDER BY views DESC, m.date_created DESC';  // Pinakamataas na views
             break;
         case 'most_rated':
-            $orderBy = 'ORDER BY AVG(r.rating_value) DESC, m.date_created DESC';
+            $orderBy = 'ORDER BY AVG(r.rating_value) DESC, m.date_created DESC';  // Pinakamataas na rating
             break;
         default:
-            $orderBy = 'ORDER BY m.date_created DESC';
+            $orderBy = 'ORDER BY m.date_created DESC';  // Default sorting, pinakabago ang unang lumabas
             break;
     }
 } else {
+    // Kung walang sorting na ipinasok, default sorting is by the latest
     $orderBy = 'ORDER BY m.date_created DESC';
 }
 
+// Searching functionality
 if (isset($_GET['search'])) {
-    $searchTerms = explode(' ', $_GET['search']);
+    $searchTerms = explode(' ', $_GET['search']);  // Hinahati natin yung search term kapag maraming words
     $placeholders = array_fill(0, count($searchTerms), 'm.meal_name LIKE ? OR m.meal_id IN (SELECT i.meal_id FROM ingredients i WHERE i.ingredient_name LIKE ?)');
-    $whereClause = implode(' OR ', $placeholders);
+    $whereClause = implode(' OR ', $placeholders);  // Pagsamahin yung mga condition ng search terms
 
+    // SQL query na kukunin ang mga meals na match sa search terms
     $sql = "SELECT m.*, AVG(r.rating_value) AS average_rating
             FROM meals m
             LEFT JOIN ratings r ON m.meal_id = r.meal_id
@@ -44,39 +57,45 @@ if (isset($_GET['search'])) {
             GROUP BY m.meal_id, m.date_created
             $orderBy";
 
+    // Prepare natin ang query
     $stmt = $pdo->prepare($sql);
     $params = [];
     foreach ($searchTerms as $term) {
-        $term = '%' . $term . '%';
+        $term = '%' . $term . '%';  // Magiging partial search
         $params[] = $term;
         $params[] = $term;
     }
-    $stmt->execute($params);
+    $stmt->execute($params);  // Execute natin ang search query
 } else {
+    // Kapag walang search term, kukunin lahat ng meals
     $stmt = $pdo->query("SELECT m.*, AVG(r.rating_value) AS average_rating FROM meals m LEFT JOIN ratings r ON m.meal_id = r.meal_id GROUP BY m.meal_id, m.date_created $orderBy");
-    $stmt->execute();
+    $stmt->execute();  // Execute the query
 }
 
+// Kunin lahat ng recipes mula sa database
 $recipes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Function to get category name based on category_id
 function getCategoryName($pdo, $category_id)
 {
     $stmt = $pdo->prepare("SELECT * FROM categories WHERE category_id = ?");
     $stmt->execute([$category_id]);
     $category = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $category ? $category['category_name'] : 'Unknown';
+    return $category ? $category['category_name'] : 'Unknown';  // Kung walang category, ibabalik 'Unknown'
 }
 
+// Function to calculate time elapsed since the recipe was created
 function getTimeElapsedString($datetime)
 {
-    $now = new DateTime;
-    $ago = new DateTime($datetime);
-    $diff = $now->diff($ago);
+    $now = new DateTime;  // Kumuha tayo ng current time
+    $ago = new DateTime($datetime);  // Oras ng creation ng recipe
+    $diff = $now->diff($ago);  // Kuha natin ang difference ng current time at creation time
 
+    // I-display natin yung human-readable na time difference
     if ($diff->d == 0) {
         if ($diff->h == 0) {
             if ($diff->i == 0) {
-                return 'Now';
+                return 'Now';  // Kung ngayon lang, 'Now' na lang
             } else {
                 return $diff->i . ' minute' . ($diff->i > 1 ? 's' : '') . ' ago';
             }
@@ -88,11 +107,10 @@ function getTimeElapsedString($datetime)
     } elseif ($diff->d < 7) {
         return $diff->d . ' days ago';
     } else {
-        return $ago->format('F j, Y'); 
+        return $ago->format('F j, Y');  // Kung mas matagal, buong date ang ipapakita
     }
 }
-?>
-
+?> 
 <!DOCTYPE html>
 <html lang="en">
 

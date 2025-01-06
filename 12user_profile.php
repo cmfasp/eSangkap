@@ -2,23 +2,27 @@
 session_start();
 date_default_timezone_set('Asia/Manila');
 require("0conn.php");
-
+//THIS IS 12user_profile.php
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
-}
-
-if (isset($_SESSION['username'])) {
+}// Check if the user is logged in
+if (!isset($_SESSION['username'])) {
+    // Store the error message in the session
+    $_SESSION['error_message'] = "You must log in first.";
+    
+    // Redirect to the same page and show the pop-up
+    header("Location: 3login.php");
+    exit();
+} else {
+    // Proceed if the user is logged in
     $username = $_SESSION['username'];
     $loggedInUsername = $_SESSION['username'];
     $stmt = $pdo->prepare("SELECT * FROM meals WHERE username = ? ORDER BY date_created DESC");
     $stmt->execute([$username]);
     $userRecipes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} else {
-    header("Location: 1registration.php");
-    exit();
 }
 
 function getCategoryName($pdo, $category_id)

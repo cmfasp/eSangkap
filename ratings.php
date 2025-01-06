@@ -2,6 +2,14 @@
 session_start();
 require("0conn.php");
 
+// Check if the user is logged in
+if (!isset($_SESSION["username"])) {
+    // If not logged in, redirect to the login page with an error message
+    $_SESSION['error_message'] = "You must log in first.";
+    header("Location: 3login.php");
+    exit();  // Stop further execution after the redirection
+}
+
 // Check if meal_id is set in the URL
 if (isset($_GET['meal_id'])) {
     $meal_id = $_GET['meal_id'];

@@ -34,6 +34,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "Invalid username or password. Please try again.";
     }
 }
+
+
+// Check if there's an error message in the session and display it as a pop-up
+if (isset($_SESSION['error_message'])) {
+    echo "<script type='text/javascript'>
+            alert('" . $_SESSION['error_message'] . "');
+          </script>";
+    unset($_SESSION['error_message']);  // Clear the error message after displaying it
+}
 ?>
 
 <!DOCTYPE html>

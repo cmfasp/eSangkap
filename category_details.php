@@ -3,11 +3,12 @@ session_start();
 date_default_timezone_set('Asia/Manila');
 require("0conn.php");
 
-// Check if the user is logged in and get the username from the session
-if (!isset($_SESSION['username'])) {
-    // Redirect to login if not logged in
-    header("Location: login.php");
-    exit();
+// Check if the user is logged in
+if (!isset($_SESSION["username"])) {
+    // If not logged in, redirect to the login page with an error message
+    $_SESSION['error_message'] = "You must log in first.";
+    header("Location: 3login.php");
+    exit();  // Stop further execution after the redirection
 }
 
 $username = $_SESSION['username']; // Get the username from the session

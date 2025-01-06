@@ -2,51 +2,70 @@
 session_start();
 require("0conn.php");
 
+// Check if the user is logged in.
+// Kapag hindi pa naka-login ang user at gusto niyang i-access yung page, ire-redirect siya sa login page.
+// Magsho-show ng error message na "You must log in first."
+if (!isset($_SESSION["username"])) {
+    $_SESSION['error_message'] = "You must log in first.";
+    header("Location: 3login.php");
+    exit();  // Tumigil agad ang proseso para hindi magpatuloy
+}
 
 if (isset($_GET['meal_id'])) {
+    // Get the meal_id from the URL to fetch the corresponding meal details.
     $meal_id = $_GET['meal_id'];
 
+    // Connect to the database using PDO.
+    // Kapag walang connection sa database, mag-eerror ito, kaya ginagamit ang try-catch block.
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch (PDOException $e) {
-        die("Error: " . $e->getMessage());
+        die("Error: " . $e->getMessage());  // Kapag may error, ititigil ang script at magpapakita ng error message.
     }
 
+    // Fetch the meal details based on the meal_id from the meals table.
     $stmt = $pdo->prepare("SELECT * FROM meals WHERE meal_id = ?");
     $stmt->execute([$meal_id]);
-    $meal = $stmt->fetch(PDO::FETCH_ASSOC);
+    $meal = $stmt->fetch(PDO::FETCH_ASSOC);  // Kinukuha ang meal information
 
+    // Fetch the cooking instructions related to this meal and order by step number.
     $instructionsStmt = $pdo->prepare("SELECT * FROM instructions WHERE meal_id = ? ORDER BY step_number");
     $instructionsStmt->execute([$meal_id]);
-    $instructions = $instructionsStmt->fetchAll(PDO::FETCH_ASSOC);
+    $instructions = $instructionsStmt->fetchAll(PDO::FETCH_ASSOC);  // Kinuha lahat ng mga instructions
 
+    // Fetch the ingredients for the meal.
     $ingredientsStmt = $pdo->prepare("SELECT * FROM ingredients WHERE meal_id = ?");
     $ingredientsStmt->execute([$meal_id]);
-    $ingredients = $ingredientsStmt->fetchAll(PDO::FETCH_ASSOC);
+    $ingredients = $ingredientsStmt->fetchAll(PDO::FETCH_ASSOC);  // Kinuha lahat ng ingredients
 
+    // Fetch the comments made on this meal, ordered by the most recent.
     $commentsStmt = $pdo->prepare("SELECT * FROM comments WHERE meal_id = ? ORDER BY created_at DESC");
     $commentsStmt->execute([$meal_id]);
-    $comments = $commentsStmt->fetchAll(PDO::FETCH_ASSOC);
+    $comments = $commentsStmt->fetchAll(PDO::FETCH_ASSOC);  // Kinuha ang mga comments na may kinalaman sa meal
 
+    // Fetch the images related to the meal.
     $imagesStmt = $pdo->prepare("SELECT * FROM meal_images WHERE meal_id = ?");
     $imagesStmt->execute([$meal_id]);
-    $images = $imagesStmt->fetchAll(PDO::FETCH_ASSOC);
+    $images = $imagesStmt->fetchAll(PDO::FETCH_ASSOC);  // Kinuha ang mga images ng meal
 
-    // Increment the views when the meal is viewed
+    // Increment the views for the meal every time it is viewed.
+    // Madadagdagan ang 'views' ng meal para makita kung ilan na ang nag-view sa meal.
     $incrementViewsStmt = $pdo->prepare("UPDATE meals SET views = views + 1 WHERE meal_id = ?");
     $incrementViewsStmt->execute([$meal_id]);
 
+    // Fetch nutritional information for the meal.
     $nutriInfoStmt = $pdo->prepare("SELECT * FROM nutritional_info WHERE meal_id = ?");
     $nutriInfoStmt->execute([$meal_id]);
-    $nutriInfo = $nutriInfoStmt->fetchAll(PDO::FETCH_ASSOC);
+    $nutriInfo = $nutriInfoStmt->fetchAll(PDO::FETCH_ASSOC);  // Kinuha ang nutritional info ng meal
 
-    // Fetch meal data after incrementing views
+    // Fetch meal data again after incrementing the views to reflect the latest meal data.
     $stmt = $pdo->prepare("SELECT * FROM meals WHERE meal_id = ?");
     $stmt->execute([$meal_id]);
     $meal = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    //Alternative Ingridients
+    // Fetch alternative ingredients if available.
+    // Hinahanap ang mga alternate na ingredients kung mayroon.
     $altIngredientsStmt = $pdo->prepare("
     SELECT alt_ingredients 
     FROM ingredients 
@@ -56,50 +75,48 @@ if (isset($_GET['meal_id'])) {
     $altIngredientsStmt->execute([$meal_id]);
     $alternative_ingredients = $altIngredientsStmt->fetchAll(PDO::FETCH_ASSOC);
 
-
+    // Filter out invalid or empty alternative ingredients.
+    // Tinatanggal ang mga walang halaga o hindi valid na alternative ingredients.
     $filtered_ingredients = array_filter($alternative_ingredients, function ($item) {
         return !empty($item['alt_ingredients']) && $item['alt_ingredients'] !== '0';
     });
 
-
-    // if (!empty($filtered_ingredients)) {
-    //     foreach ($filtered_ingredients as $ingredient) {
-    //         echo htmlspecialchars($ingredient['alt_ingredients']) . '<br>';
-    //     }
-
-    // } else {
-    //     echo "No valid alternative ingredients found.";
-    // }
-    //commented out just in case needed, since it kinda interferring with the alt_ingridient
-
-
 } else {
+    // If the meal_id is not set, redirect to the customer page.
+    // Kapag wala ang meal_id, ire-redirect ang user sa customer page.
     header("Location: 9customer.php");
     exit();
 }
 
 $userLoggedIn = isset($_SESSION['username']);
-$allowComments = $userLoggedIn;
+$allowComments = $userLoggedIn;  // Only allow comments if the user is logged in.
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $userLoggedIn) {
+    // If the form is submitted and the user is logged in, handle the comment submission.
     if (isset($_POST['comment'])) {
-        $comment_text = $_POST['comment'];
+        $comment_text = $_POST['comment'];  // Get the comment text from the POST request.
+        // Insert the comment into the database.
         $insertStmt = $pdo->prepare("INSERT INTO comments (meal_id, user_name, comment_text) VALUES (?, ?, ?)");
         $insertStmt->execute([$meal_id, $_SESSION['username'], $comment_text]);
 
+        // Redirect to the same page to refresh the meal details with the new comment.
         header("Location: 11meal_details_comments.php?meal_id=$meal_id");
         exit();
     } elseif (isset($_POST['delete_comment'])) {
+        // If the delete_comment button is clicked, try to delete the comment.
         $comment_id = $_POST['delete_comment'];
 
+        // Fetch the comment to be deleted.
         $commentStmt = $pdo->prepare("SELECT * FROM comments WHERE comment_id = ?");
         $commentStmt->execute([$comment_id]);
         $commentToDelete = $commentStmt->fetch(PDO::FETCH_ASSOC);
 
+        // Check if the logged-in user is the one who posted the comment.
+        // Kung ang user ay ang may-ari ng comment, papayagan siyang mag-delete.
         if ($commentToDelete && $_SESSION['username'] === $commentToDelete['user_name']) {
+            // If the comment belongs to the logged-in user, ask for confirmation before deleting.
             echo "<script>
                     let confirmDelete = confirm('Are you sure you want to delete your comment?');
-
                     if (confirmDelete) {
                         window.location.href = 'delete_comment.php?comment_id=$comment_id&meal_id=$meal_id';
                     }

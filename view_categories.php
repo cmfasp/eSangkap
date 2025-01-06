@@ -1,5 +1,13 @@
 <?php
+session_start();
 require("0conn.php");
+// Check if the user is logged in
+if (!isset($_SESSION["username"])) {
+    // If not logged in, redirect to the login page with an error message
+    $_SESSION['error_message'] = "You must log in first.";
+    header("Location: 3login.php");
+    exit();  // Stop further execution after the redirection
+}
 $sql = "SELECT category_id, category_name FROM categories";
 $result = mysqli_query($conn, $sql);
 
