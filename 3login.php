@@ -101,6 +101,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-top: 20px;
             text-align: center;
         }
+
+        .alert {
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -115,14 +119,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo '<div class="alert alert-danger" role="alert">' . $error . '</div>';
             }
             ?>
-            <form method="post">
+            <form method="post" onsubmit="return validateForm()">
                 <div class="form-group">
                     <label for="username">Username:</label>
-                    <input type="text" name="username" id="username" class="form-control" required>
+                    <input type="text" name="username" id="username" class="form-control">
+                    <div class="alert" id="username-error" style="display: none;">Username is required.</div>
                 </div>
                 <div class="form-group">
                     <label for="password">Password:</label>
-                    <input type="password" name="password" id="password" class="form-control" required>
+                    <input type="password" name="password" id="password" class="form-control">
+                    <div class="alert" id="password-error" style="display: none;">Password is required.</div>
                 </div>
                 <button type="submit">Login</button>
             </form>
@@ -134,5 +140,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function validateForm() {
+            var valid = true;
+
+            if (document.getElementById('username').value === '') {
+                document.getElementById('username-error').style.display = 'block';
+                valid = false;
+            } else {
+                document.getElementById('username-error').style.display = 'none';
+            }
+
+            if (document.getElementById('password').value === '') {
+                document.getElementById('password-error').style.display = 'block';
+                valid = false;
+            } else {
+                document.getElementById('password-error').style.display = 'none';
+            }
+
+            return valid;
+        }
+    </script>
 </body>
 </html>
