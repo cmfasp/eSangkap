@@ -3,6 +3,12 @@ session_start();
 date_default_timezone_set('Asia/Manila');
 require("0conn.php");
 
+if (!isset($_SESSION['username'])) {
+    echo "Please log in to view your forums meals.";
+    exit;  
+}
+
+$username = $_SESSION['username'];  
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!isset($_SESSION['username'])) {
