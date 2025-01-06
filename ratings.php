@@ -44,7 +44,6 @@ if (isset($_GET['meal_id'])) {
                 die("Error: Invalid rating value.");
             }
 
-            // Check if comment is provided
             if (empty($rating_comment)) {
                 die("Error: Please write a comment.");
             }
