@@ -36,6 +36,10 @@ if (isset($_GET['meal_id'])) {
     $commentsStmt = $pdo->prepare("SELECT * FROM comments WHERE meal_id = ? ORDER BY created_at DESC");
     $commentsStmt->execute([$meal_id]);
     $comments = $commentsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $fetchAllRatingsStmt = $pdo->prepare("SELECT * FROM ratings WHERE meal_id = ?");
+    $fetchAllRatingsStmt->execute([$meal_id]);
+    $allRatings = $fetchAllRatingsStmt->fetchAll(PDO::FETCH_ASSOC);
 } else {
     header("Location: 9customer.php");
     exit();
@@ -452,6 +456,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
                 <?php endif; ?>
             </ul>
         </div>
+
+        <div class="comments-box">
+            <h3>Ratings</h3>
+            <ul class="comments-list">
+                <?php if (count($allRatings) > 0): ?>
+                    <?php foreach ($allRatings as $rating): ?>
+                        <li class="comment-item">
+                            <div class="comment-header">
+                                <div class="comment-text-wrapper">
+                                    <p class="comment-text">
+                                        <strong><?php echo $rating['username']; ?>:</strong>
+
+                                        <?php echo $rating['rating_comment']; ?>
+                                    <div>
+                                        <?php
+                                        for ($i = 1; $i <= 5; $i++) {
+                                            if ($i <= $rating['rating_value']) {
+                                                echo "⭐";
+                                            } else {
+                                                echo "☆";
+                                            }
+                                        } ?>
+                                    </div>
+                                    </p>
+                                    <p class="comment-info"><?php echo $rating['date_rated']; ?></p>
+                                </div>
+                            </div>
+                        </li>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>No comments available.</p>
+                <?php endif; ?>
+            </ul>
+        </div>
+
     </div>
 </body>
 
