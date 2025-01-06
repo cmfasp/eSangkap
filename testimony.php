@@ -11,6 +11,7 @@ if (!isset($_SESSION["username"])) {
     exit();  // Stop further execution after the redirection
 }
 
+
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!isset($_SESSION['username'])) {

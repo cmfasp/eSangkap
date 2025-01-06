@@ -23,23 +23,20 @@ if (isset($_GET["category_id"])) {
     }
 } else {
     $category_name = "Category Not Selected";
-} // Handle the delete request
+} 
 if (isset($_GET['delete_id'])) {
     $meal_id = $_GET['delete_id'];
 
-    // First, delete the related favorites
     $stmt = $pdo->prepare("DELETE FROM favorites WHERE meal_id = ?");
     $stmt->execute([$meal_id]);
 
-    // Then, delete the related ratings
+    
     $stmt = $pdo->prepare("DELETE FROM ratings WHERE meal_id = ?");
     $stmt->execute([$meal_id]);
 
-    // Then, delete the recipe from the meals table
     $stmt = $pdo->prepare("DELETE FROM meals WHERE meal_id = ?");
     $stmt->execute([$meal_id]);
 
-    // Redirect back to the same category page after deletion
     header("Location: " . $_SERVER['PHP_SELF'] . "?category_id=" . $category_id);
     exit;
 }
@@ -223,7 +220,7 @@ if (isset($_GET['delete_id'])) {
     </div>
     <div class="container">
         <div class="card-header">
-            <h1 class="mb-3"><?php echo $category_name; ?></h1> <!-- Change h2 to h1 -->
+            <h1 class="mb-3"><?php echo $category_name; ?></h1> 
         </div>
 
 
