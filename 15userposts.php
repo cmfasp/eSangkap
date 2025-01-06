@@ -452,7 +452,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
                         </li>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <p>No comments available.</p>
+                    <p>No comment available.</p>
                 <?php endif; ?>
             </ul>
         </div>
@@ -486,7 +486,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_recipe'])) {
                         </li>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <p>No comments available.</p>
+                    <p>No rating available.</p>
                 <?php endif; ?>
             </ul>
         </div>

@@ -32,6 +32,22 @@ if (isset($_GET['meal_id'])) {
 
         // Handle rating submission
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
+            if (!isset($_POST['rating_value']) || $_POST['rating_value'] < 1 || $_POST['rating_value'] > 5) {
+                die("Error: Invalid rating value.");
+            }
+
+            $rating_value = filter_input(INPUT_POST, 'rating_value', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => 5)));
+            $rating_comment = trim($_POST['rating_comment']);
+
+            // Check if rating_value is valid
+            if ($rating_value === false) {
+                die("Error: Invalid rating value.");
+            }
+
+            // Check if comment is provided
+            if (empty($rating_comment)) {
+                die("Error: Please write a comment.");
+            }
             if (isset($_POST['rating_value'])) {
                 $rating_value = filter_input(INPUT_POST, 'rating_value', FILTER_VALIDATE_INT, array('options' => array('min_range' => 1, 'max_range' => 5)));
                 $rating_comment = $_POST['rating_comment'];
@@ -338,7 +354,7 @@ if (isset($_GET['meal_id'])) {
     <div class="sidebar">
         <a href="9customer.php" class="active"><i class="fa fa-fw fa-home"></i>Home</a>
         <a href="favoritescreen.php"><i class="fa-solid fas fa-heart"></i>Favorites</a>
-        <a href="view_categories.php" ><i class="fa-solid fa-list"></i>Categories</a>
+        <a href="view_categories.php"><i class="fa-solid fa-list"></i>Categories</a>
         <a href="12user_profile.php"><i class="fas fa-user"></i>Profile</a>
         <a href="testimony.php"><i class="fas fa-user-friends"></i> Forum</a>
         <a href="4logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
@@ -411,6 +427,23 @@ if (isset($_GET['meal_id'])) {
                             }
                         });
                     });
+                });
+
+                document.querySelector('button[type="submit"]').addEventListener('click', function(event) {
+                    const ratingValue = document.getElementById('rating_value').value;
+                    const comment = document.querySelector('textarea[name="rating_comment"]').value;
+
+                    if (!ratingValue) {
+                        alert('Please select a rating!');
+                        event.preventDefault(); // Prevent form submission if no rating is selected
+                        return false;
+                    }
+
+                    if (comment.trim() === '') {
+                        alert('Please write a comment!');
+                        event.preventDefault(); // Prevent form submission if no comment is entered
+                        return false;
+                    }
                 });
             </script>
 </body>
