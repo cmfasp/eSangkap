@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 
 require("0conn.php");
@@ -52,7 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Display errors and exit if validation fails
     if (!empty($errors)) {
-        exit; // Prevent form submission if there are errors
     }
 
 
@@ -522,89 +521,109 @@ function generateRecipePreview($pdo, $meal_id)
         <a href="4logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
     </div>
     <div class="container">
-    <h2 class="form-title">Add New Recipe</h2>
-    <div id="form-section">
-        <form method="post" onsubmit="showPopupMessage('Meal added successfully');">
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="recipe_name">Meal Name:</label>
-                    <input type="text" name="recipe_name" id="recipe_name" placeholder="Write your meal name here" value="<?php echo htmlspecialchars($recipe_name ?? ''); ?>">
-                    <?php if (!empty($errors['recipe_name'])) { echo "<p class='error'>{$errors['recipe_name']}</p>"; } ?>
+        <h2 class="form-title">Add New Recipe</h2>
+        <div id="form-section">
+            <form method="post" onsubmit="showPopupMessage('Meal added successfully');">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="recipe_name">Meal Name:</label>
+                        <input type="text" name="recipe_name" id="recipe_name" placeholder="Write your meal name here" value="<?php echo htmlspecialchars($recipe_name ?? ''); ?>">
+                        <?php if (!empty($errors['recipe_name'])) {
+                            echo "<p class='error'>{$errors['recipe_name']}</p>";
+                        } ?>
+                    </div>
+                    <div class="form-group">
+                        <label for="category_id">Category:</label>
+                        <select name="category_id" id="category_id">
+                            <?php
+                            $categories = $pdo->query("SELECT * FROM categories")->fetchAll(PDO::FETCH_ASSOC);
+                            foreach ($categories as $category) {
+                                echo "<option value='{$category['category_id']}'" . ($category['category_id'] == $category_id ? ' selected' : '') . ">{$category['category_name']}</option>";
+                            }
+                            ?>
+                        </select>
+                        <?php if (!empty($errors['category_id'])) {
+                            echo "<p class='error'>{$errors['category_id']}</p>";
+                        } ?>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="category_id">Category:</label>
-                    <select name="category_id" id="category_id">
-                        <?php
-                        $categories = $pdo->query("SELECT * FROM categories")->fetchAll(PDO::FETCH_ASSOC);
-                        foreach ($categories as $category) {
-                            echo "<option value='{$category['category_id']}'" . ($category['category_id'] == $category_id ? ' selected' : '') . ">{$category['category_name']}</option>";
-                        }
-                        ?>
-                    </select>
-                    <?php if (!empty($errors['category_id'])) { echo "<p class='error'>{$errors['category_id']}</p>"; } ?>
-                </div>
-            </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="video_link">Video Link:</label>
-                    <input type="text" name="video_link" id="video_link" placeholder="Add a youtube tutorial" value="<?php echo htmlspecialchars($video_link ?? ''); ?>">
-                    <?php if (!empty($errors['video_link'])) { echo "<p class='error'>{$errors['video_link']}</p>"; } ?>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="video_link">Video Link:</label>
+                        <input type="text" name="video_link" id="video_link" placeholder="Add a youtube tutorial" value="<?php echo htmlspecialchars($video_link ?? ''); ?>">
+                        <?php if (!empty($errors['video_link'])) {
+                            echo "<p class='error'>{$errors['video_link']}</p>";
+                        } ?>
+                    </div>
+                    <div class="form-group">
+                        <label for="image_links">Image Links:</label>
+                        <textarea name="image_links" id="image_links" rows="3" placeholder="Add image links here"><?php echo htmlspecialchars($image_links ?? ''); ?></textarea>
+                        <?php if (!empty($errors['image_links'])) {
+                            echo "<p class='error'>{$errors['image_links']}</p>";
+                        } ?>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="image_links">Image Links:</label>
-                    <textarea name="image_links" id="image_links" rows="3" placeholder="Add image links here"><?php echo htmlspecialchars($image_links ?? ''); ?></textarea>
-                    <?php if (!empty($errors['image_links'])) { echo "<p class='error'>{$errors['image_links']}</p>"; } ?>
-                </div>
-            </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="short_description">Short Description:</label>
-                    <textarea name="short_description" id="short_description" rows="3" placeholder="Add a short description of your meal"><?php echo htmlspecialchars($short_description ?? ''); ?></textarea>
-                    <?php if (!empty($errors['short_description'])) { echo "<p class='error'>{$errors['short_description']}</p>"; } ?>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="short_description">Short Description:</label>
+                        <textarea name="short_description" id="short_description" rows="3" placeholder="Add a short description of your meal"><?php echo htmlspecialchars($short_description ?? ''); ?></textarea>
+                        <?php if (!empty($errors['short_description'])) {
+                            echo "<p class='error'>{$errors['short_description']}</p>";
+                        } ?>
+                    </div>
+                    <div class="form-group">
+                        <label for="whereBuy">Where to Buy:</label>
+                        <input type="text" name="whereBuy" id="whereBuy" placeholder="Write where to buy" value="<?php echo htmlspecialchars($whereBuy ?? ''); ?>">
+                        <?php if (!empty($errors['whereBuy'])) {
+                            echo "<p class='error'>{$errors['whereBuy']}</p>";
+                        } ?>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="whereBuy">Where to Buy:</label>
-                    <input type="text" name="whereBuy" id="whereBuy" placeholder="Write where to buy" value="<?php echo htmlspecialchars($whereBuy ?? ''); ?>">
-                    <?php if (!empty($errors['whereBuy'])) { echo "<p class='error'>{$errors['whereBuy']}</p>"; } ?>
-                </div>
-            </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="ingredients">Ingredients:</label>
-                    <textarea name="ingredients" id="ingredients" rows="5" placeholder="Add the list of ingredients here"><?php echo htmlspecialchars($ingredients ?? ''); ?></textarea>
-                    <?php if (!empty($errors['ingredients'])) { echo "<p class='error'>{$errors['ingredients']}</p>"; } ?>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ingredients">Ingredients:</label>
+                        <textarea name="ingredients" id="ingredients" rows="5" placeholder="Add the list of ingredients here"><?php echo htmlspecialchars($ingredients ?? ''); ?></textarea>
+                        <?php if (!empty($errors['ingredients'])) {
+                            echo "<p class='error'>{$errors['ingredients']}</p>";
+                        } ?>
+                    </div>
+                    <div class="form-group">
+                        <label for="alt_ingredients">Alternative Ingredients:</label>
+                        <textarea name="alt_ingredients" id="alt_ingredients" rows="5" placeholder="Add alternative ingredients here"><?php echo htmlspecialchars($alt_ingredients ?? ''); ?></textarea>
+                        <?php if (!empty($errors['alt_ingredients'])) {
+                            echo "<p class='error'>{$errors['alt_ingredients']}</p>";
+                        } ?>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="alt_ingredients">Alternative Ingredients:</label>
-                    <textarea name="alt_ingredients" id="alt_ingredients" rows="5" placeholder="Add alternative ingredients here"><?php echo htmlspecialchars($alt_ingredients ?? ''); ?></textarea>
-                    <?php if (!empty($errors['alt_ingredients'])) { echo "<p class='error'>{$errors['alt_ingredients']}</p>"; } ?>
-                </div>
-            </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="nutriInfo">Nutritional Information:</label>
-                    <textarea name="nutriInfo" id="nutriInfo" rows="5" placeholder="Add nutritional information here"><?php echo htmlspecialchars($nutriInfo ?? ''); ?></textarea>
-                    <?php if (!empty($errors['nutriInfo'])) { echo "<p class='error'>{$errors['nutriInfo']}</p>"; } ?>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nutriInfo">Nutritional Information:</label>
+                        <textarea name="nutriInfo" id="nutriInfo" rows="5" placeholder="Add nutritional information here"><?php echo htmlspecialchars($nutriInfo ?? ''); ?></textarea>
+                        <?php if (!empty($errors['nutriInfo'])) {
+                            echo "<p class='error'>{$errors['nutriInfo']}</p>";
+                        } ?>
+                    </div>
+                    <div class="form-group">
+                        <label for="instructions">Instructions:</label>
+                        <textarea name="instructions" id="instructions" rows="5" placeholder="Add preparation instructions here"><?php echo htmlspecialchars($instructions ?? ''); ?></textarea>
+                        <?php if (!empty($errors['instructions'])) {
+                            echo "<p class='error'>{$errors['instructions']}</p>";
+                        } ?>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="instructions">Instructions:</label>
-                    <textarea name="instructions" id="instructions" rows="5" placeholder="Add preparation instructions here"><?php echo htmlspecialchars($instructions ?? ''); ?></textarea>
-                    <?php if (!empty($errors['instructions'])) { echo "<p class='error'>{$errors['instructions']}</p>"; } ?>
-                </div>
-            </div>
 
-            <div class="form-buttons">
-                <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
-                <button id="add-button" type="submit">Add Recipe</button>
-                <button id="edit-button" type="button" style="display: none;">Edit</button>
-            </div>
-        </form>
+                <div class="form-buttons">
+                    <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
+                    <button id="add-button" type="submit">Add Recipe</button>
+                    <button id="edit-button" type="button" style="display: none;">Edit</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
     <div id="popup" style="display: none;">
         <p id="popup-message"></p>
@@ -618,17 +637,17 @@ function generateRecipePreview($pdo, $meal_id)
             <h3>Where to buy the ingredients</h3>
             <p class="readonly-input whereBuy"></p>
             <h3>Category</h3>
-        <p class="readonly-input category"></p>
-        <h3>Short Description</h3>
-        <p class="readonly-input description"></p>
-        <h3>Ingredients</h3>
-        <p class="readonly-input ingredients"></p>
-        <h3>Alternative Ingredients</h3>
-        <p class="readonly-input alt_ingredients"></p>
-        <h3>Nutritonal Information</h3>
-        <p class="readonly-input nutriInfo"></p>
-        <h3>Instruction</h3>
-        <p class="readonly-input instructions"></p>
+            <p class="readonly-input category"></p>
+            <h3>Short Description</h3>
+            <p class="readonly-input description"></p>
+            <h3>Ingredients</h3>
+            <p class="readonly-input ingredients"></p>
+            <h3>Alternative Ingredients</h3>
+            <p class="readonly-input alt_ingredients"></p>
+            <h3>Nutritonal Information</h3>
+            <p class="readonly-input nutriInfo"></p>
+            <h3>Instruction</h3>
+            <p class="readonly-input instructions"></p>
         </div>
         <div class="form-buttons">
             <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
