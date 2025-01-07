@@ -1,8 +1,8 @@
 <?php 
 session_start();
-
 require("0conn.php");
 
+// Database connection
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -10,23 +10,33 @@ try {
     die("Error: " . $e->getMessage());
 }
 
-$recipe_preview = "";
-
 // Form validation function
 function validateInput($data) {
     return htmlspecialchars(stripslashes(trim($data)));
 }
 
+// Initialize variables and errors
 $errors = [];
+$success_message = "";
+$is_preview = false;
 
+// Check if user is logged in
+if (!isset($_SESSION["username"])) {
+    die("Error: You must be logged in to submit a recipe.");
+}
+
+// Check if user exists in the database
+$username = $_SESSION["username"];
+$stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+$stmt->execute([$username]);
+$user = $stmt->fetch();
+
+if (!$user) {
+    die("Error: User does not exist.");
+}
+
+// Handle POST request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Session check
-    if (!isset($_SESSION["username"])) {
-        die("Error: Unauthorized access.");
-    }
-
-    $username = $_SESSION["username"];
-
     // Validate inputs
     $recipe_name = validateInput($_POST["recipe_name"] ?? '');
     $category_id = validateInput($_POST["category_id"] ?? '');
@@ -39,7 +49,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nutriInfo = validateInput($_POST["nutriInfo"] ?? '');
     $alt_ingredients = validateInput($_POST["alt_ingredients"] ?? '');
 
-    // Error messages for missing fields
     if (empty($recipe_name)) $errors['recipe_name'] = "<span style='color:red;'>Recipe name is required.</span>";
     if (empty($category_id)) $errors['category_id'] = "<span style='color:red;'>Category is required.</span>";
     if (empty($video_link) || !filter_var($video_link, FILTER_VALIDATE_URL)) $errors['video_link'] = "<span style='color:red;'>Valid video link is required.</span>";
@@ -50,56 +59,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($whereBuy)) $errors['whereBuy'] = "<span style='color:red;'>Where to buy information is required.</span>";
     if (empty($nutriInfo)) $errors['nutriInfo'] = "<span style='color:red;'>Nutritional information is required.</span>";
 
-    // Check if the user exists
-    if (empty($errors)) {
-        $userCheckStmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-        $userCheckStmt->execute([$username]);
-        $userExists = $userCheckStmt->fetch();
+    // Preview feature
+    if (isset($_POST['preview'])) {
+        $is_preview = true;
+    }
 
-        if ($userExists) {
-            // Insert meal data
-            $stmt = $pdo->prepare("INSERT INTO meals (meal_name, category_id, video_link, date_created, username, description, where_buy) VALUES (?, ?, ?, NOW(), ?, ?, ?)");
-            $stmt->execute([$recipe_name, $category_id, $video_link, $username, $short_description, $whereBuy]);
+    // Proceed only if no errors and not previewing
+    if (empty($errors) && !$is_preview) {
+        // Insert recipe into database
+        $stmt = $pdo->prepare("INSERT INTO meals (meal_name, category_id, video_link, date_created, username, description, where_buy) VALUES (?, ?, ?, NOW(), ?, ?, ?)");
+        $stmt->execute([$recipe_name, $category_id, $video_link, $username, $short_description, $whereBuy]);
 
-            $meal_id = $pdo->lastInsertId();
+        $meal_id = $pdo->lastInsertId();
 
-            // Handle multiple images
-            $image_links = explode("\n", $image_links);
-            foreach ($image_links as $image_link) {
-                if (!empty(trim($image_link))) {
-                    $stmt = $pdo->prepare("INSERT INTO meal_images (meal_id, image_link) VALUES (?, ?)");
-                    $stmt->execute([$meal_id, trim($image_link)]);
-                }
+        // Insert image links
+        $image_links_array = explode("\n", $image_links);
+        foreach ($image_links_array as $image_link) {
+            if (!empty(trim($image_link))) {
+                $stmt = $pdo->prepare("INSERT INTO meal_images (meal_id, image_link) VALUES (?, ?)");
+                $stmt->execute([$meal_id, trim($image_link)]);
             }
-
-            // Insert instructions
-            $instructions = explode("\n", $instructions);
-            foreach ($instructions as $step_number => $step_description) {
-                $stmt = $pdo->prepare("INSERT INTO instructions (meal_id, step_number, step_description) VALUES (?, ?, ?)");
-                $stmt->execute([$meal_id, $step_number + 1, trim($step_description)]);
-            }
-
-            // Insert ingredients and alternative ingredients
-            $ingredients = explode("\n", $ingredients);
-            $alt_ingredients = explode("\n", $alt_ingredients);
-            for ($i = 0; $i < max(count($ingredients), count($alt_ingredients)); $i++) {
-                $ingredient_name = isset($ingredients[$i]) && !empty($ingredients[$i]) ? trim($ingredients[$i]) : null;
-                $alt_ingredient_name = isset($alt_ingredients[$i]) && !empty($alt_ingredients[$i]) ? trim($alt_ingredients[$i]) : null;
-                $stmt = $pdo->prepare("INSERT INTO ingredients (meal_id, ingredient_name, alt_ingredients) VALUES (?, ?, ?)");
-                $stmt->execute([$meal_id, $ingredient_name, $alt_ingredient_name]);
-            }
-
-            // Insert nutritional info
-            $nutriInfo = explode("\n", $nutriInfo);
-            foreach ($nutriInfo as $info) {
-                $stmt = $pdo->prepare("INSERT INTO nutritional_info (meal_id, nutrition_text) VALUES (?, ?)");
-                $stmt->execute([$meal_id, trim($info)]);
-            }
-
-            echo "<p style='color:green;'>Recipe successfully added!</p>";
-        } else {
-            echo "Error: User does not exist.";
         }
+
+        // Insert instructions
+        $instructions_array = explode("\n", $instructions);
+        foreach ($instructions_array as $step_number => $step_description) {
+            $stmt = $pdo->prepare("INSERT INTO instructions (meal_id, step_number, step_description) VALUES (?, ?, ?)");
+            $stmt->execute([$meal_id, $step_number + 1, trim($step_description)]);
+        }
+
+        // Insert ingredients
+        $ingredients_array = explode("\n", $ingredients);
+        $alt_ingredients_array = explode("\n", $alt_ingredients);
+        for ($i = 0; $i < max(count($ingredients_array), count($alt_ingredients_array)); $i++) {
+            $ingredient_name = $ingredients_array[$i] ?? null;
+            $alt_ingredient_name = $alt_ingredients_array[$i] ?? null;
+            $stmt = $pdo->prepare("INSERT INTO ingredients (meal_id, ingredient_name, alt_ingredients) VALUES (?, ?, ?)");
+            $stmt->execute([$meal_id, trim($ingredient_name), trim($alt_ingredient_name)]);
+        }
+
+        // Insert nutritional info
+        $nutriInfo_array = explode("\n", $nutriInfo);
+        foreach ($nutriInfo_array as $info) {
+            $stmt = $pdo->prepare("INSERT INTO nutritional_info (meal_id, nutrition_text) VALUES (?, ?)");
+            $stmt->execute([$meal_id, trim($info)]);
+        }
+
+        $success_message = "<script>alert('Recipe successfully added!');</script>";
     }
 }
 ?>
@@ -349,13 +355,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .brand-name {
             font-size: 1.8rem;
-            /* Adjust font size for H2 */
             font-weight: bold;
-            /* Emphasize the brand name */
             color: #f04e23;
-            /* Matches the theme */
             font-family: 'Arial', sans-serif;
-            /* Clean and modern font */
             margin: 0;
         }
 
@@ -373,71 +375,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     </style>
     <script>
-        function togglePreview() {
-            var formSection = document.getElementById("form-section");
-            var previewSection = document.getElementById("preview-section");
-            var previewButton = document.getElementById("preview-button");
-            var addButton = document.getElementById("add-button");
-            var editButton = document.getElementById("edit-button");
-
-            if (formSection.style.display === "block") {
-                formSection.style.display = "none";
-                previewSection.style.display = "block";
-                previewButton.innerText = "Edit";
-                addButton.style.display = "none";
-                editButton.style.display = "inline";
-                displayPreview();
-            } else {
-                formSection.style.display = "block";
-                previewSection.style.display = "none";
-                previewButton.innerText = "Preview";
-                addButton.style.display = "inline";
-                editButton.style.display = "none";
-            }
-        }
-
-        function displayPreview() {
-            var readonlyInputs = document.getElementsByClassName("readonly-input");
-            var inputs = document.getElementsByTagName("input");
-            var selects = document.getElementsByTagName("select");
-            var textareas = document.getElementsByTagName("textarea");
-
-            for (var i = 0; i < readonlyInputs.length; i++) {
-                readonlyInputs[i].innerText = "";
-                if (i < inputs.length) {
-                    readonlyInputs[i].innerText = inputs[i].value;
-                } else if (i < inputs.length + selects.length) {
-                    var selectedIndex = selects[i - inputs.length].selectedIndex;
-                    readonlyInputs[i].innerText = selects[i - inputs.length].options[selectedIndex].text;
-                } else if (i < inputs.length + selects.length + textareas.length) {
-                    readonlyInputs[i].innerText = textareas[i - inputs.length - selects.length].value;
-                }
-            }
-
-            displayImageGallery();
-        }
-
-        function displayImageGallery() {
-            const readonlyInputs = document.getElementsByClassName("readonly-input");
-            const imageGallery = document.querySelector('.image-gallery');
-            const imageLinksTextarea = document.getElementById("image_links");
-            const imageLinks = imageLinksTextarea.value.trim().split('\n');
-
-            imageGallery.innerHTML = ""; // Clear existing images
-
-            if (imageLinks.length > 0) {
-                imageLinks.forEach(imageLink => {
-                    if (imageLink !== "") {
-                        const imageElement = document.createElement('img');
-                        imageElement.src = imageLink;
-                        imageElement.alt = 'Meal Image';
-                        imageElement.className = 'preview-image';
-                        imageGallery.appendChild(imageElement);
-                    }
-                });
-            }
-        }
-
+       
         function showPopupMessage(message) {
             var popup = document.getElementById("popup");
             var popupMessage = document.getElementById("popup-message");
@@ -565,42 +503,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <div class="form-buttons">
-                    <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
                     <button id="add-button" type="submit">Add Recipe</button>
-                    <button id="edit-button" type="button" style="display: none;">Edit</button>
                 </div>
             </form>
         </div>
-    </div>
 
-    <div id="popup" style="display: none;">
-        <p id="popup-message"></p>
-    </div>
-    <div id="preview-section" style="display: none;">
-        <div id="readonly-section">
-            <p>Meal Name: <span class="readonly-input meal-name"></span></p>
-            <p>Video Link: <span class="readonly-input short-description"></span></p>
-            <p>Image: <span class="readonly-input video-link"></span></p>
-            <img id="recipe-image" src="" alt="Recipe Image" style="max-width: 100%; display: none;">
-            <h3>Where to buy the ingredients</h3>
-            <p class="readonly-input whereBuy"></p>
-            <h3>Category</h3>
-            <p class="readonly-input category"></p>
-            <h3>Short Description</h3>
-            <p class="readonly-input description"></p>
-            <h3>Ingredients</h3>
-            <p class="readonly-input ingredients"></p>
-            <h3>Alternative Ingredients</h3>
-            <p class="readonly-input alt_ingredients"></p>
-            <h3>Nutritonal Information</h3>
-            <p class="readonly-input nutriInfo"></p>
-            <h3>Instruction</h3>
-            <p class="readonly-input instructions"></p>
-        </div>
-        <div class="form-buttons">
-            <button id="preview-button" type="button" onclick="togglePreview()">Preview</button>
-            <button id="add-button" type="submit">Add</button>
-            <button id="edit-button" type="button" style="display: none;" onclick="toggleEdit()">Edit</button>
-        </div>
     </div>
 </body>
